@@ -26,10 +26,14 @@ const Home: NextPage = () => {
           className="mySwiper"
         >
           <SwiperSlide>
-            <Box height={48}>Banner 1</Box>
+            <Box height={48} width="100%" backgroundColor="lightyellow">
+              Banner 1
+            </Box>
           </SwiperSlide>
           <SwiperSlide>
-            <Box height={48}>Banner 2</Box>
+            <Box height={48} width="100%" backgroundColor="lightblue">
+              Banner 2
+            </Box>
           </SwiperSlide>
         </Swiper>
       </Box>
