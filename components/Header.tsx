@@ -33,7 +33,7 @@ const Header = () => {
             </ListItem>
             <ListItem marginRight={4}>
               <Button variant="outline" colorScheme="blue" size="sm">
-                <Link href="">
+                <Link href="#">
                   <a>
                     <Text as="p" fontWeight="normal">
                       Masuk
@@ -44,7 +44,7 @@ const Header = () => {
             </ListItem>
             <ListItem>
               <Button colorScheme="blue" size="sm">
-                <Link href="">
+                <Link href="#">
                   <a>
                     <Text as="p" fontWeight="normal">
                       Daftar

@@ -3,6 +3,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import theme from '../styles/theme';
 import '@fontsource/poppins';
 import '@fontsource/poppins/600.css';
+import '../styles/global.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
