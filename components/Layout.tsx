@@ -1,7 +1,7 @@
 import React from 'react';
 
 // chakra ui
-import { Container } from '@chakra-ui/react';
+import { Box, Container } from '@chakra-ui/react';
 
 // components
 import Footer from './Footer';

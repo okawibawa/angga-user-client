@@ -1,13 +1,16 @@
 import React from 'react';
 
 // chakra
-import { Box, Container } from '@chakra-ui/react';
+import { Box, Container, Text, Heading } from '@chakra-ui/react';
 
 const Footer = () => {
   return (
-    <Box>
+    <Box mt="auto" backgroundColor="#eeeeeebb" py={16}>
       <Container maxW="container.lg">
-        <p>Footer</p>
+        <Heading as="h4" fontSize={['md', 'lg']} mb={2}>
+          Seafood Putra
+        </Heading>
+        <Text as="p">{new Date().getFullYear()} - © Seafood Putra</Text>
       </Container>
     </Box>
   );
