@@ -4,7 +4,6 @@ import React from 'react';
 import { Box, Container } from '@chakra-ui/react';
 
 // components
-import Footer from './Footer';
 import Header from './Header';
 
 type ContainerProps = {
@@ -16,7 +15,6 @@ const Layout = ({ children }: ContainerProps) => {
     <>
       <Header />
       <Container maxW="container.lg">{children}</Container>
-      <Footer />
     </>
   );
 };

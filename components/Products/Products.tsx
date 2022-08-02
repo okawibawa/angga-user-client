@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { useKeenSlider } from 'keen-slider/react';
 import 'keen-slider/keen-slider.min.css';
 
@@ -34,20 +35,24 @@ const Products = () => {
         <Box>
           <div ref={ref} className="keen-slider">
             {new Array(10).fill(null).map((arr, index) => (
-              <div className="keen-slider__slide number-slide1" key={index}>
-                <Box backgroundColor="#fff" border="1px solid #d6d6d6" p={[2, 4]} borderRadius={8} cursor="pointer">
-                  <Image width={256} height={256} src="/default-placeholder.png" alt="Placeholder" />
+              <Link href={{ pathname: '/product-detail/[index]', query: { index: 'ikan-tuna' } }} key={index}>
+                <a>
+                  <div className="keen-slider__slide number-slide1">
+                    <Box backgroundColor="#fff" border="1px solid #d6d6d6" p={[2, 4]} borderRadius={8} cursor="pointer">
+                      <Image width={256} height={256} src="/default-placeholder.png" alt="Placeholder" />
 
-                  <Box mt={4}>
-                    <Text as="p" fontWeight="bold" fontSize={['sm', 'md']}>
-                      Rp80.000,00/kg
-                    </Text>
-                    <Text as="p" fontSize={['xs', 'md']}>
-                      Ikan Tuna
-                    </Text>
-                  </Box>
-                </Box>
-              </div>
+                      <Box mt={4}>
+                        <Text as="p" fontWeight="bold" fontSize={['sm', 'md']}>
+                          Rp80.000/kg
+                        </Text>
+                        <Text as="p" fontSize={['xs', 'md']}>
+                          Ikan Tuna
+                        </Text>
+                      </Box>
+                    </Box>
+                  </div>
+                </a>
+              </Link>
             ))}
           </div>
         </Box>
@@ -75,7 +80,7 @@ const Products = () => {
 
               <Box mt={4}>
                 <Text as="p" fontWeight="bold" fontSize={['sm', 'md']}>
-                  Rp80.000,00/kg
+                  Rp80.000/kg
                 </Text>
                 <Text as="p" fontSize={['xs', 'md']}>
                   Ikan Tuna
