@@ -1,23 +1,17 @@
-import { useState, useEffect } from "react";
-import Image from "next/image";
+import { NextPage } from 'next';
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 // chakra ui
-import {
-  Box,
-  Heading,
-  Text,
-  Divider,
-  Container,
-  Button,
-} from "@chakra-ui/react";
+import { Box, Heading, Text, Divider, Container, Button } from '@chakra-ui/react';
 
 // components
-import Layout from "../../components/Layout";
+import Layout from '../../components/Layout';
 
 // icons
-import { Plus, Minus } from "iconoir-react";
+import { Plus, Minus } from 'iconoir-react';
 
-const ProductDetail = () => {
+const ProductDetail: NextPage = () => {
   const [qty, setQty] = useState(1);
 
   const handleSubtractQty = () => {
@@ -41,29 +35,24 @@ const ProductDetail = () => {
       <Layout>
         <Box
           display="flex"
-          flexDirection={["column", "row"]}
-          alignItems={["flex-start"]}
-          justifyContent={["flex-start", "space-between"]}
-          mb={["6rem", 0]}
+          flexDirection={['column', 'row']}
+          alignItems={['flex-start']}
+          justifyContent={['flex-start', 'space-between']}
+          mb={['6rem', 0]}
         >
-          <Box width={["100%", "32%"]}>
-            <Image
-              src="/default-placeholder.png"
-              alt="Products"
-              width={384}
-              height={384}
-            />
+          <Box width={['100%', '32%']}>
+            <Image src="/default-placeholder.png" alt="Products" width={384} height={384} />
           </Box>
 
-          <Box my={[4, 0]} width={["100%", "32%"]}>
-            <Heading as="h2" fontSize={["lg"]} mb={2}>
+          <Box my={[4, 0]} width={['100%', '32%']}>
+            <Heading as="h2" fontSize={['lg', 'md']} mb={2}>
               Ikan Tuna
             </Heading>
-            <Heading as="h3" fontSize={["xl"]}>
+            <Heading as="h3" mb={[0, 4]} fontSize={['xl', 'lg']}>
               Rp25.000/kg
             </Heading>
 
-            <Divider my={[6]} display={["block", "none"]} />
+            <Divider my={[6]} display={['block', 'none']} />
 
             <Text as="p" fontWeight="bold" mb={2}>
               Detail
@@ -71,18 +60,12 @@ const ProductDetail = () => {
             <Text as="p">Lorem ipsum dolor sit.</Text>
           </Box>
 
-          <Box
-            display={["none", "block"]}
-            width={["100%", "32%"]}
-            border="1px solid #ddd"
-            borderRadius={4}
-            p={6}
-          >
-            <Heading as="h6" fontSize="lg" mb={4}>
+          <Box display={['none', 'block']} width={['100%', '32%']} border="1px solid #ddd" borderRadius={4} p={6}>
+            <Heading as="h6" fontSize={['lg', 'md']} mb={4}>
               Atur Jumlah
             </Heading>
 
-            <Box display="flex" alignItems="center">
+            <Box display="flex" alignItems="center" mb={6}>
               <Box
                 border="1px solid #ddd"
                 borderRadius={4}
@@ -93,24 +76,46 @@ const ProductDetail = () => {
                 justifyContent="space-between"
               >
                 <Box cursor="pointer" onClick={handleSubtractQty}>
-                  <Minus color={qty === 1 ? "#ddd" : "#333"} />
+                  <Minus color={qty === 1 ? '#ddd' : '#333'} />
                 </Box>
                 {qty}
                 <Box cursor="pointer" onClick={handleAddQty}>
-                  <Plus color={qty === 8 ? "#ddd" : "#333"} />
+                  <Plus color={qty === 8 ? '#ddd' : '#333'} />
                 </Box>
               </Box>
 
-              <Text as="p" ml={2}>
+              <Text as="p" ml={2} fontSize={['lg', 'md']}>
                 Stok Sisa: 8
               </Text>
+            </Box>
+
+            <Box>
+              <Box display="flex" alignItems="center" justifyContent="space-between">
+                <Heading as="h6" fontSize={['md', 'sm']} color="gray" mb={4}>
+                  Subtotal
+                </Heading>
+
+                <Heading as="h6" fontSize={['lg', 'md']} mb={4}>
+                  Rp200.000
+                </Heading>
+              </Box>
+
+              <Box>
+                <Button mb={2} w="100%" size="sm" colorScheme="blue">
+                  + Keranjang
+                </Button>
+
+                <Button w="100%" size="sm" colorScheme="blue" variant="outline">
+                  Beli
+                </Button>
+              </Box>
             </Box>
           </Box>
         </Box>
       </Layout>
 
       <Box
-        display={["block", "none"]}
+        display={['block', 'none']}
         position="fixed"
         bottom={0}
         width="100%"
