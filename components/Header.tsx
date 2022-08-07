@@ -1,20 +1,11 @@
-import React, { useState } from "react";
-import Link from "next/link";
+import React, { useState } from 'react';
+import Link from 'next/link';
 
 // chakra
-import {
-  Box,
-  Container,
-  Divider,
-  UnorderedList,
-  ListItem,
-  Button,
-  Text,
-  Heading,
-} from "@chakra-ui/react";
+import { Box, Container, Divider, UnorderedList, ListItem, Button, Text, Heading } from '@chakra-ui/react';
 
 // iconoir
-import { SimpleCart, Menu, Cancel } from "iconoir-react";
+import { SimpleCart, Menu, Cancel } from 'iconoir-react';
 
 const Header = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -22,13 +13,7 @@ const Header = () => {
   return (
     <Box>
       <Container maxW="container.xl">
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          py={6}
-          position="relative"
-        >
+        <Box display="flex" justifyContent="space-between" alignItems="center" py={6} position="relative">
           <Box>
             <Link href="/">
               <a>
@@ -39,11 +24,7 @@ const Header = () => {
             </Link>
           </Box>
 
-          <UnorderedList
-            display={["none", "flex"]}
-            alignItems="center"
-            listStyleType="none"
-          >
+          <UnorderedList display={['none', 'flex']} alignItems="center" listStyleType="none">
             <ListItem>
               <Link href="">
                 <a>
@@ -56,7 +37,7 @@ const Header = () => {
             </ListItem>
             <ListItem marginRight={4}>
               <Button variant="outline" colorScheme="blue" size="sm">
-                <Link href="#">
+                <Link href="/login">
                   <a>
                     <Text as="p" fontWeight="normal">
                       Masuk
@@ -67,7 +48,7 @@ const Header = () => {
             </ListItem>
             <ListItem>
               <Button colorScheme="blue" size="sm">
-                <Link href="#">
+                <Link href="/signup">
                   <a>
                     <Text as="p" fontWeight="normal">
                       Daftar
@@ -78,37 +59,29 @@ const Header = () => {
             </ListItem>
           </UnorderedList>
 
-          <Box display={["block", "none"]}>
+          <Box display={['block', 'none']}>
             <Box
-              visibility={`${
-                isMobileMenuOpen === false ? "visible" : "hidden"
-              }`}
-              opacity={`${isMobileMenuOpen === false ? "1" : "0"}`}
+              visibility={`${isMobileMenuOpen === false ? 'visible' : 'hidden'}`}
+              opacity={`${isMobileMenuOpen === false ? '1' : '0'}`}
               position="absolute"
               right="0"
               top="50%"
               transform="translateY(-50%)"
               transition="all ease-in-out .200s"
             >
-              <Menu
-                cursor="pointer"
-                onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
-              />
+              <Menu cursor="pointer" onClick={() => setMobileMenuOpen(!isMobileMenuOpen)} />
             </Box>
 
             <Box
-              visibility={`${isMobileMenuOpen === true ? "visible" : "hidden"}`}
-              opacity={`${isMobileMenuOpen === true ? "1" : "0"}`}
+              visibility={`${isMobileMenuOpen === true ? 'visible' : 'hidden'}`}
+              opacity={`${isMobileMenuOpen === true ? '1' : '0'}`}
               position="absolute"
               right="0"
               top="50%"
               transform="translateY(-50%)"
               transition="all ease-in-out .200s"
             >
-              <Cancel
-                cursor="pointer"
-                onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
-              />
+              <Cancel cursor="pointer" onClick={() => setMobileMenuOpen(!isMobileMenuOpen)} />
             </Box>
           </Box>
         </Box>

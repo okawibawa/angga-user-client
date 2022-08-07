@@ -622,6 +622,11 @@
   resolved "https://registry.yarnpkg.com/@ctrl/tinycolor/-/tinycolor-3.4.1.tgz#75b4c27948c81e88ccd3a8902047bcd797f38d32"
   integrity sha512-ej5oVy6lykXsvieQtqZxCOaLT+xD4+QNarq78cIYISHmZXshCvROLudpQN3lfL8G0NL7plMSSK+zlyvCaIJ4Iw==
 
+"@develoka/angka-rupiah-js@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@develoka/angka-rupiah-js/-/angka-rupiah-js-1.0.3.tgz#5ae32fe0fbe47431a15a117ba371f5486a8a4967"
+  integrity sha512-dkWuclc7reZd6eFGOnnm8vwWIkMbGdceSUILrJKMf2sBhOxc5/J169p2vTS1orX3dRoEZtZqb53ajKKv9zVT5A==
+
 "@emotion/babel-plugin@^11.7.1":
   version "11.9.2"
   resolved "https://registry.yarnpkg.com/@emotion/babel-plugin/-/babel-plugin-11.9.2.tgz#723b6d394c89fb2ef782229d92ba95a740576e95"
