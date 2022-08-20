@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 // chakra ui
-import { Box, Heading, Text, Divider, Container, Button } from '@chakra-ui/react';
+import { Input, Box, Heading, Text, Divider, Container, Button } from '@chakra-ui/react';
 
 // components
 import Layout from '../../components/Layout';
@@ -12,7 +12,7 @@ import Layout from '../../components/Layout';
 import { Plus, Minus } from 'iconoir-react';
 
 const ProductDetail: NextPage = () => {
-  const [qty, setQty] = useState(1);
+  const [qty, setQty] = useState(0);
 
   const handleSubtractQty = () => {
     if (qty === 1) {
@@ -62,30 +62,31 @@ const ProductDetail: NextPage = () => {
 
           <Box display={['none', 'block']} width={['100%', '32%']} border="1px solid #ddd" borderRadius={4} p={6}>
             <Heading as="h6" fontSize={['lg', 'md']} mb={4}>
-              Atur Jumlah
+              Atur Jumlah (kg)
             </Heading>
 
             <Box display="flex" alignItems="center" mb={6}>
               <Box
                 border="1px solid #ddd"
                 borderRadius={4}
-                p={2}
+                py={2}
+                px={2}
                 display="flex"
-                width="96px"
+                width="7rem"
                 alignItems="center"
                 justifyContent="space-between"
               >
                 <Box cursor="pointer" onClick={handleSubtractQty}>
                   <Minus color={qty === 1 ? '#ddd' : '#333'} />
                 </Box>
-                {qty}
+                <Input textAlign="center" variant="unstyled" placeholder="0" value={qty} />
                 <Box cursor="pointer" onClick={handleAddQty}>
                   <Plus color={qty === 8 ? '#ddd' : '#333'} />
                 </Box>
               </Box>
 
               <Text as="p" ml={2} fontSize={['lg', 'md']}>
-                Stok Sisa: 8
+                Stok Sisa: 8 kg
               </Text>
             </Box>
 

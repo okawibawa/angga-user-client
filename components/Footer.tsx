@@ -6,7 +6,7 @@ import { Box, Container, Text, Heading } from '@chakra-ui/react';
 const Footer = () => {
   return (
     <Box mt="auto" backgroundColor="#eeeeeebb" py={16}>
-      <Container maxW="container.lg">
+      <Container maxW="container.xl">
         <Heading as="h4" fontSize={['md', 'lg']} mb={2}>
           Seafood Putra
         </Heading>

@@ -1,14 +1,44 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { parseCookies, destroyCookie } from 'nookies';
 
 // chakra
-import { Box, Container, Divider, UnorderedList, ListItem, Button, Text, Heading } from '@chakra-ui/react';
+import {
+  Box,
+  Container,
+  Divider,
+  UnorderedList,
+  ListItem,
+  Button,
+  Text,
+  Heading,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuItemOption,
+  MenuGroup,
+  MenuOptionGroup,
+  MenuDivider,
+} from '@chakra-ui/react';
 
 // iconoir
-import { SimpleCart, Menu, Cancel } from 'iconoir-react';
+import { SimpleCart, Menu as MenuBurger, Cancel, User } from 'iconoir-react';
+import { NextCookies } from 'next/dist/server/web/spec-extension/cookies';
 
 const Header = () => {
+  const cookies = parseCookies();
+  const router = useRouter();
+
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleLogout = () => {
+    destroyCookie(null, 'sfJwt');
+    destroyCookie(null, 'sfUser');
+
+    router.reload();
+  };
 
   return (
     <Box>
@@ -26,7 +56,7 @@ const Header = () => {
 
           <UnorderedList display={['none', 'flex']} alignItems="center" listStyleType="none">
             <ListItem>
-              <Link href="">
+              <Link href="#">
                 <a>
                   <SimpleCart />
                 </a>
@@ -35,28 +65,44 @@ const Header = () => {
             <ListItem marginX={8}>
               <Divider orientation="vertical" height={6} />
             </ListItem>
-            <ListItem marginRight={4}>
-              <Button variant="outline" colorScheme="blue" size="sm">
-                <Link href="/login">
-                  <a>
+            <ListItem marginRight={4} display={cookies.sfJwt ? 'none' : 'block'}>
+              <Link href="/login">
+                <a>
+                  <Button variant="outline" colorScheme="blue" size="sm">
                     <Text as="p" fontWeight="normal">
                       Masuk
                     </Text>
-                  </a>
-                </Link>
-              </Button>
+                  </Button>
+                </a>
+              </Link>
             </ListItem>
-            <ListItem>
-              <Button colorScheme="blue" size="sm">
-                <Link href="/signup">
-                  <a>
+            <ListItem display={cookies.sfJwt ? 'none' : 'block'}>
+              <Link href="/signup">
+                <a>
+                  <Button colorScheme="blue" size="sm">
                     <Text as="p" fontWeight="normal">
                       Daftar
                     </Text>
-                  </a>
-                </Link>
-              </Button>
+                  </Button>
+                </a>
+              </Link>
             </ListItem>
+
+            <Box display={cookies.sfJwt ? 'flex' : 'none'} alignItems="center">
+              <Menu>
+                <MenuButton
+                  backgroundColor="transparent"
+                  _hover={{ backgroundColor: 'transparent' }}
+                  _active={{ backgroundColor: 'transparent', border: 'none' }}
+                >
+                  <User />
+                </MenuButton>
+                <MenuList zIndex={2}>
+                  <MenuItem>Akun Saya</MenuItem>
+                  <MenuItem onClick={handleLogout}>Keluar</MenuItem>
+                </MenuList>
+              </Menu>
+            </Box>
           </UnorderedList>
 
           <Box display={['block', 'none']}>
@@ -69,7 +115,7 @@ const Header = () => {
               transform="translateY(-50%)"
               transition="all ease-in-out .200s"
             >
-              <Menu cursor="pointer" onClick={() => setMobileMenuOpen(!isMobileMenuOpen)} />
+              <MenuBurger cursor="pointer" onClick={() => setMobileMenuOpen(!isMobileMenuOpen)} />
             </Box>
 
             <Box

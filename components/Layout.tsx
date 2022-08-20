@@ -14,7 +14,7 @@ const Layout = ({ children }: ContainerProps) => {
   return (
     <>
       <Header />
-      <Container maxW="container.lg">{children}</Container>
+      <Container maxW="container.xl">{children}</Container>
     </>
   );
 };
