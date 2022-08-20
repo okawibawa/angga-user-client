@@ -49,7 +49,7 @@ const Products = ({ isLoading, isError, data }: ProductsProps) => {
                   slidesPerView: 5,
                   spaceBetween: 10,
                 },
-                900: {
+                1200: {
                   slidesPerView: 6,
                   spaceBetween: 10,
                 },
