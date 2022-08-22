@@ -1,18 +1,44 @@
 import { NextPage } from 'next';
-import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useState, useEffect, useContext } from 'react';
+import { HostContext } from '../../context/HostContext';
+
+type ProductDetailsProps = {
+  isLoading: boolean;
+  isError: any;
+  data: any;
+};
+
+// react query
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 // chakra ui
-import { Input, Box, Heading, Text, Divider, Container, Button } from '@chakra-ui/react';
+import { Input, Box, Heading, Text, Divider, Container, Button, Skeleton } from '@chakra-ui/react';
 
 // components
 import Layout from '../../components/Layout';
 
 // icons
 import { Plus, Minus } from 'iconoir-react';
+import { findProductDetail } from '../../apis/api';
 
 const ProductDetail: NextPage = () => {
-  const [qty, setQty] = useState(0);
+  const host = useContext(HostContext);
+  const router = useRouter();
+  let stock: number = 0;
+
+  const [qty, setQty] = useState(1);
+
+  const { isLoading, isError, data }: ProductDetailsProps = useQuery(
+    [`product-detail-${router.query.index}`],
+    async () => findProductDetail(host?.url, router.query.index)
+  );
+
+  const formatter = new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+  });
 
   const handleSubtractQty = () => {
     if (qty === 1) {
@@ -22,8 +48,12 @@ const ProductDetail: NextPage = () => {
     }
   };
 
+  if (!isLoading) {
+    stock = data.data.data[0].attributes.stock.slice(0, data.data.data[0].attributes.stock.length - 2);
+  }
+
   const handleAddQty = () => {
-    if (qty === 8) {
+    if (qty === Number(stock)) {
       return false;
     } else {
       setQty((qty) => qty + 1);
@@ -46,18 +76,30 @@ const ProductDetail: NextPage = () => {
 
           <Box my={[4, 0]} width={['100%', '32%']}>
             <Heading as="h2" fontSize={['lg', 'md']} mb={2}>
-              Ikan Tuna
+              {isLoading ? <Skeleton height="20px" /> : <Text as="p">{data.data.data[0].attributes.name}</Text>}
             </Heading>
             <Heading as="h3" mb={[0, 4]} fontSize={['xl', 'lg']}>
-              Rp25.000/kg
+              {isLoading ? (
+                <Skeleton height="20px" />
+              ) : (
+                <Text>
+                  {formatter.format(data.data.data[0].attributes.price)}/{data.data.data[0].attributes.unit}
+                </Text>
+              )}
             </Heading>
 
             <Divider my={[6]} display={['block', 'none']} />
 
             <Text as="p" fontWeight="bold" mb={2}>
-              Detail
+              Deskripsi
             </Text>
-            <Text as="p">Lorem ipsum dolor sit.</Text>
+            {isLoading ? (
+              <Skeleton height="20px" />
+            ) : (
+              <Text as="p">
+                {data.data.data[0].attributes.description ? data.data.data[0].attributes.description : '-'}
+              </Text>
+            )}
           </Box>
 
           <Box display={['none', 'block']} width={['100%', '32%']} border="1px solid #ddd" borderRadius={4} p={6}>
@@ -81,12 +123,13 @@ const ProductDetail: NextPage = () => {
                 </Box>
                 <Input textAlign="center" variant="unstyled" placeholder="0" value={qty} />
                 <Box cursor="pointer" onClick={handleAddQty}>
-                  <Plus color={qty === 8 ? '#ddd' : '#333'} />
+                  <Plus color={qty === Number(stock) ? '#ddd' : '#333'} />
                 </Box>
               </Box>
 
-              <Text as="p" ml={2} fontSize={['lg', 'md']}>
-                Stok Sisa: 8 kg
+              <Text as="p" ml={2} fontSize={['lg', 'md']} display="flex" alignItems="center">
+                Stok Sisa:{' '}
+                {isLoading ? <Skeleton ml={1} height="20px" width="32px" /> : data.data.data[0].attributes.stock}
               </Text>
             </Box>
 

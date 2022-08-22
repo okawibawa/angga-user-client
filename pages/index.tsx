@@ -16,7 +16,7 @@ import Products from '../components/Products/Products';
 import Footer from '../components/Footer';
 
 // apis
-import { findProducts } from '../apis/api';
+import { findProducts, getCategories } from '../apis/api';
 
 const Home: NextPage = () => {
   const host = useContext(HostContext);
@@ -26,12 +26,17 @@ const Home: NextPage = () => {
 
   // queries
   const { isLoading, isError, data } = useQuery(['products'], async () => await findProducts(host?.url));
+  const {
+    isLoading: isLoadingCategories,
+    isError: isErrorCategories,
+    data: dataCategories,
+  } = useQuery(['categories'], async () => await getCategories(host?.url));
 
   return (
     <>
       <Layout>
         <Banner />
-        <Categories />
+        <Categories isLoading={isLoadingCategories} isError={isErrorCategories} data={dataCategories} />
 
         <Divider my={8} />
 

@@ -62,7 +62,7 @@ const Products = ({ isLoading, isError, data }: ProductsProps) => {
                 .slice(0, 8)
                 .map((arr: any, index: number) => (
                   <SwiperSlide key={index}>
-                    <Link href={{ pathname: '/product-detail/[index]', query: { index: 'ikan-tuna' } }}>
+                    <Link href={{ pathname: '/product-detail/[index]', query: { index: arr.attributes.slug } }}>
                       <a>
                         <div className="keen-slider__slide number-slide1">
                           <Box
@@ -104,31 +104,49 @@ const Products = ({ isLoading, isError, data }: ProductsProps) => {
           </Heading>
         </Box>
 
-        <Box
-          display="grid"
-          gridTemplateColumns={['1fr 1fr', 'repeat(4, 1fr)', 'repeat(5, 1fr)', 'repeat(6, 1fr)']}
-          gap={[3, 2.5]}
-        >
-          {new Array(10).fill(null).map((arr, index) => (
-            <Box key={index}>
-              <Link href={{ pathname: '/product-detail/[index]', query: { index: 'ikan-tuna' } }}>
-                <a>
-                  <Box backgroundColor="#fff" border="1px solid #d6d6d6" p={[2, 4]} borderRadius={8} cursor="pointer">
-                    <Image width={256} height={256} src="/default-placeholder.png" alt="Placeholder" />
+        <Box>
+          {isLoading ? (
+            <Heading>Tunggu...</Heading>
+          ) : (
+            <Box
+              display="grid"
+              gridTemplateColumns={['1fr 1fr', 'repeat(4, 1fr)', 'repeat(5, 1fr)', 'repeat(6, 1fr)']}
+              gap={[3, 2.5]}
+              alignItems="stretch"
+            >
+              {data.data.data.length > 0 ? (
+                data.data.data.slice(0, 12).map((arr: any, index: number) => (
+                  <Box key={index}>
+                    <Link href={{ pathname: '/product-detail/[index]', query: { index: arr.attributes.slug } }}>
+                      <a>
+                        <Box
+                          backgroundColor="#fff"
+                          border="1px solid #d6d6d6"
+                          p={[2, 4]}
+                          borderRadius={8}
+                          cursor="pointer"
+                          height="100%"
+                        >
+                          <Image width={256} height={256} src="/default-placeholder.png" alt="Placeholder" />
 
-                    <Box mt={4}>
-                      <Text as="p" fontWeight="bold" fontSize={['sm', 'md']}>
-                        Rp80.000/kg
-                      </Text>
-                      <Text as="p" fontSize={['xs', 'md']}>
-                        Ikan Tuna
-                      </Text>
-                    </Box>
+                          <Box mt={4}>
+                            <Text as="p" fontWeight="bold" fontSize={['sm', 'md']}>
+                              {formatter.format(arr.attributes.price)}/{arr.attributes.unit}
+                            </Text>
+                            <Text as="p" fontSize={['xs', 'md']}>
+                              {arr.attributes.name}
+                            </Text>
+                          </Box>
+                        </Box>
+                      </a>
+                    </Link>
                   </Box>
-                </a>
-              </Link>
+                ))
+              ) : (
+                <Heading>Tidak ada produk.</Heading>
+              )}
             </Box>
-          ))}
+          )}
         </Box>
       </Box>
     </Box>
