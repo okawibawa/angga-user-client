@@ -52,3 +52,13 @@ export const findProductDetail = async (url: string | undefined, slug: string | 
     return error;
   }
 };
+
+export const findProductByCategory = async (url: string | undefined, category: string | undefined | string[]) => {
+  try {
+    const result = await axios.get(`${url}products?filters[category][name][$eq]=${category}`);
+
+    return result;
+  } catch (error) {
+    return error;
+  }
+};

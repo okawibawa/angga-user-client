@@ -14,4 +14,9 @@ export const CATEGORIES = [
     title: 'Udang',
     slug: 'udang',
   },
+  {
+    icon: '/kerang.png',
+    title: 'Kerang',
+    slug: 'kerang',
+  },
 ];
