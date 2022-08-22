@@ -35,7 +35,7 @@ export const getCategories = async (url: string | undefined) => {
 // ! products
 export const findProducts = async (url: string | undefined) => {
   try {
-    const result = await axios.get(`${url}products`);
+    const result = await axios.get(`${url}products?populate=image`);
 
     return result;
   } catch (error) {
@@ -45,7 +45,7 @@ export const findProducts = async (url: string | undefined) => {
 
 export const findProductDetail = async (url: string | undefined, slug: string | undefined | string[]) => {
   try {
-    const result = await axios.get(`${url}products?filters[slug][$eq]=${slug}`);
+    const result = await axios.get(`${url}products?filters[slug][$eq]=${slug}&populate=image`);
 
     return result;
   } catch (error) {
@@ -55,7 +55,7 @@ export const findProductDetail = async (url: string | undefined, slug: string | 
 
 export const findProductByCategory = async (url: string | undefined, category: string | undefined | string[]) => {
   try {
-    const result = await axios.get(`${url}products?filters[category][name][$eq]=${category}`);
+    const result = await axios.get(`${url}products?filters[category][name][$eq]=${category}&populate=image`);
 
     return result;
   } catch (error) {

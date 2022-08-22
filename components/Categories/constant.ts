@@ -6,8 +6,8 @@ export const CATEGORIES = [
   },
   {
     icon: '/octopus.png',
-    title: 'Gurita',
-    slug: 'gurita',
+    title: 'Cumi',
+    slug: 'cumi',
   },
   {
     icon: '/shrimp.png',

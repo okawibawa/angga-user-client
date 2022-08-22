@@ -73,7 +73,16 @@ const Products = ({ isLoading, isError, data }: ProductsProps) => {
                             cursor="pointer"
                             minH="300px"
                           >
-                            <Image width={256} height={256} src="/default-placeholder.png" alt="Placeholder" />
+                            <Image
+                              width={256}
+                              height={256}
+                              src={
+                                arr.attributes.image.data
+                                  ? arr.attributes.image.data[0].attributes.url
+                                  : '/default-placeholder.png'
+                              }
+                              alt="Placeholder"
+                            />
 
                             <Box mt={4}>
                               <Text as="p" fontWeight="bold" fontSize={['sm', 'md']}>
@@ -127,7 +136,16 @@ const Products = ({ isLoading, isError, data }: ProductsProps) => {
                           cursor="pointer"
                           height="100%"
                         >
-                          <Image width={256} height={256} src="/default-placeholder.png" alt="Placeholder" />
+                          <Image
+                            width={256}
+                            height={256}
+                            src={
+                              arr.attributes.image.data
+                                ? arr.attributes.image.data[0].attributes.url
+                                : '/default-placeholder.png'
+                            }
+                            alt="Placeholder"
+                          />
 
                           <Box mt={4}>
                             <Text as="p" fontWeight="bold" fontSize={['sm', 'md']}>

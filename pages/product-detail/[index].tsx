@@ -50,6 +50,8 @@ const ProductDetail: NextPage = () => {
 
   if (!isLoading) {
     stock = data.data.data[0].attributes.stock.slice(0, data.data.data[0].attributes.stock.length - 2);
+
+    console.log(data.data.data);
   }
 
   const handleAddQty = () => {
@@ -71,7 +73,20 @@ const ProductDetail: NextPage = () => {
           mb={['6rem', 0]}
         >
           <Box width={['100%', '32%']}>
-            <Image src="/default-placeholder.png" alt="Products" width={384} height={384} />
+            {isLoading ? (
+              <Skeleton width={384} height={384} />
+            ) : (
+              <Image
+                src={
+                  data.data.data[0].attributes.image.data
+                    ? data.data.data[0].attributes.image.data[0].attributes.url
+                    : '/default-placeholder.png'
+                }
+                alt="Products"
+                width={384}
+                height={384}
+              />
+            )}
           </Box>
 
           <Box my={[4, 0]} width={['100%', '32%']}>
