@@ -43,6 +43,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [show, setShow] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>('');
+  const [errorLogin, setErrorLogin] = useState<string>('');
 
   const handleClick = () => setShow(!show);
 
@@ -67,18 +68,23 @@ const Login = () => {
 
     const result: any = await authLogin(host?.url, credentials);
 
-    setCookie(null, 'sfJwt', result.data.jwt, {
-      maxAge: 30 * 24 * 60 * 60,
-      path: '/',
-    });
+    if (result.status === 200) {
+      setCookie(null, 'sfJwt', result.data.jwt, {
+        maxAge: 30 * 24 * 60 * 60,
+        path: '/',
+      });
 
-    setCookie(null, 'sfUser', JSON.stringify(result.data.user), {
-      maxAge: 30 * 24 * 60 * 60,
-      path: '/',
-    });
+      setCookie(null, 'sfUser', JSON.stringify(result.data.user), {
+        maxAge: 30 * 24 * 60 * 60,
+        path: '/',
+      });
 
+      setIsLoading(false);
+      router.push('/');
+    }
+
+    setErrorLogin(result.response.data.error.message);
     setIsLoading(false);
-    router.push('/');
   };
 
   return (
@@ -146,6 +152,12 @@ const Login = () => {
               </InputGroup>
             </Box>
           </Box>
+
+          {errorLogin && (
+            <Text as="p" textAlign="center" color="red">
+              Email atau password salah!
+            </Text>
+          )}
 
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <Text display="flex" alignItems="center">

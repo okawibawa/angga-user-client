@@ -38,6 +38,7 @@ const SignUp = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [show, setShow] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>('');
+  const [errorSignUp, setErrorSignUp] = useState<string>('');
 
   const handleClick = () => setShow(!show);
 
@@ -62,18 +63,23 @@ const SignUp = () => {
 
     const result: any = await authSignUp(host?.url, credentials);
 
-    setCookie(null, 'sfJwt', result.data.jwt, {
-      maxAge: 30 * 24 * 60 * 60,
-      path: '/',
-    });
+    if (result.status === 200) {
+      setCookie(null, 'sfJwt', result.data.jwt, {
+        maxAge: 30 * 24 * 60 * 60,
+        path: '/',
+      });
 
-    setCookie(null, 'sfUser', JSON.stringify(result.data.user), {
-      maxAge: 30 * 24 * 60 * 60,
-      path: '/',
-    });
+      setCookie(null, 'sfUser', JSON.stringify(result.data.user), {
+        maxAge: 30 * 24 * 60 * 60,
+        path: '/',
+      });
 
+      setIsLoading(false);
+      router.push('/');
+    }
+
+    setErrorSignUp(result.response.data.error.message);
     setIsLoading(false);
-    router.push('/');
   };
 
   return (
@@ -152,6 +158,12 @@ const SignUp = () => {
               </InputGroup>
             </Box>
           </Box>
+
+          {errorSignUp && (
+            <Text as="p" textAlign="center" color="red">
+              Email atau username sudah terdaftar!
+            </Text>
+          )}
 
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <Text display="flex" alignItems="center">
