@@ -76,10 +76,10 @@ const SignUp = () => {
 
       setIsLoading(false);
       router.push('/');
+    } else {
+      setErrorSignUp(result.response.data.error.message);
+      setIsLoading(false);
     }
-
-    setErrorSignUp(result.response.data.error.message);
-    setIsLoading(false);
   };
 
   return (

@@ -81,10 +81,10 @@ const Login = () => {
 
       setIsLoading(false);
       router.push('/');
+    } else {
+      setErrorLogin(result.response.data.error.message);
+      setIsLoading(false);
     }
-
-    setErrorLogin(result.response.data.error.message);
-    setIsLoading(false);
   };
 
   return (
