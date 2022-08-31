@@ -69,14 +69,17 @@ const ProductDetail: NextPage = () => {
 
   const handleChangeQty = (e: React.FormEvent<HTMLInputElement>) => {
     setQty(Number(e.currentTarget.value));
+    setSubtotal(Number(data.data.data[0].attributes.price) * Number(e.currentTarget.value));
     stock = data.data.data[0].attributes.stock.slice(0, data.data.data[0].attributes.stock.length - 2);
 
     if (Number(e.currentTarget.value) > Number(stock)) {
       setQty(stock);
+      setSubtotal(Number(data.data.data[0].attributes.price) * Number(stock));
     }
 
     if (Number(e.currentTarget.value) <= 0) {
       setQty(1);
+      setSubtotal(Number(data.data.data[0].attributes.price));
     }
   };
 
