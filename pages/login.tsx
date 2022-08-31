@@ -68,6 +68,8 @@ const Login = () => {
 
     const result: any = await authLogin(host?.url, credentials);
 
+    console.log({ result });
+
     if (result.status === 200) {
       setCookie(null, 'sfJwt', result.data.jwt, {
         maxAge: 30 * 24 * 60 * 60,
@@ -78,6 +80,12 @@ const Login = () => {
         maxAge: 30 * 24 * 60 * 60,
         path: '/',
       });
+
+      setCookie(null, 'sfUsername', result.data.user.username),
+        {
+          maxAge: 30 * 24 * 60 * 60,
+          path: '/',
+        };
 
       setIsLoading(false);
       router.push('/');
