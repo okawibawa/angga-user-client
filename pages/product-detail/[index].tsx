@@ -51,7 +51,6 @@ const ProductDetail: NextPage = () => {
   if (!isLoading) {
     stock = data.data.data[0].attributes.stock.slice(0, data.data.data[0].attributes.stock.length - 2);
 
-    console.log(data.data.data);
   }
 
   const handleAddQty = () => {

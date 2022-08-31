@@ -98,7 +98,11 @@ const Header = () => {
                   <User />
                 </MenuButton>
                 <MenuList zIndex={2}>
-                  <MenuItem>Akun Saya</MenuItem>
+                  <MenuItem>
+                    <Link href="/profile">
+                      <a>Akun Saya</a>
+                    </Link>
+                  </MenuItem>
                   <MenuItem onClick={handleLogout}>Keluar</MenuItem>
                 </MenuList>
               </Menu>

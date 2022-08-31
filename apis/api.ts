@@ -13,7 +13,42 @@ export const authLogin = async (url: string | undefined, body: {}) => {
 
 export const authSignUp = async (url: string | undefined, body: {}) => {
   try {
-    const result = await axios.post(`${url}auth/local/register`, body);
+    const result = await axios.post(`${url}profile/register-user`, body);
+
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+// ! profile
+export const getProfile = async (url: string | undefined, token: string, username: string) => {
+  try {
+    const result = await axios.get(`${url}profiles?filters[full_name][$eq]=${username}&populate=*`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const updateProfile = async (url: string | undefined, token: string, id: string, body: any) => {
+  try {
+    const result = await axios.put(
+      `${url}profiles/${id}`,
+      { data: body[0] },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     return result;
   } catch (error) {
