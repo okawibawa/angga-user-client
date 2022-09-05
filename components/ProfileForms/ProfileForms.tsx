@@ -15,10 +15,10 @@ import { Button, Box, Text, Heading, Divider, Input, VStack } from '@chakra-ui/r
 export const ProfileInfo = () => {
   return (
     <Box>
-      <Heading as="h6" fontSize="md">
+      <Heading as="h6" size="md">
         Profile Saya
       </Heading>
-      <Text as="p" fontSize="md">
+      <Text as="p" size="md">
         Kelola Informasi profile Anda
       </Text>
 
@@ -34,7 +34,7 @@ export const Address = ({ data, handleDetails, details, handleUpdate, isLoadingU
 
   return (
     <Box>
-      <Heading as="h6" fontSize="md">
+      <Heading as="h6" size="md">
         Detail Profil
       </Heading>
 

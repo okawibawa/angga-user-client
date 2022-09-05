@@ -57,47 +57,44 @@ const Products = ({ isLoading, isError, data }: ProductsProps) => {
               onSlideChange={() => console.log('slide change')}
               onSwiper={(swiper) => console.log(swiper)}
             >
-              {data.data.data
-                .reverse()
-                .slice(0, 8)
-                .map((arr: any, index: number) => (
-                  <SwiperSlide key={index}>
-                    <Link href={{ pathname: '/product-detail/[index]', query: { index: arr.attributes.slug } }}>
-                      <a>
-                        <div className="keen-slider__slide number-slide1">
-                          <Box
-                            backgroundColor="#fff"
-                            border="1px solid #d6d6d6"
-                            p={[2, 4]}
-                            borderRadius={8}
-                            cursor="pointer"
-                            minH="300px"
-                          >
-                            <Image
-                              width={256}
-                              height={256}
-                              src={
-                                arr.attributes.image.data
-                                  ? arr.attributes.image.data[0].attributes.url
-                                  : '/default-placeholder.png'
-                              }
-                              alt="Placeholder"
-                            />
+              {data.data.data.map((arr: any, index: number) => (
+                <SwiperSlide key={index}>
+                  <Link href={{ pathname: '/product-detail/[index]', query: { index: arr.attributes.slug } }}>
+                    <a>
+                      <div className="keen-slider__slide number-slide1">
+                        <Box
+                          backgroundColor="#fff"
+                          border="1px solid #d6d6d6"
+                          p={[2, 4]}
+                          borderRadius={8}
+                          cursor="pointer"
+                          minH="300px"
+                        >
+                          <Image
+                            width={256}
+                            height={256}
+                            src={
+                              arr.attributes.image.data
+                                ? arr.attributes.image.data[0].attributes.url
+                                : '/default-placeholder.png'
+                            }
+                            alt="Placeholder"
+                          />
 
-                            <Box mt={4}>
-                              <Text as="p" fontWeight="bold" fontSize={['sm', 'md']}>
-                                {formatter.format(arr.attributes.price)}/{arr.attributes.unit}
-                              </Text>
-                              <Text as="p" fontSize={['xs', 'md']}>
-                                {arr.attributes.name}
-                              </Text>
-                            </Box>
+                          <Box mt={4}>
+                            <Text as="p" fontWeight="bold" size={['sm', 'md']}>
+                              {formatter.format(arr.attributes.price)}/{arr.attributes.unit}
+                            </Text>
+                            <Text as="p" size={['xs', 'md']}>
+                              {arr.attributes.name}
+                            </Text>
                           </Box>
-                        </div>
-                      </a>
-                    </Link>
-                  </SwiperSlide>
-                ))}
+                        </Box>
+                      </div>
+                    </a>
+                  </Link>
+                </SwiperSlide>
+              ))}
             </Swiper>
           ) : (
             <Heading>Tidak ada produk..</Heading>
@@ -106,7 +103,7 @@ const Products = ({ isLoading, isError, data }: ProductsProps) => {
       </Box>
 
       {/* Recommendation */}
-      <Box>
+      {/* <Box>
         <Box mb={2}>
           <Heading as="h3" size="md">
             Rekomendasi
@@ -148,10 +145,10 @@ const Products = ({ isLoading, isError, data }: ProductsProps) => {
                           />
 
                           <Box mt={4}>
-                            <Text as="p" fontWeight="bold" fontSize={['sm', 'md']}>
+                            <Text as="p" fontWeight="bold" size={['sm', 'md']}>
                               {formatter.format(arr.attributes.price)}/{arr.attributes.unit}
                             </Text>
-                            <Text as="p" fontSize={['xs', 'md']}>
+                            <Text as="p" size={['xs', 'md']}>
                               {arr.attributes.name}
                             </Text>
                           </Box>
@@ -166,7 +163,7 @@ const Products = ({ isLoading, isError, data }: ProductsProps) => {
             </Box>
           )}
         </Box>
-      </Box>
+      </Box> */}
     </Box>
   );
 };

@@ -111,10 +111,10 @@ const ProductDetail: NextPage = () => {
           </Box>
 
           <Box my={[4, 0]} width={['100%', '32%']}>
-            <Heading as="h2" fontSize={['lg', 'md']} mb={2}>
+            <Heading as="h2" size={['lg', 'md']} mb={2}>
               {isLoading ? <Skeleton height="20px" /> : <Text as="p">{data.data.data[0].attributes.name}</Text>}
             </Heading>
-            <Heading as="h3" mb={[0, 4]} fontSize={['xl', 'lg']}>
+            <Heading as="h3" mb={[0, 4]} size={['xl', 'lg']}>
               {isLoading ? (
                 <Skeleton height="20px" />
               ) : (
@@ -139,7 +139,7 @@ const ProductDetail: NextPage = () => {
           </Box>
 
           <Box display={['none', 'block']} width={['100%', '32%']} border="1px solid #ddd" borderRadius={4} p={6}>
-            <Heading as="h6" fontSize={['lg', 'md']} mb={4}>
+            <Heading as="h6" size={['lg', 'md']} mb={4}>
               Atur Jumlah (kg)
             </Heading>
 
@@ -163,7 +163,7 @@ const ProductDetail: NextPage = () => {
                 </Box>
               </Box>
 
-              <Text as="p" ml={2} fontSize={['lg', 'md']} display="flex" alignItems="center">
+              <Text as="p" ml={2} size={['lg', 'md']} display="flex" alignItems="center">
                 Stok Sisa:{' '}
                 {isLoading ? <Skeleton ml={1} height="20px" width="32px" /> : data.data.data[0].attributes.stock}
               </Text>
@@ -171,11 +171,11 @@ const ProductDetail: NextPage = () => {
 
             <Box>
               <Box display="flex" alignItems="center" justifyContent="space-between">
-                <Heading as="h6" fontSize={['md', 'sm']} color="gray" mb={4}>
+                <Heading as="h6" size={['md', 'sm']} color="gray" mb={4}>
                   Subtotal
                 </Heading>
 
-                <Heading as="h6" fontSize={['lg', 'md']} mb={4}>
+                <Heading as="h6" size={['lg', 'md']} mb={4}>
                   {!isLoading ? formatter.format(subtotal) : <Skeleton height="20px" width="32px" />}
                 </Heading>
               </Box>
