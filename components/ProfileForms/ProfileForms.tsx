@@ -30,8 +30,6 @@ export const ProfileInfo = () => {
 };
 
 export const Address = ({ data, handleDetails, details, handleUpdate, isLoadingUpdate }: ProfileFormsProps) => {
-  // console.log({ data });
-
   return (
     <Box>
       <Heading as="h6" size="md">

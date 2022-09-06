@@ -56,19 +56,19 @@ const Header = () => {
           </Box>
 
           <Stack direction={['row']} spacing={4} display={['none', 'flex']} alignItems="center" listStyleType="none">
-            <Link href="#">
+            <Link href="/">
               <a>
                 <Text as="p">Home</Text>
               </a>
             </Link>
 
-            <Link href="#">
+            <Link href="/about-us">
               <a>
                 <Text as="p">About Us</Text>
               </a>
             </Link>
 
-            <Link href="#">
+            <Link href="/contact-us">
               <a>
                 <Text as="p">Contact Us</Text>
               </a>

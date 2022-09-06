@@ -22,6 +22,7 @@ import Layout from '../../components/Layout';
 // icons
 import { Plus, Minus } from 'iconoir-react';
 import { findProductDetail } from '../../apis/api';
+import Footer from '../../components/Footer';
 
 const ProductDetail: NextPage = () => {
   const host = useContext(HostContext);
@@ -92,6 +93,7 @@ const ProductDetail: NextPage = () => {
           alignItems={['flex-start']}
           justifyContent={['flex-start', 'space-between']}
           mb={['6rem', 0]}
+          minHeight="50vh"
         >
           <Box width={['100%', '32%']}>
             {isLoading ? (
@@ -214,6 +216,8 @@ const ProductDetail: NextPage = () => {
           </Box>
         </Container>
       </Box>
+
+      <Footer />
     </Box>
   );
 };
