@@ -102,7 +102,7 @@ const Profile = () => {
                 onClick={() => setCurrentMenu('detail')}
                 cursor="pointer"
                 my={4}
-                color={currentMenu === 'detail' ? 'blue' : 'black'}
+                color={currentMenu === 'detail' ? 'rgb(49, 130, 206)' : 'black'}
               >
                 Detail Profil
               </Text>

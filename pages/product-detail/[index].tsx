@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useState, useEffect, useContext } from 'react';
@@ -187,9 +188,17 @@ const ProductDetail: NextPage = () => {
                   + Keranjang
                 </Button>
 
-                <Button w="100%" size="sm" colorScheme="blue" variant="outline">
-                  Beli
-                </Button>
+                {isLoading ? (
+                  <Skeleton height="24px" width="100%" />
+                ) : (
+                  <Link href={{ pathname: '/buy-now/[index]', query: { index: data.data.data[0].attributes.slug } }}>
+                    <a>
+                      <Button w="100%" size="sm" colorScheme="blue" variant="outline">
+                        Beli Sekarang
+                      </Button>
+                    </a>
+                  </Link>
+                )}
               </Box>
             </Box>
           </Box>
@@ -208,7 +217,7 @@ const ProductDetail: NextPage = () => {
         <Container maxW="container.xl">
           <Box display="flex" justifyContent="flex-end">
             <Button size="sm" colorScheme="blue" variant="outline">
-              Beli
+              Beli Sekarang
             </Button>
             <Button size="sm" colorScheme="blue" ml={2}>
               + Keranjang
