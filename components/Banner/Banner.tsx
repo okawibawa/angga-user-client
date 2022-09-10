@@ -20,12 +20,12 @@ const Banner = () => {
       >
         <SwiperSlide>
           <Box height={48} width="100%" backgroundColor="lightyellow">
-            Banner 1
+            <img src="/banner-1.png" alt="banner one" style={{ width: '100%' }} />
           </Box>
         </SwiperSlide>
         <SwiperSlide>
           <Box height={48} width="100%" backgroundColor="lightblue">
-            Banner 2
+            <img src="/banner-2.png" alt="banner 2" style={{ width: '100%' }} />
           </Box>
         </SwiperSlide>
       </Swiper>

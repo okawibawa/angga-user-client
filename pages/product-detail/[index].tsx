@@ -216,9 +216,17 @@ const ProductDetail: NextPage = () => {
       >
         <Container maxW="container.xl">
           <Box display="flex" justifyContent="flex-end">
-            <Button size="sm" colorScheme="blue" variant="outline">
-              Beli Sekarang
-            </Button>
+            {isLoading ? (
+              <Skeleton height="24px" width="100%" />
+            ) : (
+              <Link href={{ pathname: '/buy-now/[index]', query: { index: data.data.data[0].attributes.slug } }}>
+                <a>
+                  <Button w="100%" size="sm" colorScheme="blue" variant="outline">
+                    Beli Sekarang
+                  </Button>
+                </a>
+              </Link>
+            )}
             <Button size="sm" colorScheme="blue" ml={2}>
               + Keranjang
             </Button>
