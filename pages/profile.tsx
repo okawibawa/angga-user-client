@@ -85,7 +85,7 @@ const Profile = () => {
   return (
     <Layout>
       <Box>
-        <Grid gridTemplateColumns="16rem 1fr" gap={8}>
+        <Grid gridTemplateColumns={['1fr', '16rem 1fr']} gap={8}>
           <GridItem>
             <Box border="1px solid lightgrey" p={2} borderRadius={4}>
               {/* <Text
@@ -108,7 +108,8 @@ const Profile = () => {
               </Text>
             </Box>
           </GridItem>
-          <GridItem>
+
+          <GridItem mb={[6, 0]}>
             {!isLoading ? (
               <>
                 {/* {currentMenu === 'profile' && <ProfileInfo />} */}
