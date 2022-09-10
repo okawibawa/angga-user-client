@@ -70,7 +70,7 @@ export const getCategories = async (url: string | undefined) => {
 // ! products
 export const findProducts = async (url: string | undefined) => {
   try {
-    const result = await axios.get(`${url}products?populate=image`);
+    const result = await axios.get(`${url}products?populate=image&sort[0]=id:desc&pagination[limit]=12`);
 
     return result;
   } catch (error) {

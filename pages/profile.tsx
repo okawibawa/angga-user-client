@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, ChangeEvent } from 'react';
 import { useRouter } from 'next/router';
 import { HostContext } from '../context/HostContext';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { parseCookies, setCookie } from 'nookies';
 
 // chakra
@@ -11,6 +11,21 @@ import { Divider, Text, Box, Heading, Grid, GridItem } from '@chakra-ui/react';
 import Layout from '../components/Layout';
 import { ProfileInfo, Address } from '../components/ProfileForms/ProfileForms';
 import { getProfile, updateProfile } from '../apis/api';
+
+interface UserProps {
+  address: string;
+  phone: string;
+  postal_code: string;
+  district: string;
+  regency: string;
+}
+
+interface UpdateUserProps {
+  url: string;
+  jwt: string;
+  userId: string;
+  body: UserProps;
+}
 
 const Profile = () => {
   const host = useContext(HostContext);
@@ -38,11 +53,12 @@ const Profile = () => {
     setDetails({ ...details, [name]: e.target.value });
   };
 
+  // const mutation = useMutation<UpdateUserProps>(updateProfile);
+
   const handleUpdate = async () => {
     const body: any = [
       {
         address: details.address ? details.address : data.data.data[0].attributes.address,
-        // full_name: details.full_name ? details.full_name : data.data.data[0].attributes.full_name,
         phone: details.phone ? details.phone : data.data.data[0].attributes.phone,
         postal_code: details.postal_code ? details.postal_code : data.data.data[0].attributes.postal_code,
         district: details.district ? details.district : data.data.data[0].attributes.district,
@@ -51,6 +67,13 @@ const Profile = () => {
     ];
 
     setIsLoadingUpdate(true);
+
+    // await mutation.mutate({
+    //   url: host?.url,
+    //   jwt: cookies.sfJwt,
+    //   userId: cookies.sfUserId,
+    //   body: body,
+    // });
 
     const result: any = await updateProfile(host?.url, cookies.sfJwt, cookies.sfUserId, body);
 
@@ -79,7 +102,7 @@ const Profile = () => {
                 onClick={() => setCurrentMenu('detail')}
                 cursor="pointer"
                 my={4}
-                color={currentMenu === 'detail' ? 'blue' : 'black'}
+                color={currentMenu === 'detail' ? 'rgb(49, 130, 206)' : 'black'}
               >
                 Detail Profil
               </Text>

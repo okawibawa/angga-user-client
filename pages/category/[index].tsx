@@ -95,10 +95,10 @@ const Category: NextPage = () => {
                           />
 
                           <Box mt={4}>
-                            <Text as="p" fontWeight="bold" fontSize={['sm', 'md']}>
+                            <Text as="p" fontWeight="bold" size={['sm', 'md']}>
                               {formatter.format(arr.attributes.price)}/{arr.attributes.unit}
                             </Text>
-                            <Text as="p" fontSize={['xs', 'md']}>
+                            <Text as="p" size={['xs', 'md']}>
                               {arr.attributes.name}
                             </Text>
                           </Box>

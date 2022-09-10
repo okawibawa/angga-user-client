@@ -5,6 +5,7 @@ import { parseCookies, destroyCookie } from 'nookies';
 
 // chakra
 import {
+  Stack,
   Box,
   Container,
   Divider,
@@ -47,25 +48,43 @@ const Header = () => {
           <Box>
             <Link href="/">
               <a>
-                <Heading as="h1" fontSize="md">
-                  Seafood
+                <Heading as="h1" size="lg">
+                  UD. Putra
                 </Heading>
               </a>
             </Link>
           </Box>
 
-          <UnorderedList display={['none', 'flex']} alignItems="center" listStyleType="none">
-            <ListItem>
-              <Link href="#">
-                <a>
-                  <SimpleCart />
-                </a>
-              </Link>
-            </ListItem>
-            <ListItem marginX={8}>
-              <Divider orientation="vertical" height={6} />
-            </ListItem>
-            <ListItem marginRight={4} display={cookies.sfJwt ? 'none' : 'block'}>
+          <Stack direction={['row']} spacing={4} display={['none', 'flex']} alignItems="center" listStyleType="none">
+            <Link href="/">
+              <a>
+                <Text as="p">Home</Text>
+              </a>
+            </Link>
+
+            <Link href="/about-us">
+              <a>
+                <Text as="p">About Us</Text>
+              </a>
+            </Link>
+
+            <Link href="/contact-us">
+              <a>
+                <Text as="p">Contact Us</Text>
+              </a>
+            </Link>
+
+            <Divider orientation="vertical" height={6} />
+
+            <Link href="#">
+              <a>
+                <SimpleCart />
+              </a>
+            </Link>
+
+            <Divider orientation="vertical" height={6} />
+
+            <Box marginRight={4} display={cookies.sfJwt ? 'none' : 'block'}>
               <Link href="/login">
                 <a>
                   <Button variant="outline" colorScheme="blue" size="sm">
@@ -75,8 +94,9 @@ const Header = () => {
                   </Button>
                 </a>
               </Link>
-            </ListItem>
-            <ListItem display={cookies.sfJwt ? 'none' : 'block'}>
+            </Box>
+
+            <Box display={cookies.sfJwt ? 'none' : 'block'}>
               <Link href="/signup">
                 <a>
                   <Button colorScheme="blue" size="sm">
@@ -86,7 +106,7 @@ const Header = () => {
                   </Button>
                 </a>
               </Link>
-            </ListItem>
+            </Box>
 
             <Box display={cookies.sfJwt ? 'flex' : 'none'} alignItems="center">
               <Menu>
@@ -107,7 +127,7 @@ const Header = () => {
                 </MenuList>
               </Menu>
             </Box>
-          </UnorderedList>
+          </Stack>
 
           <Box display={['block', 'none']}>
             <Box

@@ -1,7 +1,8 @@
 import { NextPage } from 'next';
+import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { HostContext } from '../../context/HostContext';
 
 type ProductDetailsProps = {
@@ -22,13 +23,15 @@ import Layout from '../../components/Layout';
 // icons
 import { Plus, Minus } from 'iconoir-react';
 import { findProductDetail } from '../../apis/api';
+import Footer from '../../components/Footer';
 
 const ProductDetail: NextPage = () => {
   const host = useContext(HostContext);
   const router = useRouter();
   let stock: number = 0;
 
-  const [qty, setQty] = useState(1);
+  const [subtotal, setSubtotal] = useState<number>(0);
+  const [qty, setQty] = useState<number>(1);
 
   const { isLoading, isError, data }: ProductDetailsProps = useQuery(
     [`product-detail-${router.query.index}`],
@@ -41,23 +44,44 @@ const ProductDetail: NextPage = () => {
   });
 
   const handleSubtractQty = () => {
-    if (qty === 1) {
+    if (Number(qty) === 1) {
       return false;
     } else {
-      setQty((qty) => qty - 1);
+      setQty((qty) => Number(qty) - 1);
+      setSubtotal(Number(subtotal) - Number(data.data.data[0].attributes.price));
     }
   };
 
   if (!isLoading) {
     stock = data.data.data[0].attributes.stock.slice(0, data.data.data[0].attributes.stock.length - 2);
-
   }
 
+  useEffect(() => {
+    if (data) setSubtotal(data.data.data[0].attributes.price);
+  }, [data]);
+
   const handleAddQty = () => {
-    if (qty === Number(stock)) {
+    if (Number(qty) === Number(stock)) {
       return false;
     } else {
-      setQty((qty) => qty + 1);
+      setQty((qty) => Number(qty) + 1);
+      setSubtotal(Number(subtotal) + Number(data.data.data[0].attributes.price));
+    }
+  };
+
+  const handleChangeQty = (e: React.FormEvent<HTMLInputElement>) => {
+    setQty(Number(e.currentTarget.value));
+    setSubtotal(Number(data.data.data[0].attributes.price) * Number(e.currentTarget.value));
+    stock = data.data.data[0].attributes.stock.slice(0, data.data.data[0].attributes.stock.length - 2);
+
+    if (Number(e.currentTarget.value) > Number(stock)) {
+      setQty(stock);
+      setSubtotal(Number(data.data.data[0].attributes.price) * Number(stock));
+    }
+
+    if (Number(e.currentTarget.value) <= 0) {
+      setQty(1);
+      setSubtotal(Number(data.data.data[0].attributes.price));
     }
   };
 
@@ -70,6 +94,7 @@ const ProductDetail: NextPage = () => {
           alignItems={['flex-start']}
           justifyContent={['flex-start', 'space-between']}
           mb={['6rem', 0]}
+          minHeight="50vh"
         >
           <Box width={['100%', '32%']}>
             {isLoading ? (
@@ -89,10 +114,10 @@ const ProductDetail: NextPage = () => {
           </Box>
 
           <Box my={[4, 0]} width={['100%', '32%']}>
-            <Heading as="h2" fontSize={['lg', 'md']} mb={2}>
+            <Heading as="h2" size={['lg', 'md']} mb={2}>
               {isLoading ? <Skeleton height="20px" /> : <Text as="p">{data.data.data[0].attributes.name}</Text>}
             </Heading>
-            <Heading as="h3" mb={[0, 4]} fontSize={['xl', 'lg']}>
+            <Heading as="h3" mb={[0, 4]} size={['xl', 'lg']}>
               {isLoading ? (
                 <Skeleton height="20px" />
               ) : (
@@ -117,7 +142,7 @@ const ProductDetail: NextPage = () => {
           </Box>
 
           <Box display={['none', 'block']} width={['100%', '32%']} border="1px solid #ddd" borderRadius={4} p={6}>
-            <Heading as="h6" fontSize={['lg', 'md']} mb={4}>
+            <Heading as="h6" size={['lg', 'md']} mb={4}>
               Atur Jumlah (kg)
             </Heading>
 
@@ -133,15 +158,15 @@ const ProductDetail: NextPage = () => {
                 justifyContent="space-between"
               >
                 <Box cursor="pointer" onClick={handleSubtractQty}>
-                  <Minus color={qty === 1 ? '#ddd' : '#333'} />
+                  <Minus color={Number(qty) === 1 ? '#ddd' : '#333'} />
                 </Box>
-                <Input textAlign="center" variant="unstyled" placeholder="0" value={qty} />
+                <Input textAlign="center" variant="unstyled" placeholder="0" value={qty} onChange={handleChangeQty} />
                 <Box cursor="pointer" onClick={handleAddQty}>
-                  <Plus color={qty === Number(stock) ? '#ddd' : '#333'} />
+                  <Plus color={Number(qty) === Number(stock) ? '#ddd' : '#333'} />
                 </Box>
               </Box>
 
-              <Text as="p" ml={2} fontSize={['lg', 'md']} display="flex" alignItems="center">
+              <Text as="p" ml={2} size={['lg', 'md']} display="flex" alignItems="center">
                 Stok Sisa:{' '}
                 {isLoading ? <Skeleton ml={1} height="20px" width="32px" /> : data.data.data[0].attributes.stock}
               </Text>
@@ -149,12 +174,12 @@ const ProductDetail: NextPage = () => {
 
             <Box>
               <Box display="flex" alignItems="center" justifyContent="space-between">
-                <Heading as="h6" fontSize={['md', 'sm']} color="gray" mb={4}>
+                <Heading as="h6" size={['md', 'sm']} color="gray" mb={4}>
                   Subtotal
                 </Heading>
 
-                <Heading as="h6" fontSize={['lg', 'md']} mb={4}>
-                  Rp200.000
+                <Heading as="h6" size={['lg', 'md']} mb={4}>
+                  {!isLoading ? formatter.format(subtotal) : <Skeleton height="20px" width="32px" />}
                 </Heading>
               </Box>
 
@@ -163,9 +188,17 @@ const ProductDetail: NextPage = () => {
                   + Keranjang
                 </Button>
 
-                <Button w="100%" size="sm" colorScheme="blue" variant="outline">
-                  Beli
-                </Button>
+                {isLoading ? (
+                  <Skeleton height="24px" width="100%" />
+                ) : (
+                  <Link href={{ pathname: '/buy-now/[index]', query: { index: data.data.data[0].attributes.slug } }}>
+                    <a>
+                      <Button w="100%" size="sm" colorScheme="blue" variant="outline">
+                        Beli Sekarang
+                      </Button>
+                    </a>
+                  </Link>
+                )}
               </Box>
             </Box>
           </Box>
@@ -183,15 +216,25 @@ const ProductDetail: NextPage = () => {
       >
         <Container maxW="container.xl">
           <Box display="flex" justifyContent="flex-end">
-            <Button size="sm" colorScheme="blue" variant="outline">
-              Beli
-            </Button>
+            {isLoading ? (
+              <Skeleton height="24px" width="100%" />
+            ) : (
+              <Link href={{ pathname: '/buy-now/[index]', query: { index: data.data.data[0].attributes.slug } }}>
+                <a>
+                  <Button w="100%" size="sm" colorScheme="blue" variant="outline">
+                    Beli Sekarang
+                  </Button>
+                </a>
+              </Link>
+            )}
             <Button size="sm" colorScheme="blue" ml={2}>
               + Keranjang
             </Button>
           </Box>
         </Container>
       </Box>
+
+      <Footer />
     </Box>
   );
 };
