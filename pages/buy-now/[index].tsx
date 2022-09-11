@@ -142,14 +142,14 @@ const BuyNow = () => {
       data.data.data[0].id
     );
 
+    console.log({ result });
+
     if (result.statusText !== 'OK') {
       setMsg('Proses pembuatan pembayaran gagal. Hubungi admin.');
       onOpen();
       setIsLoadingPayment(false);
       return;
     }
-
-    console.log({ result });
 
     router.push({ pathname: '/invoice/[index]', query: { index: result.data.data.id } });
   };
