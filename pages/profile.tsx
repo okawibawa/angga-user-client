@@ -53,8 +53,6 @@ const Profile = () => {
     setDetails({ ...details, [name]: e.target.value });
   };
 
-  // const mutation = useMutation<UpdateUserProps>(updateProfile);
-
   const handleUpdate = async () => {
     const body: any = [
       {
@@ -67,13 +65,6 @@ const Profile = () => {
     ];
 
     setIsLoadingUpdate(true);
-
-    // await mutation.mutate({
-    //   url: host?.url,
-    //   jwt: cookies.sfJwt,
-    //   userId: cookies.sfUserId,
-    //   body: body,
-    // });
 
     const result: any = await updateProfile(host?.url, cookies.sfJwt, cookies.sfUserId, body);
 

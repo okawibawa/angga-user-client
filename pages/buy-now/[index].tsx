@@ -6,7 +6,7 @@ import { HostContext } from '../../context/HostContext';
 
 import Layout from '../../components/Layout';
 
-import { Stack, Text, Heading, Box, Button, Skeleton, Divider, Input } from '@chakra-ui/react';
+import { Stack, Text, Heading, Box, Button, Skeleton, Divider, Input, Select } from '@chakra-ui/react';
 
 type ProductDetailsProps = {
   isLoading: boolean;
@@ -18,9 +18,9 @@ type ProductDetailsProps = {
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 // icons
-import { Plus, Minus } from 'iconoir-react';
+import { Plus, Minus, NavArrowDown } from 'iconoir-react';
 
-import { findProductDetail } from '../../apis/api';
+import { findProductDetail, getFVA } from '../../apis/api';
 import Footer from '../../components/Footer';
 
 const BuyNow = () => {
@@ -35,6 +35,16 @@ const BuyNow = () => {
     [`product-detail-${router.query.index}`],
     async () => findProductDetail(host?.url, router.query.index)
   );
+
+  useEffect(() => {
+    const banks = async () => {
+      const result = await getFVA();
+
+      console.log({ result });
+    };
+
+    banks();
+  }, []);
 
   const formatter = new Intl.NumberFormat('id-ID', {
     style: 'currency',
@@ -187,35 +197,51 @@ const BuyNow = () => {
               </Box>
             </Box>
 
-            <Box width={['100%', '32%']} border="1px solid #ddd" borderRadius={4} p={6} mb={[4, 0]}>
-              <Stack direction="column" spacing={4}>
-                <Heading as="h6" size="md">
-                  Ringakasan Belanja
-                </Heading>
-
-                <Box display="flex" alignItems="center" justifyContent="space-between">
-                  <Heading as="h6" size={['sm', 'sm']} color="gray" mb={4}>
-                    Total ({qty})
+            <Stack spacing={4} width={['100%', '32%']}>
+              <Box border="1px solid #ddd" borderRadius={4} p={6} mb={[4, 0]}>
+                <Stack direction="column" spacing={4}>
+                  <Heading as="h6" size="md">
+                    Metode Pembayaran
                   </Heading>
 
-                  <Heading as="h6" size={['sm', 'md']} mb={4}>
-                    {!isLoading ? formatter.format(subtotal) : <Skeleton height="20px" width="32px" />}
-                  </Heading>
-                </Box>
+                  <Box>
+                    <Select placeholder="Pilih metode pembayaran">
+                      <option value="option1">Option 1</option>
+                    </Select>
+                  </Box>
+                </Stack>
+              </Box>
 
-                <Box display="flex" alignItems="center" justifyContent="space-between">
-                  <Heading as="h6" size={['sm', 'sm']} color="gray" mb={4}>
-                    Total Tagihan
+              <Box border="1px solid #ddd" borderRadius={4} p={6} mb={[4, 0]}>
+                <Stack direction="column" spacing={4}>
+                  <Heading as="h6" size="md">
+                    Ringakasan Belanja
                   </Heading>
 
-                  <Heading as="h6" size={['sm', 'md']} mb={4}>
-                    {!isLoading ? formatter.format(subtotal) : <Skeleton height="20px" width="32px" />}
-                  </Heading>
-                </Box>
+                  <Box display="flex" alignItems="center" justifyContent="space-between">
+                    <Heading as="h6" size={['sm', 'sm']} color="gray" mb={4}>
+                      Total ({qty})
+                    </Heading>
 
-                <Button colorScheme="blue">Bayar</Button>
-              </Stack>
-            </Box>
+                    <Heading as="h6" size={['sm', 'md']} mb={4}>
+                      {!isLoading ? formatter.format(subtotal) : <Skeleton height="20px" width="32px" />}
+                    </Heading>
+                  </Box>
+
+                  <Box display="flex" alignItems="center" justifyContent="space-between">
+                    <Heading as="h6" size={['sm', 'sm']} color="gray" mb={4}>
+                      Total Tagihan
+                    </Heading>
+
+                    <Heading as="h6" size={['sm', 'md']} mb={4}>
+                      {!isLoading ? formatter.format(subtotal) : <Skeleton height="20px" width="32px" />}
+                    </Heading>
+                  </Box>
+
+                  <Button colorScheme="blue">Bayar</Button>
+                </Stack>
+              </Box>
+            </Stack>
           </Box>
         </Stack>
       </Stack>

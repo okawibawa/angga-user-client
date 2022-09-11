@@ -68,7 +68,8 @@ const Products = ({ isLoading, isError, data }: ProductsProps) => {
                           p={[2, 4]}
                           borderRadius={8}
                           cursor="pointer"
-                          minH="300px"
+                          minH="320px"
+                          flex={1}
                         >
                           <Image
                             width={256}
@@ -78,14 +79,14 @@ const Products = ({ isLoading, isError, data }: ProductsProps) => {
                                 ? arr.attributes.image.data[0].attributes.url
                                 : '/default-placeholder.png'
                             }
-                            alt="Placeholder"
+                            alt={arr.attributes.name}
                           />
 
                           <Box mt={4}>
                             <Text as="p" fontWeight="bold" size={['sm', 'md']}>
                               {formatter.format(arr.attributes.price)}/{arr.attributes.unit}
                             </Text>
-                            <Text as="p" size={['xs', 'md']}>
+                            <Text as="p" size={['xs', 'md']} noOfLines={2} wordBreak="break-all">
                               {arr.attributes.name}
                             </Text>
                           </Box>
