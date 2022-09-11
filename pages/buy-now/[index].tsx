@@ -20,7 +20,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 // icons
 import { Plus, Minus, NavArrowDown } from 'iconoir-react';
 
-import { findProductDetail, getFVA } from '../../apis/api';
+import { findProductDetail } from '../../apis/api';
 import Footer from '../../components/Footer';
 
 const BuyNow = () => {
@@ -35,16 +35,6 @@ const BuyNow = () => {
     [`product-detail-${router.query.index}`],
     async () => findProductDetail(host?.url, router.query.index)
   );
-
-  useEffect(() => {
-    const banks = async () => {
-      const result = await getFVA();
-
-      console.log({ result });
-    };
-
-    banks();
-  }, []);
 
   const formatter = new Intl.NumberFormat('id-ID', {
     style: 'currency',

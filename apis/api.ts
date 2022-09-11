@@ -1,23 +1,4 @@
 import axios from 'axios';
-const Xendit = require('xendit-node');
-const x = new Xendit({
-  secretKey: 'xnd_development_URrf17t6hhUNJTzSR7cxGpQSnhKirmLQndQehhKsqNeycsy1ZJoFFQDjLaxAO',
-  xenditURL: 'https://api.xendit.co',
-});
-
-// ! xendit
-export const getFVA = async () => {
-  const VirtualAcc = x.VirtualAcc;
-  const va = new VirtualAcc({});
-
-  try {
-    const banks = await va.getVABanks();
-
-    return banks;
-  } catch (error) {
-    return error;
-  }
-};
 
 // ! auth
 export const authLogin = async (url: string | undefined, body: {}) => {
