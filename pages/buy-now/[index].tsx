@@ -66,8 +66,6 @@ const BuyNow = () => {
     async () => findProductDetail(host?.url, router.query.index)
   );
 
-  console.log({ data });
-
   const { isLoading: isLoadingVA, data: dataVA } = useQuery(['va'], () => getVa(host?.url));
 
   const { data: dataProfile, isLoading: isLoadingProfile }: any = useQuery([`profile-${cookies.sfUsername}`], () =>
@@ -150,6 +148,8 @@ const BuyNow = () => {
       setIsLoadingPayment(false);
       return;
     }
+
+    console.log({ result });
 
     router.push({ pathname: '/invoice/[index]', query: { index: result.data.data.id } });
   };

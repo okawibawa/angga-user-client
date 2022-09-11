@@ -17,8 +17,6 @@ const AboutUs = () => {
   const router = useRouter();
   const host = useContext(HostContext);
 
-  console.log({ index: router.query.index });
-
   const { isLoading, data, isError } = useQuery([`payment-${router.query.index}`], () =>
     getPaymentByID(host?.url, router.query.index)
   );
