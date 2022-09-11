@@ -11,6 +11,32 @@ export const getVa = async (url: string | undefined) => {
   }
 };
 
+export const createVa = async (
+  url: string | undefined,
+  phone: string,
+  bank_code: string,
+  full_name: string,
+  expected_amount: number,
+  // time: Date,
+  product_id: number
+): Promise<any> => {
+  try {
+    const result = await axios.post(`${url}xendit/create-va`, {
+      externalID: `VA_fixed-${phone}-${Date.now()}`,
+      bankCode: bank_code,
+      name: full_name,
+      expectedAmt: expected_amount,
+      isClosed: true,
+      // expirationDate: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
+      productId: product_id,
+    });
+
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
 // ! auth
 export const authLogin = async (url: string | undefined, body: {}) => {
   try {
@@ -102,6 +128,17 @@ export const findProductDetail = async (url: string | undefined, slug: string | 
 export const findProductByCategory = async (url: string | undefined, category: string | undefined | string[]) => {
   try {
     const result = await axios.get(`${url}products?filters[category][name][$eq]=${category}&populate=image`);
+
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+// ! payment
+export const getPaymentByID = async (url: string | undefined, id: string | string[] | undefined): Promise<any> => {
+  try {
+    const result = await axios.get(`${url}payments/${id}`);
 
     return result;
   } catch (error) {

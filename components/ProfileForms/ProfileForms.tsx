@@ -12,19 +12,19 @@ interface ProfileFormsProps {
 // chakra
 import { Button, Box, Text, Heading, Divider, Input, VStack } from '@chakra-ui/react';
 
-export const ProfileInfo = () => {
+export const Order = () => {
   return (
     <Box>
       <Heading as="h6" size="md">
-        Profile Saya
+        Pesanan Saya
       </Heading>
       <Text as="p" size="md">
-        Kelola Informasi profile Anda
+        Informasi pesanan Anda
       </Text>
 
       <Divider my={8} />
 
-      <Text as="p">Username</Text>
+      <Text as="p">INCOMINGGGGGG!!!!!</Text>
     </Box>
   );
 };
