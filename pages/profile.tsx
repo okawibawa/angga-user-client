@@ -38,7 +38,7 @@ const Profile = () => {
 
   useEffect(() => {}, [currentMenu]);
 
-  const { data, isLoading, isError, error }: any = useQuery([`profile-${1}`], () =>
+  const { data, isLoading, isError, error }: any = useQuery([`profile-${cookies.sfUsername}`], () =>
     getProfile(host?.url, cookies.sfJwt, cookies.sfUsername)
   );
 

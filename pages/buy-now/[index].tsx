@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { HostContext } from '../../context/HostContext';
 
 import Layout from '../../components/Layout';
@@ -14,26 +14,41 @@ type ProductDetailsProps = {
   data: any;
 };
 
+interface VAProps {
+  name: string;
+  code: string;
+  is_activated: boolean;
+}
+
 // react query
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 // icons
 import { Plus, Minus, NavArrowDown } from 'iconoir-react';
 
-import { findProductDetail } from '../../apis/api';
+import { findProductDetail, getProfile, getVa } from '../../apis/api';
 import Footer from '../../components/Footer';
+import { parseCookies } from 'nookies';
 
 const BuyNow = () => {
   const host = useContext(HostContext);
+  const cookies = parseCookies();
   const router = useRouter();
   let stock: number = 0;
 
   const [subtotal, setSubtotal] = useState<number>(0);
   const [qty, setQty] = useState<number>(1);
+  const [va, setVA] = useState<string>('');
 
   const { isLoading, isError, data }: ProductDetailsProps = useQuery(
     [`product-detail-${router.query.index}`],
     async () => findProductDetail(host?.url, router.query.index)
+  );
+
+  const { isLoading: isLoadingVA, data: dataVA } = useQuery(['va'], () => getVa(host?.url));
+
+  const { data: dataProfile, isLoading: isLoadingProfile }: any = useQuery([`profile-${cookies.sfUsername}`], () =>
+    getProfile(host?.url, cookies.sfJwt, cookies.sfUsername)
   );
 
   const formatter = new Intl.NumberFormat('id-ID', {
@@ -82,6 +97,12 @@ const BuyNow = () => {
       setSubtotal(Number(data.data.data[0].attributes.price));
     }
   };
+
+  const handleSelectVA = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setVA(event.currentTarget.value);
+  };
+
+  console.log({ dataProfile });
 
   return (
     <Layout>
@@ -191,12 +212,36 @@ const BuyNow = () => {
               <Box border="1px solid #ddd" borderRadius={4} p={6} mb={[4, 0]}>
                 <Stack direction="column" spacing={4}>
                   <Heading as="h6" size="md">
+                    Informasi Pengiriman
+                  </Heading>
+
+                  <Stack spacing={2}>
+                    <Text as="p">
+                      {dataProfile.data.data[0].attributes.full_name} - ({dataProfile.data.data[0].attributes.phone})
+                    </Text>
+                    <Text as="p">
+                      {dataProfile.data.data[0].attributes.address}, {dataProfile.data.data[0].attributes.district},{' '}
+                      {dataProfile.data.data[0].attributes.regency} ({dataProfile.data.data[0].attributes.postal_code})
+                    </Text>
+                  </Stack>
+                </Stack>
+              </Box>
+
+              <Box border="1px solid #ddd" borderRadius={4} p={6} mb={[4, 0]}>
+                <Stack direction="column" spacing={4}>
+                  <Heading as="h6" size="md">
                     Metode Pembayaran
                   </Heading>
 
                   <Box>
-                    <Select placeholder="Pilih metode pembayaran">
-                      <option value="option1">Option 1</option>
+                    <Select placeholder="Pilih metode pembayaran" onChange={handleSelectVA}>
+                      {!isLoadingVA &&
+                        dataVA.length > 0 &&
+                        dataVA.map((va: VAProps) => (
+                          <option key={va.code} value={va.code}>
+                            {va.name}
+                          </option>
+                        ))}
                     </Select>
                   </Box>
                 </Stack>

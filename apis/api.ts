@@ -1,5 +1,16 @@
 import axios from 'axios';
 
+// ! xendit
+export const getVa = async (url: string | undefined) => {
+  try {
+    const result = await axios.get(`${url}xendit/get-va`);
+
+    return result.data;
+  } catch (error) {
+    return error;
+  }
+};
+
 // ! auth
 export const authLogin = async (url: string | undefined, body: {}) => {
   try {
