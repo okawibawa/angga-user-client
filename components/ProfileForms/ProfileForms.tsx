@@ -1,6 +1,6 @@
 import React from 'react';
 import Countdown from 'react-countdown';
-import Link from 'next/link'
+import Link from 'next/link';
 
 // interfaces
 interface ProfileFormsProps {
@@ -14,7 +14,7 @@ interface ProfileFormsProps {
 // chakra
 import { Skeleton, Stack, Button, Box, Text, Heading, Divider, Input, VStack } from '@chakra-ui/react';
 
-export const Order = ({ data, isLoadingTransactions }: { data: any, isLoadingTransactions: boolean }) => {
+export const Order = ({ data, isLoadingTransactions }: { data: any; isLoadingTransactions: boolean }) => {
   const formatter = new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',
@@ -34,7 +34,10 @@ export const Order = ({ data, isLoadingTransactions }: { data: any, isLoadingTra
       <Stack>
         <Stack spacing={4} maxWidth="32rem">
           {data.data.data.map((data: any) => (
-            <Link href={{ pathname: '/invoice/[index]', query: { index: data.attributes.payment.data.id }}}>
+            <Link
+              key={data.id}
+              href={{ pathname: '/invoice/[index]', query: { index: data.attributes.payment.data.id } }}
+            >
               <a>
                 <Box py={1} px={2} border="1px" borderRadius={6}>
                   <Stack direction="row" justifyContent="space-between">
@@ -54,16 +57,18 @@ export const Order = ({ data, isLoadingTransactions }: { data: any, isLoadingTra
                       <Text as="p">{data.attributes.payment.data.attributes.xendit_va_object.account_number}</Text>
                     )}
                   </Stack>
-      
+
                   <Stack direction="row" justifyContent="space-between">
                     <Text>Jumlah</Text>
                     {isLoadingTransactions ? (
                       <Skeleton height="32px" width="3rem" />
                     ) : (
-                      <Text as="p">{formatter.format(data.attributes.payment.data.attributes.xendit_va_object.expected_amount)}</Text>
+                      <Text as="p">
+                        {formatter.format(data.attributes.payment.data.attributes.xendit_va_object.expected_amount)}
+                      </Text>
                     )}
                   </Stack>
-      
+
                   <Stack direction="row" justifyContent="space-between">
                     <Text>Bayar sebelum</Text>
                     {isLoadingTransactions ? (
