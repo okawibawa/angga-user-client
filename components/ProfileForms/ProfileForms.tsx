@@ -32,51 +32,53 @@ export const Order = ({ data, isLoadingTransactions }: { data: any, isLoadingTra
       <Divider my={8} />
 
       <Stack>
-        <Box border='1px' py={1} px={2} borderRadius={6} maxWidth="32rem">
+        <Stack spacing={4} maxWidth="32rem">
           {data.data.data.map((data: any) => (
             <Link href={{ pathname: '/invoice/[index]', query: { index: data.attributes.payment.data.id }}}>
               <a>
-                <Stack direction="row" justifyContent="space-between">
-                  <Text>Bank</Text>
-                  {isLoadingTransactions ? (
-                    <Skeleton height="32px" width="3rem" />
-                  ) : (
-                    <Text as="p">{data.attributes.payment.data.attributes.xendit_va_object.bank_code}</Text>
-                  )}
-                </Stack>
+                <Box py={1} px={2} border="1px" borderRadius={6}>
+                  <Stack direction="row" justifyContent="space-between">
+                    <Text>Bank</Text>
+                    {isLoadingTransactions ? (
+                      <Skeleton height="32px" width="3rem" />
+                    ) : (
+                      <Text as="p">{data.attributes.payment.data.attributes.xendit_va_object.bank_code}</Text>
+                    )}
+                  </Stack>
 
-                <Stack direction="row" justifyContent="space-between">
-                  <Text>Nomor VA</Text>
-                  {isLoadingTransactions ? (
-                    <Skeleton height="32px" width="3rem" />
-                  ) : (
-                    <Text as="p">{data.attributes.payment.data.attributes.xendit_va_object.account_number}</Text>
-                  )}
-                </Stack>
+                  <Stack direction="row" justifyContent="space-between">
+                    <Text>Nomor VA</Text>
+                    {isLoadingTransactions ? (
+                      <Skeleton height="32px" width="3rem" />
+                    ) : (
+                      <Text as="p">{data.attributes.payment.data.attributes.xendit_va_object.account_number}</Text>
+                    )}
+                  </Stack>
       
-                <Stack direction="row" justifyContent="space-between">
-                  <Text>Jumlah</Text>
-                  {isLoadingTransactions ? (
-                    <Skeleton height="32px" width="3rem" />
-                  ) : (
-                    <Text as="p">{formatter.format(data.attributes.payment.data.attributes.xendit_va_object.expected_amount)}</Text>
-                  )}
-                </Stack>
+                  <Stack direction="row" justifyContent="space-between">
+                    <Text>Jumlah</Text>
+                    {isLoadingTransactions ? (
+                      <Skeleton height="32px" width="3rem" />
+                    ) : (
+                      <Text as="p">{formatter.format(data.attributes.payment.data.attributes.xendit_va_object.expected_amount)}</Text>
+                    )}
+                  </Stack>
       
-                <Stack direction="row" justifyContent="space-between">
-                  <Text>Bayar sebelum</Text>
-                  {isLoadingTransactions ? (
-                    <Skeleton height="32px" width="3rem" />
-                  ) : (
-                    <Text as="p">
-                      <Countdown date={Date.now() + 86400000} />
-                    </Text>
-                  )}
-                </Stack>
+                  <Stack direction="row" justifyContent="space-between">
+                    <Text>Bayar sebelum</Text>
+                    {isLoadingTransactions ? (
+                      <Skeleton height="32px" width="3rem" />
+                    ) : (
+                      <Text as="p">
+                        <Countdown date={Date.now() + 86400000} />
+                      </Text>
+                    )}
+                  </Stack>
+                </Box>
               </a>
             </Link>
           ))}
-        </Box>
+        </Stack>
       </Stack>
     </Box>
   );
@@ -88,6 +90,9 @@ export const Address = ({ data, handleDetails, details, handleUpdate, isLoadingU
       <Heading as="h6" size="md">
         Detail Profil
       </Heading>
+      <Text as="p" size="md">
+        Informasi pesanan Anda
+      </Text>
 
       <Divider my={8} />
 
