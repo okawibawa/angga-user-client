@@ -30,7 +30,7 @@ export const createVa = async (
       isClosed: true,
       // expirationDate: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
       productId: product_id,
-      user: user
+      user: user,
     });
 
     return result;
@@ -150,10 +150,12 @@ export const getPaymentByID = async (url: string | undefined, id: string | strin
 
 export const getPaymentByProfile = async (url: string | undefined, username: string): Promise<any> => {
   try {
-    const result = await axios.get(`${url}transactions?filters[profile][full_name][$eq]=${username}&populate=payment,profile`)
-    
-    return result
-  } catch {
-    return result
+    const result = await axios.get(
+      `${url}transactions?filters[profile][full_name][$eq]=${username}&populate=payment,profile`
+    );
+
+    return result;
+  } catch (error) {
+    return error;
   }
-}
+};
