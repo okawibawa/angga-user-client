@@ -10,7 +10,7 @@ import { Divider, Text, Box, Heading, Grid, GridItem, Stack } from '@chakra-ui/r
 // components
 import Layout from '../components/Layout';
 import { Order, Address } from '../components/ProfileForms/ProfileForms';
-import { getProfile, updateProfile } from '../apis/api';
+import { getProfile, updateProfile, getPaymentByProfile } from '../apis/api';
 
 interface UserProps {
   address: string;
@@ -41,7 +41,9 @@ const Profile = () => {
   const { data, isLoading, isError, error }: any = useQuery([`profile-${cookies.sfUsername}`], () =>
     getProfile(host?.url, cookies.sfJwt, cookies.sfUsername)
   );
-
+   
+  const { data: dataTransaction, isLoading: isLoadingTransaction }: any = useQuery(['profile-${cookies.sfUsername}'], () => getPaymentByProfile(host?.url, cookies.sfUsername))
+    
   if (!isLoading) {
     setCookie(null, 'sfUserId', data.data.data[0].id, {
       maxAge: 30 * 24 * 60 * 60,
@@ -102,7 +104,7 @@ const Profile = () => {
           <GridItem mb={[6, 0]}>
             {!isLoading ? (
               <>
-                {currentMenu === 'order' && <Order />}
+                {currentMenu === 'order' && <Order isLoadingTransactions={isLoadingTransaction} data={dataTransaction}  />}
 
                 {currentMenu === 'detail' && (
                   <Address

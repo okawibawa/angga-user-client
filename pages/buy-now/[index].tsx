@@ -139,7 +139,8 @@ const BuyNow = () => {
       dataProfile.data.data[0].attributes.full_name,
       Number(subtotal),
       // new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
-      data.data.data[0].id
+      data.data.data[0].id,
+      cookies.sfUserId
     );
 
     if (result.status != 200) {
@@ -148,7 +149,7 @@ const BuyNow = () => {
       setIsLoadingPayment(false);
       return;
     }
-
+    
     router.push({ pathname: '/invoice/[index]', query: { index: result.data.data.id } });
   };
 

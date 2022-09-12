@@ -1,4 +1,6 @@
 import React from 'react';
+import Countdown from 'react-countdown';
+import Link from 'next/link'
 
 // interfaces
 interface ProfileFormsProps {
@@ -10,9 +12,14 @@ interface ProfileFormsProps {
 }
 
 // chakra
-import { Button, Box, Text, Heading, Divider, Input, VStack } from '@chakra-ui/react';
+import { Skeleton, Stack, Button, Box, Text, Heading, Divider, Input, VStack } from '@chakra-ui/react';
 
-export const Order = () => {
+export const Order = ({ data, isLoadingTransactions }: { data: any, isLoadingTransactions: boolean }) => {
+  const formatter = new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+  });
+
   return (
     <Box>
       <Heading as="h6" size="md">
@@ -24,7 +31,53 @@ export const Order = () => {
 
       <Divider my={8} />
 
-      <Text as="p">INCOMINGGGGGG!!!!!</Text>
+      <Stack>
+        <Box border='1px' py={1} px={2} borderRadius={6} maxWidth="32rem">
+          {data.data.data.map((data: any) => (
+            <Link href={{ pathname: '/invoice/[index]', query: { index: data.attributes.payment.data.id }}}>
+              <a>
+                <Stack direction="row" justifyContent="space-between">
+                  <Text>Bank</Text>
+                  {isLoadingTransactions ? (
+                    <Skeleton height="32px" width="3rem" />
+                  ) : (
+                    <Text as="p">{data.attributes.payment.data.attributes.xendit_va_object.bank_code}</Text>
+                  )}
+                </Stack>
+
+                <Stack direction="row" justifyContent="space-between">
+                  <Text>Nomor VA</Text>
+                  {isLoadingTransactions ? (
+                    <Skeleton height="32px" width="3rem" />
+                  ) : (
+                    <Text as="p">{data.attributes.payment.data.attributes.xendit_va_object.account_number}</Text>
+                  )}
+                </Stack>
+      
+                <Stack direction="row" justifyContent="space-between">
+                  <Text>Jumlah</Text>
+                  {isLoadingTransactions ? (
+                    <Skeleton height="32px" width="3rem" />
+                  ) : (
+                    <Text as="p">{formatter.format(data.attributes.payment.data.attributes.xendit_va_object.expected_amount)}</Text>
+                  )}
+                </Stack>
+      
+                <Stack direction="row" justifyContent="space-between">
+                  <Text>Bayar sebelum</Text>
+                  {isLoadingTransactions ? (
+                    <Skeleton height="32px" width="3rem" />
+                  ) : (
+                    <Text as="p">
+                      <Countdown date={Date.now() + 86400000} />
+                    </Text>
+                  )}
+                </Stack>
+              </a>
+            </Link>
+          ))}
+        </Box>
+      </Stack>
     </Box>
   );
 };

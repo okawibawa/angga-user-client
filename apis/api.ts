@@ -18,7 +18,8 @@ export const createVa = async (
   full_name: string,
   expected_amount: number,
   // time: Date,
-  product_id: number
+  product_id: number,
+  user: string
 ): Promise<any> => {
   try {
     const result = await axios.post(`${url}xendit/create-va`, {
@@ -29,6 +30,7 @@ export const createVa = async (
       isClosed: true,
       // expirationDate: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
       productId: product_id,
+      user: user
     });
 
     return result;
@@ -145,3 +147,13 @@ export const getPaymentByID = async (url: string | undefined, id: string | strin
     return error;
   }
 };
+
+export const getPaymentByProfile = async (url: string | undefined, username: string): Promise<any> => {
+  try {
+    const result = await axios.get(`${url}transactions?filters[profile][full_name][$eq]=${username}&populate=payment,profile`)
+    
+    return result
+  } catch {
+    return result
+  }
+}

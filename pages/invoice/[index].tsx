@@ -45,20 +45,20 @@ const AboutUs = () => {
             </Stack>
 
             <Stack direction="row" justifyContent="space-between">
-              <Text>Jumlah</Text>
-              {isLoading ? (
-                <Skeleton height="32px" width="3rem" />
-              ) : (
-                <Text as="p">{formatter.format(data.data.data.attributes.xendit_va_object.expected_amount)}</Text>
-              )}
-            </Stack>
-
-            <Stack direction="row" justifyContent="space-between">
               <Text>Nomor VA</Text>
               {isLoading ? (
                 <Skeleton height="32px" width="3rem" />
               ) : (
                 <Text as="p">{data.data.data.attributes.xendit_va_object.account_number}</Text>
+              )}
+            </Stack>
+
+            <Stack direction="row" justifyContent="space-between">
+              <Text>Jumlah</Text>
+              {isLoading ? (
+                <Skeleton height="32px" width="3rem" />
+              ) : (
+                <Text as="p">{formatter.format(data.data.data.attributes.xendit_va_object.expected_amount)}</Text>
               )}
             </Stack>
 
