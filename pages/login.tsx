@@ -3,7 +3,7 @@ import { HostContext } from '../context/HostContext';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import * as EmailValidator from 'email-validator';
-import { setCookie } from 'nookies';
+import { setCookie, parseCookies } from 'nookies';
 
 // // types
 // type CredentialProps = {
@@ -32,7 +32,8 @@ import {
 } from '@chakra-ui/react';
 
 // apis
-import { authLogin } from '../apis/api';
+import { authLogin, getProfile } from '../apis/api';
+import { useQuery } from '@tanstack/react-query';
 
 const Login = () => {
   const router = useRouter();
@@ -87,7 +88,10 @@ const Login = () => {
           path: '/',
         };
 
-      setCookie(null, 'sfUserId', result.data.user.id),
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const res: any = await getProfile(host?.url, result.data.jwt, result.data.user.username);
+
+      setCookie(null, 'sfUserId', res.data.data[0].id),
         {
           maxAge: 30 * 24 * 60 * 60,
           path: '/',
