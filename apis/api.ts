@@ -159,3 +159,41 @@ export const getPaymentByProfile = async (url: string | undefined, username: str
     return error;
   }
 };
+
+// ! cart
+export const createCart = async (url: string | undefined, qty: string, price: string, profile: string, product: number) => {
+  try {
+    const result = await axios.post(`${url}carts`, {
+      data: {
+        qty,
+        price,
+        profile,
+        product
+      }
+    })
+    
+    return result
+  } catch (error) {
+    return error
+  }
+}
+
+export const getCart = async (url: string | undefined, profile: string) => {
+  try {
+    const result = await axios.get(`${url}carts?filters[profile][full_name][$eq]=${profile}&populate=product`)
+    
+    return result.data
+  } catch (error) {
+    return error
+  }
+}
+
+export const deleteCart = async (url: string | undefined, id: number) => {
+  try {
+    const result = await axios.delete(`${url}carts/${id}`)
+    
+    return result.data
+  } catch (error) {
+    return error
+  }
+}

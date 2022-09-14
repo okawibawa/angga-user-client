@@ -76,7 +76,7 @@ const Header = () => {
 
             <Divider orientation="vertical" height={6} />
 
-            <Link href="#">
+            <Link href="/cart">
               <a>
                 <SimpleCart />
               </a>
@@ -198,7 +198,7 @@ const Header = () => {
               </a>
             </Link>
 
-            <Link href="#">
+            <Link href="/cart">
               <a>
                 <SimpleCart style={{ margin: 'auto' }} />
               </a>

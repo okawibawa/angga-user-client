@@ -45,7 +45,6 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Minus, NavArrowDown, MapsGoStraight } from 'iconoir-react';
 
 import { createVa, findProductDetail, getProfile, getVa } from '../../apis/api';
-import Footer from '../../components/Footer';
 import { parseCookies } from 'nookies';
 
 const BuyNow = () => {
@@ -150,7 +149,7 @@ const BuyNow = () => {
       return;
     }
     
-    // router.push({ pathname: '/invoice/[index]', query: { index: result.data.data.id } });
+    router.push({ pathname: '/invoice/[index]', query: { index: result.data.data.id } });
   };
 
   return (
