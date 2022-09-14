@@ -80,6 +80,12 @@ const SignUp = () => {
           path: '/',
         };
 
+      setCookie(null, 'sfUserId', result.data.user.id),
+        {
+          maxAge: 30 * 24 * 60 * 60,
+          path: '/',
+        };
+
       setIsLoading(false);
       router.push('/');
     } else {
