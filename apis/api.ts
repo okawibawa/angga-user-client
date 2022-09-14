@@ -17,9 +17,9 @@ export const createVa = async (
   bank_code: string,
   full_name: string,
   expected_amount: number,
-  // time: Date,
   product_id: number,
-  user: string
+  user: string,
+  qty: number
 ): Promise<any> => {
   try {
     const result = await axios.post(`${url}xendit/create-va`, {
@@ -28,11 +28,11 @@ export const createVa = async (
       name: full_name,
       expectedAmt: expected_amount,
       isClosed: true,
-      // expirationDate: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
       productId: product_id,
       user: user,
+      qty: qty
     });
-
+    
     return result;
   } catch (error) {
     return error;
@@ -140,7 +140,7 @@ export const findProductByCategory = async (url: string | undefined, category: s
 // ! payment
 export const getPaymentByID = async (url: string | undefined, id: string | string[] | undefined): Promise<any> => {
   try {
-    const result = await axios.get(`${url}payments/${id}`);
+    const result = await axios.get(`${url}payments/${id}?populate=transaction,transaction.transaction_details,transaction.transaction_details.product`);
 
     return result;
   } catch (error) {

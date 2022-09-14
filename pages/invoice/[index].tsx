@@ -6,7 +6,7 @@ import Countdown from 'react-countdown';
 import Layout from '../../components/Layout';
 import Footer from '../../components/Footer';
 
-import { Text, Stack, Heading, Skeleton } from '@chakra-ui/react';
+import { Alert, Divider, Text, Stack, Heading, Skeleton } from '@chakra-ui/react';
 
 // react query
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -20,6 +20,8 @@ const AboutUs = () => {
   const { isLoading, data, isError } = useQuery([`payment-${router.query.index}`], () =>
     getPaymentByID(host?.url, router.query.index)
   );
+  
+  console.log({ data })
 
   const formatter = new Intl.NumberFormat('id-ID', {
     style: 'currency',
@@ -34,13 +36,26 @@ const AboutUs = () => {
             Selesaikan Proses Pembayaran
           </Heading>
 
-          <Stack border="1px" width="50%" maxWidth="40rem" py={4} px={6} borderRadius={6}>
+          <Stack textAlign="left" border="1px" width="50%" maxWidth="36rem" py={4} px={6} borderRadius={6}>
+            <Heading as="h2" size="md" mb={2}>
+              Detail
+            </Heading>
+    
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Text>Status</Text>
+              {isLoading ? (
+                <Skeleton height="32px" width="3rem" />
+              ) : (
+                <Alert width="min-content" borderRadius={6} status="warning" fontWeight="bold">{data.data.data.attributes.xendit_va_object.status}</Alert>
+              )}
+            </Stack>
+
             <Stack direction="row" justifyContent="space-between">
               <Text>Bank</Text>
               {isLoading ? (
                 <Skeleton height="32px" width="3rem" />
               ) : (
-                <Text as="p">{data.data.data.attributes.xendit_va_object.bank_code}</Text>
+                <Text as="p">{data.data.data.attributes.xendit_va_object.bank_code.replace("_", " ")}</Text>
               )}
             </Stack>
 
@@ -54,7 +69,7 @@ const AboutUs = () => {
             </Stack>
 
             <Stack direction="row" justifyContent="space-between">
-              <Text>Jumlah</Text>
+              <Text>Total</Text>
               {isLoading ? (
                 <Skeleton height="32px" width="3rem" />
               ) : (
@@ -63,11 +78,75 @@ const AboutUs = () => {
             </Stack>
 
             <Stack direction="row" justifyContent="space-between">
-              <Text>Bayar dalam</Text>
+              <Text>Bayar sebelum</Text>
 
-              <Text as="p">
-                <Countdown date={Date.now() + 86400000} />
-              </Text>
+              {isLoading ? (
+                <Skeleton height="32px" width="3rem" />
+              ) : (
+                <Text as="p">{new Date(data.data.data.attributes.xendit_va_object.expiration_date).toLocaleString()}</Text>
+              )}
+            </Stack>
+    
+            <Divider py={3} />
+    
+            <Stack direction="column">
+              <Heading as="h2" size="md" mb={2}>
+                Pembelian
+              </Heading>
+    
+              <Stack direction="row" spacing={2}>
+                {isLoading ? (
+                  <Text>Mohon tunggu...</Text>
+                ) : (
+                  <Stack direction="column" width="100%">
+                    {data.data.data.attributes.transaction.data.attributes.transaction_details.data.map((product: any) => (
+                      <>
+                        <Stack spacing={2} border="1px" py={1} px={2} borderRadius={6} width="100%">
+                          <Stack direction="row" justifyContent="space-between">
+                            <Text as="p">
+                              Nama
+                            </Text>
+
+                            <Text as="p">
+                              {product.attributes.product.data.attributes.name}
+                            </Text>
+                          </Stack>
+      
+                          <Stack direction="row" justifyContent="space-between">
+                            <Text as="p">
+                              Jumlah
+                            </Text>
+
+                            <Text as="p">
+                              {product.attributes.qty}
+                            </Text>
+                          </Stack>
+      
+                          <Stack direction="row" justifyContent="space-between">
+                            <Text as="p">
+                              Harga
+                            </Text>
+
+                            <Text as="p">
+                              {formatter.format(Number(product.attributes.product.data.attributes.price))}
+                            </Text>
+                          </Stack>
+      
+                          <Stack direction="row" justifyContent="space-between">
+                            <Text as="p">
+                              Subtotal
+                            </Text>
+
+                            <Text as="p">
+                              {formatter.format(Number(product.attributes.product.data.attributes.price) * Number(product.attributes.qty))}
+                            </Text>
+                          </Stack>
+                        </Stack>      
+                      </>
+                    ))}                  
+                  </Stack>
+                )}
+              </Stack>
             </Stack>
           </Stack>
         </Stack>

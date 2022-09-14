@@ -12,13 +12,15 @@ interface ProfileFormsProps {
 }
 
 // chakra
-import { Skeleton, Stack, Button, Box, Text, Heading, Divider, Input, VStack } from '@chakra-ui/react';
+import { Skeleton, Stack, Alert, Button, Box, Text, Heading, Divider, Input, VStack } from '@chakra-ui/react';
 
 export const Order = ({ data, isLoadingTransactions }: { data: any; isLoadingTransactions: boolean }) => {
   const formatter = new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',
   });
+  
+  console.log({ trx: data })
 
   return (
     <Box>
@@ -32,20 +34,29 @@ export const Order = ({ data, isLoadingTransactions }: { data: any; isLoadingTra
       <Divider my={8} />
 
       <Stack>
-        <Stack spacing={4} maxWidth="32rem">
+        <Stack spacing={4} maxWidth="32rem" py={4}>
           {data.data.data.map((data: any) => (
             <Link
               key={data.id}
               href={{ pathname: '/invoice/[index]', query: { index: data.attributes.payment.data.id } }}
             >
               <a>
-                <Box py={1} px={2} border="1px" borderRadius={6}>
+                <Stack spacing={2} py={2} px={2} border="1px" borderRadius={6}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Text>Status</Text>
+                    {isLoadingTransactions ? (
+                      <Skeleton height="32px" width="3rem" />
+                    ) : (
+                      <Alert width="min-content" borderRadius={6} status="warning" fontWeight="bold">{data.attributes.payment.data.attributes.xendit_va_object.status}</Alert>
+                    )}
+                  </Stack>
+
                   <Stack direction="row" justifyContent="space-between">
                     <Text>Bank</Text>
                     {isLoadingTransactions ? (
                       <Skeleton height="32px" width="3rem" />
                     ) : (
-                      <Text as="p">{data.attributes.payment.data.attributes.xendit_va_object.bank_code}</Text>
+                      <Text as="p">{data.attributes.payment.data.attributes.xendit_va_object.bank_code.replace("_", " ")}</Text>
                     )}
                   </Stack>
 
@@ -75,11 +86,11 @@ export const Order = ({ data, isLoadingTransactions }: { data: any; isLoadingTra
                       <Skeleton height="32px" width="3rem" />
                     ) : (
                       <Text as="p">
-                        <Countdown date={Date.now() + 86400000} />
+                        {new Date(data.attributes.payment.data.attributes.xendit_va_object.expiration_date).toLocaleString()}
                       </Text>
                     )}
                   </Stack>
-                </Box>
+                </Stack>
               </a>
             </Link>
           ))}
