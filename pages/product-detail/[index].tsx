@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useState, useEffect, useContext } from 'react';
 import { HostContext } from '../../context/HostContext';
+import { parseCookies } from 'nookies'
 
 type ProductDetailsProps = {
   isLoading: boolean;
@@ -15,28 +16,49 @@ type ProductDetailsProps = {
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 // chakra ui
-import { Input, Box, Heading, Text, Divider, Container, Button, Skeleton } from '@chakra-ui/react';
+import { Input, Box, Heading, Text, Divider, Container, Button, Skeleton, useToast } from '@chakra-ui/react';
 
 // components
 import Layout from '../../components/Layout';
 
 // icons
 import { Plus, Minus } from 'iconoir-react';
-import { findProductDetail } from '../../apis/api';
+import { createCart, findProductDetail } from '../../apis/api';
 import Footer from '../../components/Footer';
 
 const ProductDetail: NextPage = () => {
   const host = useContext(HostContext);
+  const cookies = parseCookies()
   const router = useRouter();
   let stock: number = 0;
-
+  const toast = useToast()
+  
   const [subtotal, setSubtotal] = useState<number>(0);
   const [qty, setQty] = useState<number>(1);
-
+  const [isLoadingCart, setIsLoadingCart] = useState<boolean>(false)
+    
   const { isLoading, isError, data }: ProductDetailsProps = useQuery(
     [`product-detail-${router.query.index}`],
     async () => findProductDetail(host?.url, router.query.index)
   );
+  
+  const handleCreateCart = async () => {
+    setIsLoadingCart(true)
+
+    const result: any = await createCart(host?.url, String(qty), String(subtotal), cookies.sfUserId, data.data.data[0].id)
+    
+    if (result.status == 200) {
+      setIsLoadingCart(false)
+      
+      toast({
+          title: 'Produk ditambahkan.',
+          description: "Produk berhasil ditambahkan ke keranjang.",
+          status: 'success',
+          duration: 9000,
+          isClosable: true,
+        })
+    }
+  }
 
   const formatter = new Intl.NumberFormat('id-ID', {
     style: 'currency',
@@ -184,7 +206,7 @@ const ProductDetail: NextPage = () => {
               </Box>
 
               <Box>
-                <Button mb={2} w="100%" size="sm" colorScheme="blue">
+                <Button onClick={handleCreateCart} mb={2} w="100%" size="sm" colorScheme="blue" isLoading={isLoadingCart}>
                   + Keranjang
                 </Button>
 
@@ -193,7 +215,7 @@ const ProductDetail: NextPage = () => {
                 ) : (
                   <Link href={{ pathname: '/buy-now/[index]', query: { index: data.data.data[0].attributes.slug } }}>
                     <a>
-                      <Button w="100%" size="sm" colorScheme="blue" variant="outline">
+                      <Button w="100%" size="sm" colorScheme="blue" variant="outline" isLoading={isLoadingCart}>
                         Beli Sekarang
                       </Button>
                     </a>
@@ -221,13 +243,13 @@ const ProductDetail: NextPage = () => {
             ) : (
               <Link href={{ pathname: '/buy-now/[index]', query: { index: data.data.data[0].attributes.slug } }}>
                 <a>
-                  <Button w="100%" size="sm" colorScheme="blue" variant="outline">
+                  <Button w="100%" size="sm" colorScheme="blue" variant="outline" isLoading={isLoadingCart}>
                     Beli Sekarang
                   </Button>
                 </a>
               </Link>
             )}
-            <Button size="sm" colorScheme="blue" ml={2}>
+            <Button onClick={handleCreateCart} size="sm" colorScheme="blue" ml={2} isLoading={isLoadingCart}>
               + Keranjang
             </Button>
           </Box>

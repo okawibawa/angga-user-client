@@ -42,7 +42,7 @@ const Header = () => {
   };
 
   return (
-    <Box>
+    <Box position="relative">
       <Container maxW="container.xl">
         <Box display="flex" justifyContent="space-between" alignItems="center" py={6} position="relative">
           <Box>
@@ -76,7 +76,7 @@ const Header = () => {
 
             <Divider orientation="vertical" height={6} />
 
-            <Link href="#">
+            <Link href="/cart">
               <a>
                 <SimpleCart />
               </a>
@@ -142,7 +142,7 @@ const Header = () => {
               <MenuBurger cursor="pointer" onClick={() => setMobileMenuOpen(!isMobileMenuOpen)} />
             </Box>
 
-            <Box
+            {/* <Box
               visibility={`${isMobileMenuOpen === true ? 'visible' : 'hidden'}`}
               opacity={`${isMobileMenuOpen === true ? '1' : '0'}`}
               position="absolute"
@@ -152,10 +152,104 @@ const Header = () => {
               transition="all ease-in-out .200s"
             >
               <Cancel cursor="pointer" onClick={() => setMobileMenuOpen(!isMobileMenuOpen)} />
-            </Box>
+            </Box> */}
           </Box>
         </Box>
       </Container>
+
+      <Box
+        visibility={isMobileMenuOpen ? 'visible' : 'hidden'}
+        bgColor="white"
+        position="fixed"
+        zIndex={2}
+        width="100%"
+        top={0}
+        minHeight="100vh"
+        p={6}
+      >
+        <Box textAlign="center">
+          <Box
+            visibility={`${isMobileMenuOpen === true ? 'visible' : 'hidden'}`}
+            opacity={`${isMobileMenuOpen === true ? '1' : '0'}`}
+            transition="all ease-in-out .200s"
+            marginLeft="auto"
+            position="absolute"
+            right={4}
+          >
+            <Cancel cursor="pointer" onClick={() => setMobileMenuOpen(!isMobileMenuOpen)} />
+          </Box>
+
+          <Stack direction={['column']} spacing={4} color="black" fontWeight="bold">
+            <Link href="/">
+              <a>
+                <Text as="p">Home</Text>
+              </a>
+            </Link>
+
+            <Link href="/about-us">
+              <a>
+                <Text as="p">About Us</Text>
+              </a>
+            </Link>
+
+            <Link href="/contact-us">
+              <a>
+                <Text as="p">Contact Us</Text>
+              </a>
+            </Link>
+
+            <Link href="/cart">
+              <a>
+                <SimpleCart style={{ margin: 'auto' }} />
+              </a>
+            </Link>
+
+            <Box marginRight={4} display={cookies.sfJwt ? 'none' : 'block'}>
+              <Link href="/login">
+                <a>
+                  <Button variant="outline" colorScheme="blue" size="sm">
+                    <Text as="p" fontWeight="normal">
+                      Masuk
+                    </Text>
+                  </Button>
+                </a>
+              </Link>
+            </Box>
+
+            <Box display={cookies.sfJwt ? 'none' : 'block'}>
+              <Link href="/signup">
+                <a>
+                  <Button colorScheme="blue" size="sm">
+                    <Text as="p" fontWeight="normal">
+                      Daftar
+                    </Text>
+                  </Button>
+                </a>
+              </Link>
+            </Box>
+
+            <Box display={cookies.sfJwt ? 'flex' : 'none'} alignItems="center" justifyContent="center">
+              <Menu>
+                <MenuButton
+                  backgroundColor="transparent"
+                  _hover={{ backgroundColor: 'transparent' }}
+                  _active={{ backgroundColor: 'transparent', border: 'none' }}
+                >
+                  <User />
+                </MenuButton>
+                <MenuList zIndex={2}>
+                  <MenuItem>
+                    <Link href="/profile">
+                      <a>Akun Saya</a>
+                    </Link>
+                  </MenuItem>
+                  <MenuItem onClick={handleLogout}>Keluar</MenuItem>
+                </MenuList>
+              </Menu>
+            </Box>
+          </Stack>
+        </Box>
+      </Box>
     </Box>
   );
 };

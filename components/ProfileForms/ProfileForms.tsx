@@ -1,4 +1,6 @@
 import React from 'react';
+import Countdown from 'react-countdown';
+import Link from 'next/link';
 
 // interfaces
 interface ProfileFormsProps {
@@ -10,21 +12,90 @@ interface ProfileFormsProps {
 }
 
 // chakra
-import { Button, Box, Text, Heading, Divider, Input, VStack } from '@chakra-ui/react';
+import { Skeleton, Stack, Alert, Button, Box, Text, Heading, Divider, Input, VStack } from '@chakra-ui/react';
 
-export const ProfileInfo = () => {
+export const Order = ({ data, isLoadingTransactions }: { data: any; isLoadingTransactions: boolean }) => {
+  const formatter = new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+  });
+  
+  console.log({ trx: data })
+
   return (
     <Box>
       <Heading as="h6" size="md">
-        Profile Saya
+        Pesanan Saya
       </Heading>
       <Text as="p" size="md">
-        Kelola Informasi profile Anda
+        Informasi pesanan Anda
       </Text>
 
       <Divider my={8} />
 
-      <Text as="p">Username</Text>
+      <Stack>
+        <Stack spacing={4} maxWidth="32rem" py={4}>
+          {data.data.data.map((data: any) => (
+            <Link
+              key={data.id}
+              href={{ pathname: '/invoice/[index]', query: { index: data.attributes.payment.data.id } }}
+            >
+              <a>
+                <Stack spacing={2} py={2} px={2} border="1px" borderRadius={6}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Text>Status</Text>
+                    {isLoadingTransactions ? (
+                      <Skeleton height="32px" width="3rem" />
+                    ) : (
+                      <Alert width="min-content" borderRadius={6} status="warning" fontWeight="bold">{data.attributes.payment.data.attributes.xendit_va_object.status}</Alert>
+                    )}
+                  </Stack>
+
+                  <Stack direction="row" justifyContent="space-between">
+                    <Text>Bank</Text>
+                    {isLoadingTransactions ? (
+                      <Skeleton height="32px" width="3rem" />
+                    ) : (
+                      <Text as="p">{data.attributes.payment.data.attributes.xendit_va_object.bank_code.replace("_", " ")}</Text>
+                    )}
+                  </Stack>
+
+                  <Stack direction="row" justifyContent="space-between">
+                    <Text>Nomor VA</Text>
+                    {isLoadingTransactions ? (
+                      <Skeleton height="32px" width="3rem" />
+                    ) : (
+                      <Text as="p">{data.attributes.payment.data.attributes.xendit_va_object.account_number}</Text>
+                    )}
+                  </Stack>
+
+                  <Stack direction="row" justifyContent="space-between">
+                    <Text>Jumlah</Text>
+                    {isLoadingTransactions ? (
+                      <Skeleton height="32px" width="3rem" />
+                    ) : (
+                      <Text as="p">
+                        {formatter.format(data.attributes.payment.data.attributes.xendit_va_object.expected_amount)}
+                      </Text>
+                    )}
+                  </Stack>
+
+                  <Stack direction="row" justifyContent="space-between">
+                    <Text>Bayar sebelum</Text>
+                    {isLoadingTransactions ? (
+                      <Skeleton height="32px" width="3rem" />
+                    ) : (
+                      <Text as="p">
+                        {new Date(data.attributes.payment.data.attributes.xendit_va_object.expiration_date).toLocaleString()}
+                      </Text>
+                    )}
+                  </Stack>
+                </Stack>
+              </a>
+            </Link>
+          ))}
+        </Stack>
+      </Stack>
     </Box>
   );
 };
@@ -35,6 +106,9 @@ export const Address = ({ data, handleDetails, details, handleUpdate, isLoadingU
       <Heading as="h6" size="md">
         Detail Profil
       </Heading>
+      <Text as="p" size="md">
+        Informasi pesanan Anda
+      </Text>
 
       <Divider my={8} />
 

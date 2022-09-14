@@ -5,12 +5,12 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { parseCookies, setCookie } from 'nookies';
 
 // chakra
-import { Divider, Text, Box, Heading, Grid, GridItem } from '@chakra-ui/react';
+import { Divider, Text, Box, Heading, Grid, GridItem, Stack } from '@chakra-ui/react';
 
 // components
 import Layout from '../components/Layout';
-import { ProfileInfo, Address } from '../components/ProfileForms/ProfileForms';
-import { getProfile, updateProfile } from '../apis/api';
+import { Order, Address } from '../components/ProfileForms/ProfileForms';
+import { getProfile, updateProfile, getPaymentByProfile } from '../apis/api';
 
 interface UserProps {
   address: string;
@@ -38,10 +38,12 @@ const Profile = () => {
 
   useEffect(() => {}, [currentMenu]);
 
-  const { data, isLoading, isError, error }: any = useQuery([`profile-${1}`], () =>
+  const { data, isLoading, isError, error }: any = useQuery([`profile-${cookies.sfUsername}`], () =>
     getProfile(host?.url, cookies.sfJwt, cookies.sfUsername)
   );
-
+   
+  const { data: dataTransaction, isLoading: isLoadingTransaction }: any = useQuery(['profile-${cookies.sfUsername}'], () => getPaymentByProfile(host?.url, cookies.sfUsername))
+    
   if (!isLoading) {
     setCookie(null, 'sfUserId', data.data.data[0].id, {
       maxAge: 30 * 24 * 60 * 60,
@@ -52,8 +54,6 @@ const Profile = () => {
   const handleDetails = (name: string) => (e: ChangeEvent<HTMLInputElement>) => {
     setDetails({ ...details, [name]: e.target.value });
   };
-
-  // const mutation = useMutation<UpdateUserProps>(updateProfile);
 
   const handleUpdate = async () => {
     const body: any = [
@@ -68,13 +68,6 @@ const Profile = () => {
 
     setIsLoadingUpdate(true);
 
-    // await mutation.mutate({
-    //   url: host?.url,
-    //   jwt: cookies.sfJwt,
-    //   userId: cookies.sfUserId,
-    //   body: body,
-    // });
-
     const result: any = await updateProfile(host?.url, cookies.sfJwt, cookies.sfUserId, body);
 
     if (result.statusText === 'OK') {
@@ -85,33 +78,33 @@ const Profile = () => {
   return (
     <Layout>
       <Box>
-        <Grid gridTemplateColumns="16rem 1fr" gap={8}>
+        <Grid gridTemplateColumns={['1fr', '16rem 1fr']} gap={8}>
           <GridItem>
-            <Box border="1px solid lightgrey" p={2} borderRadius={4}>
-              {/* <Text
-              as="p"
-              onClick={() => setCurrentMenu('profile')}
-              cursor="pointer"
-              color={currentMenu === 'profile' ? 'blue' : 'black'}
-            >
-              Profil
-            </Text> */}
-
+            <Stack border="1px solid lightgrey" p={2} borderRadius={4}>
               <Text
                 as="p"
                 onClick={() => setCurrentMenu('detail')}
                 cursor="pointer"
-                my={4}
                 color={currentMenu === 'detail' ? 'rgb(49, 130, 206)' : 'black'}
               >
                 Detail Profil
               </Text>
-            </Box>
+
+              <Text
+                as="p"
+                onClick={() => setCurrentMenu('order')}
+                cursor="pointer"
+                color={currentMenu === 'order' ? 'rgb(49, 130, 206)' : 'black'}
+              >
+                Pesanan Saya
+              </Text>
+            </Stack>
           </GridItem>
-          <GridItem>
+
+          <GridItem mb={[6, 0]}>
             {!isLoading ? (
               <>
-                {/* {currentMenu === 'profile' && <ProfileInfo />} */}
+                {currentMenu === 'order' && <Order isLoadingTransactions={isLoadingTransaction} data={dataTransaction}  />}
 
                 {currentMenu === 'detail' && (
                   <Address
