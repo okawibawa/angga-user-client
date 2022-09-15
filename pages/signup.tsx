@@ -24,7 +24,7 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from '@chakra-ui/react';
-import { authSignUp } from '../apis/api';
+import { authSignUp, getProfile } from '../apis/api';
 import { Router } from 'next/router';
 
 // component
@@ -75,6 +75,15 @@ const SignUp = () => {
       });
 
       setCookie(null, 'sfUsername', result.data.user.username),
+        {
+          maxAge: 30 * 24 * 60 * 60,
+          path: '/',
+        };
+
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const res: any = await getProfile(host?.url, result.data.jwt, result.data.user.username);
+
+      setCookie(null, 'sfUserId', res.data.data[0].id),
         {
           maxAge: 30 * 24 * 60 * 60,
           path: '/',

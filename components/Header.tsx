@@ -26,7 +26,6 @@ import {
 
 // iconoir
 import { SimpleCart, Menu as MenuBurger, Cancel, User } from 'iconoir-react';
-import { NextCookies } from 'next/dist/server/web/spec-extension/cookies';
 
 const Header = () => {
   const cookies = parseCookies();
