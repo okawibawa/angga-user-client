@@ -157,7 +157,7 @@ const Cart = () => {
                           <Text as="p" size="md">
                             Nama Produk:{' '}
                           </Text>
-                          <Text as="p" size="md">
+                          <Text as="p" size="md" textDecoration="underline">
                             {product.attributes.product.data.attributes.name}
                           </Text>
                         </Stack>
