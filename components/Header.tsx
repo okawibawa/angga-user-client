@@ -9,8 +9,6 @@ import {
   Box,
   Container,
   Divider,
-  UnorderedList,
-  ListItem,
   Button,
   Text,
   Heading,
@@ -18,10 +16,6 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuDivider,
 } from '@chakra-ui/react';
 
 // iconoir
@@ -36,6 +30,8 @@ const Header = () => {
   const handleLogout = () => {
     destroyCookie(null, 'sfJwt');
     destroyCookie(null, 'sfUser');
+    destroyCookie(null, 'sfUserId');
+    destroyCookie(null, 'sfUsername');
 
     router.reload();
   };
@@ -140,18 +136,6 @@ const Header = () => {
             >
               <MenuBurger cursor="pointer" onClick={() => setMobileMenuOpen(!isMobileMenuOpen)} />
             </Box>
-
-            {/* <Box
-              visibility={`${isMobileMenuOpen === true ? 'visible' : 'hidden'}`}
-              opacity={`${isMobileMenuOpen === true ? '1' : '0'}`}
-              position="absolute"
-              right="0"
-              top="50%"
-              transform="translateY(-50%)"
-              transition="all ease-in-out .200s"
-            >
-              <Cancel cursor="pointer" onClick={() => setMobileMenuOpen(!isMobileMenuOpen)} />
-            </Box> */}
           </Box>
         </Box>
       </Container>
