@@ -77,17 +77,6 @@ const Cart = () => {
     
     const qty = data.data.map((data: any) => Number(data.attributes.qty) )
     
-    console.log({
-      host: host?.url,
-      prf: dataProfile.data.data[0].attributes.phone,
-      va: va,
-      fnm: dataProfile.data.data[0].attributes.full_name,
-      total: Number(total),
-      id: ids,
-      cook: cookies.sfUserId,
-      qty: qty
-    })
-
     setIsLoadingPayment(true);
 
     const result = await createVa(
