@@ -137,9 +137,9 @@ const BuyNow = () => {
       va,
       dataProfile.data.data[0].attributes.full_name,
       Number(subtotal),
-      data.data.data[0].id,
+      [data.data.data[0].id],
       cookies.sfUserId,
-      qty
+      [qty]
     );
 
     if (result.status != 200) {

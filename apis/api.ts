@@ -17,9 +17,9 @@ export const createVa = async (
   bank_code: string,
   full_name: string,
   expected_amount: number,
-  product_id: number,
+  product_id: number[] | number,
   user: string,
-  qty: number
+  qty: number[] | number
 ): Promise<any> => {
   try {
     const result = await axios.post(`${url}xendit/create-va`, {

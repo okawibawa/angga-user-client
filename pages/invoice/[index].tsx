@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { HostContext } from '../../context/HostContext';
+import Link from 'next/link'
 import Countdown from 'react-countdown';
 
 import Layout from '../../components/Layout';
@@ -107,9 +108,13 @@ const AboutUs = () => {
                               Nama
                             </Text>
 
-                            <Text as="p">
-                              {product.attributes.product.data.attributes.name}
-                            </Text>
+                            <Link href={{ pathname: '/product-detail/[index]', query: { index: product.attributes.product.data.attributes.slug }}}>
+                              <a>
+                                <Text as="p" textDecoration="none">
+                                  {product.attributes.product.data.attributes.name}
+                                </Text>
+                              </a>
+                            </Link>
                           </Stack>
       
                           <Stack direction="row" justifyContent="space-between">

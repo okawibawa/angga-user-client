@@ -130,7 +130,7 @@ const Login = () => {
         <Link href="/">
           <a>
             <Heading as="h2" mb={8}>
-              Seafood
+              UD. Putra
             </Heading>
           </a>
         </Link>

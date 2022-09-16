@@ -47,7 +47,8 @@ const Cart = () => {
   const [total, setTotal] = useState<number>(0);
   const [va, setVA] = useState('');
   const [isLoadingPayment, setIsLoadingPayment] = useState(false);
-
+  const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false)
+  
   const { isLoading, data } = useQuery(['cart'], () => getCart(host?.url, cookies.sfUsername));
 
   const { isLoading: isLoadingVA, data: dataVA } = useQuery(['va'], () => getVa(host?.url));
@@ -71,6 +72,21 @@ const Cart = () => {
       onOpen();
       return;
     }
+    
+    const ids = data.data.map((data: any) => data.attributes.product.data.id )
+    
+    const qty = data.data.map((data: any) => Number(data.attributes.qty) )
+    
+    console.log({
+      host: host?.url,
+      prf: dataProfile.data.data[0].attributes.phone,
+      va: va,
+      fnm: dataProfile.data.data[0].attributes.full_name,
+      total: Number(total),
+      id: ids,
+      cook: cookies.sfUserId,
+      qty: qty
+    })
 
     setIsLoadingPayment(true);
 
@@ -80,9 +96,9 @@ const Cart = () => {
       va,
       dataProfile.data.data[0].attributes.full_name,
       Number(total),
-      data.data.data[0].id,
+      ids,
       cookies.sfUserId,
-      5 // qty
+      qty
     );
 
     if (result.status != 200) {
@@ -96,12 +112,27 @@ const Cart = () => {
   };
 
   const handleDeleteCart = async (id: number) => {
+    setIsLoadingDelete(true)
+
     const result = await deleteCart(host?.url, id);
 
     if (result) {
       router.reload();
     }
   };
+  
+  const handleSelectAllProductCart = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.checked)    
+    
+    if (!event.target.checked) {
+      setTotal(0)
+      return;
+    }
+    
+    setTotal((currValue) => {
+      return data.data.reduce((prevValue: any, currValue: any) => prevValue + Number(currValue.attributes.price), 0)
+    })
+  }
 
   return (
     <>
@@ -127,7 +158,9 @@ const Cart = () => {
               Keranjang
             </Heading>
 
-            <Checkbox>Pilih semua</Checkbox>
+            {isLoading ? null :
+              <Checkbox disabled={data.data.length > 0 ? false : true} onChange={handleSelectAllProductCart}>Pilih semua</Checkbox>
+            }
 
             <Divider width="100%" />
 
@@ -180,7 +213,7 @@ const Cart = () => {
                     </Stack>
                   </Stack>
 
-                  <Button colorScheme="red" onClick={() => handleDeleteCart(product.id)}>
+                  <Button isLoading={isLoadingDelete} colorScheme="red" onClick={() => handleDeleteCart(product.id)}>
                     Hapus
                   </Button>
                 </Stack>
@@ -226,7 +259,7 @@ const Cart = () => {
                   <Select
                     placeholder="Pilih virtual account"
                     onChange={handleSelectVA}
-                    disabled={isLoadingPayment ? true : false}
+                    disabled={isLoadingPayment || total === 0 ? true : false}
                   >
                     {!isLoadingVA &&
                       dataVA.length > 0 &&
@@ -259,10 +292,10 @@ const Cart = () => {
                 {!isLoading && (
                   <Button
                     colorScheme="blue"
-                    // onClick={handleCreateVa}
-                    // isLoading={isLoadingPayment}
+                    onClick={handleCreateVa}
+                    isLoading={isLoadingPayment}
                     loadingText="Mohon tunggu..."
-                    disabled={data.data.length > 0 ? false : true}
+                    disabled={data.data.length < 1 || total === 0 ? true : false}
                   >
                     Bayar
                   </Button>

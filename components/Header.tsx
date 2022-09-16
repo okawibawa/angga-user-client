@@ -45,8 +45,6 @@ const Header = () => {
     router.reload();
   };
 
-  console.log({ cookies });
-
   return (
     <Box position="relative">
       <Container maxW="container.xl">
