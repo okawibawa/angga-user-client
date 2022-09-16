@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { parseCookies, destroyCookie } from 'nookies';
@@ -16,14 +16,23 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  Spinner,
 } from '@chakra-ui/react';
 
 // iconoir
 import { SimpleCart, Menu as MenuBurger, Cancel, User } from 'iconoir-react';
 
 const Header = () => {
-  const cookies = parseCookies();
+  const [cookies, setCookies] = useState<any | null>({
+    sfJwt: '',
+  });
   const router = useRouter();
+
+  useEffect(() => {
+    const cookies = parseCookies();
+
+    setCookies({ ...cookies });
+  }, []);
 
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -35,6 +44,8 @@ const Header = () => {
 
     router.reload();
   };
+
+  console.log({ cookies });
 
   return (
     <Box position="relative">
@@ -79,49 +90,55 @@ const Header = () => {
 
             <Divider orientation="vertical" height={6} />
 
-            <Box marginRight={4} display={cookies.sfJwt ? 'none' : 'block'}>
-              <Link href="/login">
-                <a>
-                  <Button variant="outline" colorScheme="blue" size="sm">
-                    <Text as="p" fontWeight="normal">
-                      Masuk
-                    </Text>
-                  </Button>
-                </a>
-              </Link>
-            </Box>
+            {cookies.sfJwt === '' ? (
+              <Spinner />
+            ) : !cookies.sfJwt ? (
+              <>
+                <Box marginRight={4} display="block">
+                  <Link href="/login">
+                    <a>
+                      <Button variant="outline" colorScheme="blue" size="sm">
+                        <Text as="p" fontWeight="normal">
+                          Masuk
+                        </Text>
+                      </Button>
+                    </a>
+                  </Link>
+                </Box>
 
-            <Box display={cookies.sfJwt ? 'none' : 'block'}>
-              <Link href="/signup">
-                <a>
-                  <Button colorScheme="blue" size="sm">
-                    <Text as="p" fontWeight="normal">
-                      Daftar
-                    </Text>
-                  </Button>
-                </a>
-              </Link>
-            </Box>
-
-            <Box display={cookies.sfJwt ? 'flex' : 'none'} alignItems="center">
-              <Menu>
-                <MenuButton
-                  backgroundColor="transparent"
-                  _hover={{ backgroundColor: 'transparent' }}
-                  _active={{ backgroundColor: 'transparent', border: 'none' }}
-                >
-                  <User />
-                </MenuButton>
-                <MenuList zIndex={2}>
-                  <MenuItem>
-                    <Link href="/profile">
-                      <a>Akun Saya</a>
-                    </Link>
-                  </MenuItem>
-                  <MenuItem onClick={handleLogout}>Keluar</MenuItem>
-                </MenuList>
-              </Menu>
-            </Box>
+                <Box display="block">
+                  <Link href="/signup">
+                    <a>
+                      <Button colorScheme="blue" size="sm">
+                        <Text as="p" fontWeight="normal">
+                          Daftar
+                        </Text>
+                      </Button>
+                    </a>
+                  </Link>
+                </Box>
+              </>
+            ) : (
+              <Box display="flex" alignItems="center">
+                <Menu>
+                  <MenuButton
+                    backgroundColor="transparent"
+                    _hover={{ backgroundColor: 'transparent' }}
+                    _active={{ backgroundColor: 'transparent', border: 'none' }}
+                  >
+                    <User />
+                  </MenuButton>
+                  <MenuList zIndex={2}>
+                    <MenuItem>
+                      <Link href="/profile">
+                        <a>Akun Saya</a>
+                      </Link>
+                    </MenuItem>
+                    <MenuItem onClick={handleLogout}>Keluar</MenuItem>
+                  </MenuList>
+                </Menu>
+              </Box>
+            )}
           </Stack>
 
           <Box display={['block', 'none']}>
@@ -187,49 +204,55 @@ const Header = () => {
               </a>
             </Link>
 
-            <Box marginRight={4} display={cookies.sfJwt ? 'none' : 'block'}>
-              <Link href="/login">
-                <a>
-                  <Button variant="outline" colorScheme="blue" size="sm">
-                    <Text as="p" fontWeight="normal">
-                      Masuk
-                    </Text>
-                  </Button>
-                </a>
-              </Link>
-            </Box>
+            {cookies.sfJwt === '' ? (
+              <Spinner />
+            ) : !cookies.sfJwt ? (
+              <>
+                <Box marginRight={4} display="block">
+                  <Link href="/login">
+                    <a>
+                      <Button variant="outline" colorScheme="blue" size="sm">
+                        <Text as="p" fontWeight="normal">
+                          Masuk
+                        </Text>
+                      </Button>
+                    </a>
+                  </Link>
+                </Box>
 
-            <Box display={cookies.sfJwt ? 'none' : 'block'}>
-              <Link href="/signup">
-                <a>
-                  <Button colorScheme="blue" size="sm">
-                    <Text as="p" fontWeight="normal">
-                      Daftar
-                    </Text>
-                  </Button>
-                </a>
-              </Link>
-            </Box>
-
-            <Box display={cookies.sfJwt ? 'flex' : 'none'} alignItems="center" justifyContent="center">
-              <Menu>
-                <MenuButton
-                  backgroundColor="transparent"
-                  _hover={{ backgroundColor: 'transparent' }}
-                  _active={{ backgroundColor: 'transparent', border: 'none' }}
-                >
-                  <User />
-                </MenuButton>
-                <MenuList zIndex={2}>
-                  <MenuItem>
-                    <Link href="/profile">
-                      <a>Akun Saya</a>
-                    </Link>
-                  </MenuItem>
-                  <MenuItem onClick={handleLogout}>Keluar</MenuItem>
-                </MenuList>
-              </Menu>
-            </Box>
+                <Box display="block">
+                  <Link href="/signup">
+                    <a>
+                      <Button colorScheme="blue" size="sm">
+                        <Text as="p" fontWeight="normal">
+                          Daftar
+                        </Text>
+                      </Button>
+                    </a>
+                  </Link>
+                </Box>
+              </>
+            ) : (
+              <Box display="flex" alignItems="center">
+                <Menu>
+                  <MenuButton
+                    backgroundColor="transparent"
+                    _hover={{ backgroundColor: 'transparent' }}
+                    _active={{ backgroundColor: 'transparent', border: 'none' }}
+                  >
+                    <User />
+                  </MenuButton>
+                  <MenuList zIndex={2}>
+                    <MenuItem>
+                      <Link href="/profile">
+                        <a>Akun Saya</a>
+                      </Link>
+                    </MenuItem>
+                    <MenuItem onClick={handleLogout}>Keluar</MenuItem>
+                  </MenuList>
+                </Menu>
+              </Box>
+            )}
           </Stack>
         </Box>
       </Box>
