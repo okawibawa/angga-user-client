@@ -180,9 +180,9 @@ const Cart = () => {
                     </Stack>
                   </Stack>
 
-                  <Text cursor="pointer" as="p" onClick={() => handleDeleteCart(product.id)}>
+                  <Button colorScheme="red" onClick={() => handleDeleteCart(product.id)}>
                     Hapus
-                  </Text>
+                  </Button>
                 </Stack>
               ))
             )}
