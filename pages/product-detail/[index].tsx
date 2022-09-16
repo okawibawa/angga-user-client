@@ -28,35 +28,52 @@ import Footer from '../../components/Footer';
 
 const ProductDetail: NextPage = () => {
   const host = useContext(HostContext);
-  const cookies = parseCookies()
   const router = useRouter();
   let stock: number = 0;
   const toast = useToast()
-  
+
+  const [cookies, setCookies] = useState<any | null>({
+    sfJwt: '',
+    sfUserId: '',
+    sfUsername: ''
+  });
   const [subtotal, setSubtotal] = useState<number>(0);
   const [qty, setQty] = useState<number>(1);
   const [isLoadingCart, setIsLoadingCart] = useState<boolean>(false)
-    
+
+  useEffect(() => {
+    const cookies = parseCookies()
+
+    setCookies({ ...cookies })
+  }, [])
+
   const { isLoading, isError, data }: ProductDetailsProps = useQuery(
     [`product-detail-${router.query.index}`],
     async () => findProductDetail(host?.url, router.query.index)
   );
-  
+
+  console.log({ cookies })
+
   const handleCreateCart = async () => {
+    if (!cookies.sfJwt) {
+      router.replace('/login')
+      return;
+    }
+
     setIsLoadingCart(true)
 
     const result: any = await createCart(host?.url, String(qty), String(subtotal), cookies.sfUserId, data.data.data[0].id)
-    
+
     if (result.status == 200) {
       setIsLoadingCart(false)
-      
+
       toast({
-          title: 'Produk ditambahkan.',
-          description: "Produk berhasil ditambahkan ke keranjang.",
-          status: 'success',
-          duration: 9000,
-          isClosable: true,
-        })
+        title: 'Produk ditambahkan.',
+        description: "Produk berhasil ditambahkan ke keranjang.",
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      })
     }
   }
 
@@ -106,6 +123,18 @@ const ProductDetail: NextPage = () => {
       setSubtotal(Number(data.data.data[0].attributes.price));
     }
   };
+
+  const handleBuyNow = async () => {
+    if (!cookies.sfJwt) {
+      router.replace('/login')
+      return;
+    };
+
+    router.push({
+      pathname: "/buy-now/[index]",
+      query: { index: data.data.data[0].attributes.slug }
+    })
+  }
 
   return (
     <Box>
@@ -213,13 +242,9 @@ const ProductDetail: NextPage = () => {
                 {isLoading ? (
                   <Skeleton height="24px" width="100%" />
                 ) : (
-                  <Link href={{ pathname: '/buy-now/[index]', query: { index: data.data.data[0].attributes.slug } }}>
-                    <a>
-                      <Button w="100%" size="sm" colorScheme="blue" variant="outline" isLoading={isLoadingCart}>
-                        Beli Sekarang
-                      </Button>
-                    </a>
-                  </Link>
+                  <Button onClick={handleBuyNow} w="100%" size="sm" colorScheme="blue" variant="outline" isLoading={isLoadingCart}>
+                    Beli Sekarang
+                  </Button>
                 )}
               </Box>
             </Box>
@@ -241,16 +266,12 @@ const ProductDetail: NextPage = () => {
             {isLoading ? (
               <Skeleton height="24px" width="100%" />
             ) : (
-              <Link href={{ pathname: '/buy-now/[index]', query: { index: data.data.data[0].attributes.slug } }}>
-                <a>
-                  <Button w="100%" size="sm" colorScheme="blue" variant="outline" isLoading={isLoadingCart}>
-                    Beli Sekarang
-                  </Button>
-                </a>
-              </Link>
+              <Button onClick={handleBuyNow} w="100%" size="sm" colorScheme="blue" variant="outline" isLoading={isLoadingCart}>
+                Beli Sekarang
+              </Button>
             )}
             <Button onClick={handleCreateCart} size="sm" colorScheme="blue" ml={2} isLoading={isLoadingCart}>
-              + Keranjang
+              Keranjang
             </Button>
           </Box>
         </Container>

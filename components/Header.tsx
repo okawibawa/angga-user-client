@@ -82,13 +82,18 @@ const Header = () => {
 
             <Divider orientation="vertical" height={6} />
 
-            <Link href="/cart">
-              <a>
-                <SimpleCart />
-              </a>
-            </Link>
+            {cookies.sfJwt && (
+              <>
+                <Link href="/cart">
+                  <a>
+                    <SimpleCart />
+                  </a>
+                </Link>
 
-            <Divider orientation="vertical" height={6} />
+                <Divider orientation="vertical" height={6} />
+              </>
+            )}
+
 
             {cookies.sfJwt === '' ? (
               <Spinner />
@@ -198,11 +203,13 @@ const Header = () => {
               </a>
             </Link>
 
-            <Link href="/cart">
-              <a>
-                <SimpleCart style={{ margin: 'auto' }} />
-              </a>
-            </Link>
+            {cookies.sfJwt && (
+              <Link href="/cart">
+                <a>
+                  <SimpleCart style={{ margin: 'auto' }} />
+                </a>
+              </Link>
+            )}
 
             {cookies.sfJwt === '' ? (
               <Spinner />

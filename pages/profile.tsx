@@ -36,14 +36,14 @@ const Profile = () => {
   const [details, setDetails] = useState<any>([]);
   const [isLoadingUpdate, setIsLoadingUpdate] = useState<boolean>(false);
 
-  useEffect(() => {}, [currentMenu]);
+  useEffect(() => { }, [currentMenu]);
 
   const { data, isLoading, isError, error }: any = useQuery([`profile-${cookies.sfUsername}`], () =>
     getProfile(host?.url, cookies.sfJwt, cookies.sfUsername)
   );
-   
+
   const { data: dataTransaction, isLoading: isLoadingTransaction }: any = useQuery(['profile-${cookies.sfUsername}'], () => getPaymentByProfile(host?.url, cookies.sfUsername))
-    
+
   if (!isLoading) {
     setCookie(null, 'sfUserId', data.data.data[0].id, {
       maxAge: 30 * 24 * 60 * 60,
@@ -104,7 +104,7 @@ const Profile = () => {
           <GridItem mb={[6, 0]}>
             {!isLoading ? (
               <>
-                {currentMenu === 'order' && <Order isLoadingTransactions={isLoadingTransaction} data={dataTransaction}  />}
+                {currentMenu === 'order' && <Order isLoadingTransactions={isLoadingTransaction} data={dataTransaction} />}
 
                 {currentMenu === 'detail' && (
                   <Address
