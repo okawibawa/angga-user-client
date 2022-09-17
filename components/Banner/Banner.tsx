@@ -10,7 +10,7 @@ import { Box } from '@chakra-ui/react';
 
 const Banner = () => {
   return (
-    <Box mt={8}>
+    <Box mt={8} width="100%">
       <Swiper
         scrollbar={{
           hide: true,
@@ -19,13 +19,13 @@ const Banner = () => {
         className="mySwiper"
       >
         <SwiperSlide>
-          <Box height={48} width="100%" backgroundColor="lightyellow">
-            <img src="/banner-1.png" alt="banner one" style={{ width: '100%' }} />
+          <Box width="100%" backgroundColor="lightyellow" maxWidth="1248px">
+            <img style={{ width: 'auto', height: 'auto' }} src="/banner-1.png" alt="banner one" />
           </Box>
         </SwiperSlide>
         <SwiperSlide>
-          <Box height={48} width="100%" backgroundColor="lightblue">
-            <img src="/banner-2.png" alt="banner 2" style={{ width: '100%' }} />
+          <Box width="100%" backgroundColor="lightblue">
+            <img src="/banner-2.png" alt="banner 2" style={{ width: 'auto', height: 'auto' }} />
           </Box>
         </SwiperSlide>
       </Swiper>

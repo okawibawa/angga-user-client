@@ -121,13 +121,14 @@ const SignUp = () => {
       <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="100vh">
         <Link href="/">
           <a>
-            <Heading as="h2" mb={8}>
+            <Heading as="h2">
               UD. Putra
             </Heading>
           </a>
         </Link>
+        <Heading as="h6" size="md" mb={8}>Daftar</Heading>
 
-        <Box border="1px solid lightgrey" borderRadius={4} p={8} width="526px">
+        <Box border="1px solid lightgrey" borderRadius={4} p={8}  width="90%" maxWidth="526px">
           <Heading as="h2" mb={4}>
             Daftar
           </Heading>
@@ -180,8 +181,8 @@ const SignUp = () => {
             </Text>
           )}
 
-          <Box display="flex" justifyContent="space-between" alignItems="center">
-            <Text display="flex" alignItems="center">
+          <Box>
+            <Text display="flex" alignItems="center" mb={2}>
               Sudah punya akun?
               <Link href="/login">
                 <a>
@@ -192,7 +193,7 @@ const SignUp = () => {
               </Link>
             </Text>
 
-            <Button colorScheme="blue" onClick={handleSignUp} isLoading={isLoading} loadingText="Mohon tunggu...">
+            <Button width="100%" colorScheme="blue" onClick={handleSignUp} isLoading={isLoading} loadingText="Mohon tunggu...">
               Daftar
             </Button>
           </Box>

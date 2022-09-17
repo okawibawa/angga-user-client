@@ -238,12 +238,14 @@ const Header = () => {
                 </Box>
               </>
             ) : (
-              <Box display="flex" alignItems="center">
+              <Box display="flex" alignItems="center" justifyContent="center">
                 <Menu>
                   <MenuButton
                     backgroundColor="transparent"
                     _hover={{ backgroundColor: 'transparent' }}
                     _active={{ backgroundColor: 'transparent', border: 'none' }}
+                    display="flex"
+                    justifyContent="center"
                   >
                     <User />
                   </MenuButton>
