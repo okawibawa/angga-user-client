@@ -44,7 +44,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 // icons
 import { Plus, Minus, NavArrowDown, MapsGoStraight } from 'iconoir-react';
 
-import { createVa, findProductDetail, getProfile, getVa } from '../../apis/api';
+import { createInvoice, createVa, findProductDetail, getProfile, getVa } from '../../apis/api';
 import { parseCookies } from 'nookies';
 
 const BuyNow = () => {
@@ -118,17 +118,7 @@ const BuyNow = () => {
     }
   };
 
-  const handleSelectVA = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setVA(event.currentTarget.value);
-  };
-
   const handleCreateVa = async () => {
-    if (!va) {
-      setMsg('Pilih metode pembayaran terlebih dahulu!');
-      onOpen();
-      return;
-    }
-
     setIsLoadingPayment(true);
 
     const result = await createVa(
@@ -151,6 +141,20 @@ const BuyNow = () => {
     
     router.push({ pathname: '/invoice/[index]', query: { index: result.data.data.id } });
   };
+  
+  const handleCreateInvoice = async () => {
+    setIsLoadingPayment(true)
+    
+    const result: any = await createInvoice(host?.url, Number(subtotal))
+    
+    if (result.status != 200) {
+      setMsg('Proses pembuatan pembayaran gagal. Hubungi admin.')
+      setIsLoadingPayment(false);
+      return
+    }
+    
+    window.location.replace(result.data.invoice_url)
+  }
 
   return (
     <>
@@ -311,30 +315,6 @@ const BuyNow = () => {
                 <Box border="1px solid #ddd" borderRadius={4} p={6} mb={[4, 0]}>
                   <Stack direction="column" spacing={4}>
                     <Heading as="h6" size="md">
-                      Virtual Account
-                    </Heading>
-
-                    <Box>
-                      <Select
-                        placeholder="Pilih virtual account"
-                        onChange={handleSelectVA}
-                        disabled={isLoadingPayment ? true : false}
-                      >
-                        {!isLoadingVA &&
-                          dataVA.length > 0 &&
-                          dataVA.map((va: VAProps) => (
-                            <option key={va.code} value={va.code}>
-                              {va.name}
-                            </option>
-                          ))}
-                      </Select>
-                    </Box>
-                  </Stack>
-                </Box>
-
-                <Box border="1px solid #ddd" borderRadius={4} p={6} mb={[4, 0]}>
-                  <Stack direction="column" spacing={4}>
-                    <Heading as="h6" size="md">
                       Ringakasan Belanja
                     </Heading>
 
@@ -360,7 +340,7 @@ const BuyNow = () => {
 
                     <Button
                       colorScheme="blue"
-                      onClick={handleCreateVa}
+                      onClick={handleCreateInvoice}
                       isLoading={isLoadingPayment}
                       loadingText="Mohon tunggu..."
                     >

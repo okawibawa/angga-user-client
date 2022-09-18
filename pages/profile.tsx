@@ -90,14 +90,14 @@ const Profile = () => {
                 Detail Profil
               </Text>
 
-              <Text
+              {/* <Text
                 as="p"
                 onClick={() => setCurrentMenu('order')}
                 cursor="pointer"
                 color={currentMenu === 'order' ? 'rgb(49, 130, 206)' : 'black'}
               >
                 Pesanan Saya
-              </Text>
+              </Text> */}
             </Stack>
           </GridItem>
 

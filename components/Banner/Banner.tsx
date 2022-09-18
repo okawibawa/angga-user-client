@@ -1,5 +1,5 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Scrollbar } from 'swiper';
+import { Scrollbar, Autoplay } from 'swiper';
 
 // Swiper styles
 import 'swiper/css';
@@ -15,7 +15,8 @@ const Banner = () => {
         scrollbar={{
           hide: true,
         }}
-        modules={[Scrollbar]}
+      autoplay={{ delay: 5000 }}
+        modules={[Scrollbar, Autoplay]}
         className="mySwiper"
       >
         <SwiperSlide>
