@@ -61,51 +61,19 @@ const Cart = () => {
     style: 'currency',
     currency: 'IDR',
   });
-
-  const handleSelectVA = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setVA(event.currentTarget.value);
-  };
-
-  const handleCreateVa = async () => {
-    if (!va) {
-      setMsg('Pilih metode pembayaran terlebih dahulu!');
-      onOpen();
-      return;
-    }
+  
+  const handleCreateInvoice = async () => {
+    setIsLoadingPayment(true)
     
     const ids = data.data.map((data: any) => data.attributes.product.data.id )
     
     const qty = data.data.map((data: any) => Number(data.attributes.qty) )
-    
-    setIsLoadingPayment(true);
-
-    const result = await createVa(
-      host?.url,
-      dataProfile.data.data[0].attributes.phone,
-      va,
-      dataProfile.data.data[0].attributes.full_name,
-      Number(total),
-      ids,
-      cookies.sfUserId,
-      qty
-    );
-
-    if (result.status != 200) {
-      setMsg('Proses pembuatan pembayaran gagal. Hubungi admin.');
-      onOpen();
-      setIsLoadingPayment(false);
-      return;
-    }
-
-    router.push({ pathname: '/invoice/[index]', query: { index: result.data.data.id } });
-  };
-  
-  const handleCreateInvoice = async () => {
-    setIsLoadingPayment(true)
 
     const result: any = await createInvoice(
       host?.url,
-      Number(total)
+      Number(total),
+      qty,
+      ids,
     )
     
     if (result.status != 200) {

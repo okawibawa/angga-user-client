@@ -86,7 +86,8 @@ const BuyNow = () => {
   };
 
   if (!isLoading) {
-    stock = data.data.data[0].attributes.stock.slice(0, data.data.data[0].attributes.stock.length - 2);
+    // stock = data.data.data[0].attributes.stock.slice(0, data.data.data[0].attributes.stock.length - 2);
+    stock = data.data.data[0].attributes.stock;
   }
 
   useEffect(() => {
@@ -117,35 +118,11 @@ const BuyNow = () => {
       setSubtotal(Number(data.data.data[0].attributes.price));
     }
   };
-
-  const handleCreateVa = async () => {
-    setIsLoadingPayment(true);
-
-    const result = await createVa(
-      host?.url,
-      dataProfile.data.data[0].attributes.phone,
-      va,
-      dataProfile.data.data[0].attributes.full_name,
-      Number(subtotal),
-      [data.data.data[0].id],
-      cookies.sfUserId,
-      [qty]
-    );
-
-    if (result.status != 200) {
-      setMsg('Proses pembuatan pembayaran gagal. Hubungi admin.');
-      onOpen();
-      setIsLoadingPayment(false);
-      return;
-    }
-    
-    router.push({ pathname: '/invoice/[index]', query: { index: result.data.data.id } });
-  };
   
   const handleCreateInvoice = async () => {
     setIsLoadingPayment(true)
     
-    const result: any = await createInvoice(host?.url, Number(subtotal))
+    const result: any = await createInvoice(host?.url, Number(subtotal), [qty], [data.data.data[0].id])
     
     if (result.status != 200) {
       setMsg('Proses pembuatan pembayaran gagal. Hubungi admin.')
@@ -263,13 +240,14 @@ const BuyNow = () => {
                     <Box cursor="pointer" onClick={handleSubtractQty}>
                       <Minus color={Number(qty) === 1 ? '#ddd' : '#333'} />
                     </Box>
-                    <Input
+                    {/* <Input
                       textAlign="center"
                       variant="unstyled"
                       placeholder="0"
                       value={qty}
                       onChange={handleChangeQty}
-                    />
+                    /> */}
+                    <Text as="p">{qty}</Text>
                     <Box cursor="pointer" onClick={handleAddQty}>
                       <Plus color={Number(qty) === Number(stock) ? '#ddd' : '#333'} />
                     </Box>

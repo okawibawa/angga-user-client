@@ -11,10 +11,12 @@ export const getVa = async (url: string | undefined) => {
   }
 };
 
-export const createInvoice = async (url: string | undefined, amount: number) => {
+export const createInvoice = async (url: string | undefined, amount: number, qty: number | number[], productId: number | number[]) => {
   try {
     const result = await axios.post(`${url}xendit/create-invoice`, {
-      amount: amount
+      amount: amount,
+      qty: qty,
+      productId: productId
     })
     
     return result;

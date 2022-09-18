@@ -92,7 +92,8 @@ const ProductDetail: NextPage = () => {
   };
 
   if (!isLoading) {
-    stock = data.data.data[0].attributes.stock.slice(0, data.data.data[0].attributes.stock.length - 2);
+    // stock = data.data.data[0].attributes.stock.slice(0, data.data.data[0].attributes.stock.length - 2);
+    stock = data.data.data[0].attributes.stock
   }
 
   useEffect(() => {
@@ -100,6 +101,8 @@ const ProductDetail: NextPage = () => {
   }, [data]);
 
   const handleAddQty = () => {
+    console.log(qty)
+    console.log(stock)
     if (Number(qty) === Number(stock)) {
       return false;
     } else {
@@ -211,7 +214,8 @@ const ProductDetail: NextPage = () => {
                 <Box cursor="pointer" onClick={handleSubtractQty}>
                   <Minus color={Number(qty) === 1 ? '#ddd' : '#333'} />
                 </Box>
-                <Input textAlign="center" variant="unstyled" placeholder="0" value={qty} onChange={handleChangeQty} />
+                {/* <Input textAlign="center" variant="unstyled" placeholder="0" value={qty} onChange={handleChangeQty} /> */}
+                <Text as="p">{qty}</Text>
                 <Box cursor="pointer" onClick={handleAddQty}>
                   <Plus color={Number(qty) === Number(stock) ? '#ddd' : '#333'} />
                 </Box>
