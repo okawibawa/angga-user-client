@@ -11,6 +11,20 @@ export const getVa = async (url: string | undefined) => {
   }
 };
 
+export const createInvoice = async (url: string | undefined, amount: number, qty: number | number[], productId: number | number[]) => {
+  try {
+    const result = await axios.post(`${url}xendit/create-invoice`, {
+      amount: amount,
+      qty: qty,
+      productId: productId
+    })
+    
+    return result;
+  } catch (error) {
+    return error;
+  }
+}
+
 export const createVa = async (
   url: string | undefined,
   phone: string,
@@ -98,7 +112,7 @@ export const updateProfile = async (url: string | undefined, token: string, id: 
 // ! categories
 export const getCategories = async (url: string | undefined) => {
   try {
-    const result = await axios.get(`${url}categories`);
+    const result = await axios.get(`${url}categories?populate=*`);
 
     return result;
   } catch (error) {

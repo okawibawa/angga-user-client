@@ -192,9 +192,15 @@ const Login = () => {
               </Link>
             </Text>
 
-            <Button width="100%" colorScheme="blue" onClick={login} isLoading={isLoading} loadingText="Mohon tunggu...">
+            <Button mb={2} width="100%" colorScheme="blue" onClick={login} isLoading={isLoading} loadingText="Mohon tunggu...">
               Login
             </Button>
+    
+            <Link href="#">
+              <a>
+                <Text as="p" textDecoration="underline">Lupa password?</Text>
+              </a>
+            </Link>
           </Box>
         </Box>
       </Box>

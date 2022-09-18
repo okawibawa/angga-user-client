@@ -29,7 +29,7 @@ import {
 
 import Layout from '../components/Layout';
 
-import { deleteCart, getVa, getProfile, getCart, createVa } from '../apis/api';
+import { createInvoice, deleteCart, getVa, getProfile, getCart, createVa } from '../apis/api';
 
 interface VAProps {
   name: string;
@@ -61,44 +61,29 @@ const Cart = () => {
     style: 'currency',
     currency: 'IDR',
   });
-
-  const handleSelectVA = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setVA(event.currentTarget.value);
-  };
-
-  const handleCreateVa = async () => {
-    if (!va) {
-      setMsg('Pilih metode pembayaran terlebih dahulu!');
-      onOpen();
-      return;
-    }
+  
+  const handleCreateInvoice = async () => {
+    setIsLoadingPayment(true)
     
     const ids = data.data.map((data: any) => data.attributes.product.data.id )
     
     const qty = data.data.map((data: any) => Number(data.attributes.qty) )
-    
-    setIsLoadingPayment(true);
 
-    const result = await createVa(
+    const result: any = await createInvoice(
       host?.url,
-      dataProfile.data.data[0].attributes.phone,
-      va,
-      dataProfile.data.data[0].attributes.full_name,
       Number(total),
+      qty,
       ids,
-      cookies.sfUserId,
-      qty
-    );
-
+    )
+    
     if (result.status != 200) {
-      setMsg('Proses pembuatan pembayaran gagal. Hubungi admin.');
-      onOpen();
+      setMsg('Proses pembuatan pembayaran gagal. Hubungi admin.')
       setIsLoadingPayment(false);
-      return;
+      return
     }
-
-    router.push({ pathname: '/invoice/[index]', query: { index: result.data.data.id } });
-  };
+    
+    window.location.replace(result.data.invoice_url)
+  }
 
   const handleDeleteCart = async (id: number) => {
     setIsLoadingDelete(true)
@@ -241,30 +226,6 @@ const Cart = () => {
             <Box border="1px solid #ddd" borderRadius={4} p={6} mb={[4, 0]}>
               <Stack direction="column" spacing={4}>
                 <Heading as="h6" size="md">
-                  Virtual Account
-                </Heading>
-
-                <Box>
-                  <Select
-                    placeholder="Pilih virtual account"
-                    onChange={handleSelectVA}
-                    disabled={isLoadingPayment || total === 0 ? true : false}
-                  >
-                    {!isLoadingVA &&
-                      dataVA.length > 0 &&
-                      dataVA.map((va: VAProps) => (
-                        <option key={va.code} value={va.code}>
-                          {va.name}
-                        </option>
-                      ))}
-                  </Select>
-                </Box>
-              </Stack>
-            </Box>
-
-            <Box border="1px solid #ddd" borderRadius={4} p={6} mb={[4, 0]}>
-              <Stack direction="column" spacing={4}>
-                <Heading as="h6" size="md">
                   Ringakasan Belanja
                 </Heading>
 
@@ -281,7 +242,7 @@ const Cart = () => {
                 {!isLoading && (
                   <Button
                     colorScheme="blue"
-                    onClick={handleCreateVa}
+                    onClick={handleCreateInvoice}
                     isLoading={isLoadingPayment}
                     loadingText="Mohon tunggu..."
                     disabled={data.data.length < 1 || total === 0 ? true : false}

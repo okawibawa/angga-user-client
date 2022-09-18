@@ -44,7 +44,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 // icons
 import { Plus, Minus, NavArrowDown, MapsGoStraight } from 'iconoir-react';
 
-import { createVa, findProductDetail, getProfile, getVa } from '../../apis/api';
+import { createInvoice, createVa, findProductDetail, getProfile, getVa } from '../../apis/api';
 import { parseCookies } from 'nookies';
 
 const BuyNow = () => {
@@ -86,7 +86,8 @@ const BuyNow = () => {
   };
 
   if (!isLoading) {
-    stock = data.data.data[0].attributes.stock.slice(0, data.data.data[0].attributes.stock.length - 2);
+    // stock = data.data.data[0].attributes.stock.slice(0, data.data.data[0].attributes.stock.length - 2);
+    stock = data.data.data[0].attributes.stock;
   }
 
   useEffect(() => {
@@ -117,40 +118,20 @@ const BuyNow = () => {
       setSubtotal(Number(data.data.data[0].attributes.price));
     }
   };
-
-  const handleSelectVA = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setVA(event.currentTarget.value);
-  };
-
-  const handleCreateVa = async () => {
-    if (!va) {
-      setMsg('Pilih metode pembayaran terlebih dahulu!');
-      onOpen();
-      return;
-    }
-
-    setIsLoadingPayment(true);
-
-    const result = await createVa(
-      host?.url,
-      dataProfile.data.data[0].attributes.phone,
-      va,
-      dataProfile.data.data[0].attributes.full_name,
-      Number(subtotal),
-      [data.data.data[0].id],
-      cookies.sfUserId,
-      [qty]
-    );
-
+  
+  const handleCreateInvoice = async () => {
+    setIsLoadingPayment(true)
+    
+    const result: any = await createInvoice(host?.url, Number(subtotal), [qty], [data.data.data[0].id])
+    
     if (result.status != 200) {
-      setMsg('Proses pembuatan pembayaran gagal. Hubungi admin.');
-      onOpen();
+      setMsg('Proses pembuatan pembayaran gagal. Hubungi admin.')
       setIsLoadingPayment(false);
-      return;
+      return
     }
     
-    router.push({ pathname: '/invoice/[index]', query: { index: result.data.data.id } });
-  };
+    window.location.replace(result.data.invoice_url)
+  }
 
   return (
     <>
@@ -259,13 +240,14 @@ const BuyNow = () => {
                     <Box cursor="pointer" onClick={handleSubtractQty}>
                       <Minus color={Number(qty) === 1 ? '#ddd' : '#333'} />
                     </Box>
-                    <Input
+                    {/* <Input
                       textAlign="center"
                       variant="unstyled"
                       placeholder="0"
                       value={qty}
                       onChange={handleChangeQty}
-                    />
+                    /> */}
+                    <Text as="p">{qty}</Text>
                     <Box cursor="pointer" onClick={handleAddQty}>
                       <Plus color={Number(qty) === Number(stock) ? '#ddd' : '#333'} />
                     </Box>
@@ -311,30 +293,6 @@ const BuyNow = () => {
                 <Box border="1px solid #ddd" borderRadius={4} p={6} mb={[4, 0]}>
                   <Stack direction="column" spacing={4}>
                     <Heading as="h6" size="md">
-                      Virtual Account
-                    </Heading>
-
-                    <Box>
-                      <Select
-                        placeholder="Pilih virtual account"
-                        onChange={handleSelectVA}
-                        disabled={isLoadingPayment ? true : false}
-                      >
-                        {!isLoadingVA &&
-                          dataVA.length > 0 &&
-                          dataVA.map((va: VAProps) => (
-                            <option key={va.code} value={va.code}>
-                              {va.name}
-                            </option>
-                          ))}
-                      </Select>
-                    </Box>
-                  </Stack>
-                </Box>
-
-                <Box border="1px solid #ddd" borderRadius={4} p={6} mb={[4, 0]}>
-                  <Stack direction="column" spacing={4}>
-                    <Heading as="h6" size="md">
                       Ringakasan Belanja
                     </Heading>
 
@@ -360,7 +318,7 @@ const BuyNow = () => {
 
                     <Button
                       colorScheme="blue"
-                      onClick={handleCreateVa}
+                      onClick={handleCreateInvoice}
                       isLoading={isLoadingPayment}
                       loadingText="Mohon tunggu..."
                     >
