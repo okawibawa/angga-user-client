@@ -3,6 +3,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState, useContext } from 'react';
 import { HostContext } from '../../context/HostContext';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 import Layout from '../../components/Layout';
 
@@ -118,20 +120,20 @@ const BuyNow = () => {
       setSubtotal(Number(data.data.data[0].attributes.price));
     }
   };
-  
+
   const handleCreateInvoice = async () => {
-    setIsLoadingPayment(true)
-    
-    const result: any = await createInvoice(host?.url, Number(subtotal), [qty], [data.data.data[0].id])
-    
+    setIsLoadingPayment(true);
+
+    const result: any = await createInvoice(host?.url, Number(subtotal), [qty], [data.data.data[0].id]);
+
     if (result.status != 200) {
-      setMsg('Proses pembuatan pembayaran gagal. Hubungi admin.')
+      setMsg('Proses pembuatan pembayaran gagal. Hubungi admin.');
       setIsLoadingPayment(false);
-      return
+      return;
     }
-    
-    window.location.replace(result.data.invoice_url)
-  }
+
+    window.location.replace(result.data.invoice_url);
+  };
 
   return (
     <>
@@ -217,9 +219,7 @@ const BuyNow = () => {
                 {isLoading ? (
                   <Skeleton height="20px" />
                 ) : (
-                  <Text as="p">
-                    {data.data.data[0].attributes.description ? data.data.data[0].attributes.description : '-'}
-                  </Text>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{data.data.data[0].attributes.desc}</ReactMarkdown>
                 )}
 
                 <Heading as="h6" size={['sm', 'md']} mb={4}>
