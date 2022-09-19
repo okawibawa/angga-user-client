@@ -1,4 +1,26 @@
 import axios from 'axios';
+import { EmojiBall } from 'iconoir-react';
+
+// ! reset password
+export const forgotPassword = async (url: string | undefined, email: string) => {
+  try {
+    const result = await axios.post(`${url}email/forgot-password`, { email: email });
+
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const resetPassword = async (url: string | undefined, email: string, password: string) => {
+  try {
+    const result = await axios.post(`${url}email/reset-password`, { email: email, password: password });
+
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
 
 // ! xendit
 export const getVa = async (url: string | undefined) => {
@@ -11,19 +33,24 @@ export const getVa = async (url: string | undefined) => {
   }
 };
 
-export const createInvoice = async (url: string | undefined, amount: number, qty: number | number[], productId: number | number[]) => {
+export const createInvoice = async (
+  url: string | undefined,
+  amount: number,
+  qty: number | number[],
+  productId: number | number[]
+) => {
   try {
     const result = await axios.post(`${url}xendit/create-invoice`, {
       amount: amount,
       qty: qty,
-      productId: productId
-    })
-    
+      productId: productId,
+    });
+
     return result;
   } catch (error) {
     return error;
   }
-}
+};
 
 export const createVa = async (
   url: string | undefined,
@@ -44,9 +71,9 @@ export const createVa = async (
       isClosed: true,
       productId: product_id,
       user: user,
-      qty: qty
+      qty: qty,
     });
-    
+
     return result;
   } catch (error) {
     return error;
@@ -154,7 +181,9 @@ export const findProductByCategory = async (url: string | undefined, category: s
 // ! payment
 export const getPaymentByID = async (url: string | undefined, id: string | string[] | undefined): Promise<any> => {
   try {
-    const result = await axios.get(`${url}payments/${id}?populate=transaction,transaction.transaction_details,transaction.transaction_details.product`);
+    const result = await axios.get(
+      `${url}payments/${id}?populate=transaction,transaction.transaction_details,transaction.transaction_details.product`
+    );
 
     return result;
   } catch (error) {
@@ -175,39 +204,45 @@ export const getPaymentByProfile = async (url: string | undefined, username: str
 };
 
 // ! cart
-export const createCart = async (url: string | undefined, qty: string, price: string, profile: string, product: number) => {
+export const createCart = async (
+  url: string | undefined,
+  qty: string,
+  price: string,
+  profile: string,
+  product: number
+) => {
   try {
     const result = await axios.post(`${url}carts`, {
       data: {
         qty,
         price,
         profile,
-        product
-      }
-    })
-    
-    return result
+        product,
+      },
+    });
+
+    return result;
   } catch (error) {
-    return error
+    return error;
   }
-}
+};
 
 export const getCart = async (url: string | undefined, profile: string) => {
   try {
-    const result = await axios.get(`${url}carts?filters[profile][full_name][$eq]=${profile}&populate=product`)
-    
-    return result.data
+    const result = await axios.get(`${url}carts?filters[profile][full_name][$eq]=${profile}&populate=product`);
+
+    return result.data;
   } catch (error) {
-    return error
+    return error;
   }
-}
+};
 
 export const deleteCart = async (url: string | undefined, id: number) => {
   try {
-    const result = await axios.delete(`${url}carts/${id}`)
-    
-    return result.data
+    const result = await axios.delete(`${url}carts/${id}`);
+
+    return result.data;
   } catch (error) {
-    return error
+    return error;
   }
-}
+};

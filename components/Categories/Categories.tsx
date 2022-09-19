@@ -21,8 +21,6 @@ const Categories = ({ data, isLoading, isError }: CategoriesProps) => {
     slides: { perView: 'auto', spacing: 12 },
   });
 
-  console.log({ data })
-
   return (
     <Box mt={8}>
       <Box>
@@ -39,7 +37,10 @@ const Categories = ({ data, isLoading, isError }: CategoriesProps) => {
             {data.data.data.length > 0 ? (
               <div ref={sliderRef} className="keen-slider">
                 {data.data.data.map((category: any, i: any) => (
-                  <Link href={{ pathname: `/category/[index]`, query: { index: category.attributes.slug } }} key={category.attributes.name}>
+                  <Link
+                    href={{ pathname: `/category/[index]`, query: { index: category.attributes.slug } }}
+                    key={category.attributes.name}
+                  >
                     <a>
                       <div
                         className="keen-slider__slide number-slide1"
@@ -56,7 +57,12 @@ const Categories = ({ data, isLoading, isError }: CategoriesProps) => {
                           alignItems="center"
                           justifyContent="center"
                         >
-                          <img src={category.attributes.logo.data.attributes.url} height={24} width={24} alt={category.attributes.name} />
+                          <img
+                            src={category.attributes.logo.data.attributes.url}
+                            height={24}
+                            width={24}
+                            alt={category.attributes.name}
+                          />
                           <Text as="p" ml={2}>
                             {category.attributes.name}
                           </Text>

@@ -47,8 +47,8 @@ const Cart = () => {
   const [total, setTotal] = useState<number>(0);
   const [va, setVA] = useState('');
   const [isLoadingPayment, setIsLoadingPayment] = useState(false);
-  const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false)
-  
+  const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false);
+
   const { isLoading, data } = useQuery(['cart'], () => getCart(host?.url, cookies.sfUsername));
 
   const { isLoading: isLoadingVA, data: dataVA } = useQuery(['va'], () => getVa(host?.url));
@@ -61,32 +61,27 @@ const Cart = () => {
     style: 'currency',
     currency: 'IDR',
   });
-  
-  const handleCreateInvoice = async () => {
-    setIsLoadingPayment(true)
-    
-    const ids = data.data.map((data: any) => data.attributes.product.data.id )
-    
-    const qty = data.data.map((data: any) => Number(data.attributes.qty) )
 
-    const result: any = await createInvoice(
-      host?.url,
-      Number(total),
-      qty,
-      ids,
-    )
-    
+  const handleCreateInvoice = async () => {
+    setIsLoadingPayment(true);
+
+    const ids = data.data.map((data: any) => data.attributes.product.data.id);
+
+    const qty = data.data.map((data: any) => Number(data.attributes.qty));
+
+    const result: any = await createInvoice(host?.url, Number(total), qty, ids);
+
     if (result.status != 200) {
-      setMsg('Proses pembuatan pembayaran gagal. Hubungi admin.')
+      setMsg('Proses pembuatan pembayaran gagal. Hubungi admin.');
       setIsLoadingPayment(false);
-      return
+      return;
     }
-    
-    window.location.replace(result.data.invoice_url)
-  }
+
+    window.location.replace(result.data.invoice_url);
+  };
 
   const handleDeleteCart = async (id: number) => {
-    setIsLoadingDelete(true)
+    setIsLoadingDelete(true);
 
     const result = await deleteCart(host?.url, id);
 
@@ -94,19 +89,17 @@ const Cart = () => {
       router.reload();
     }
   };
-  
+
   const handleSelectAllProductCart = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.checked)    
-    
     if (!event.target.checked) {
-      setTotal(0)
+      setTotal(0);
       return;
     }
-    
+
     setTotal((currValue) => {
-      return data.data.reduce((prevValue: any, currValue: any) => prevValue + Number(currValue.attributes.price), 0)
-    })
-  }
+      return data.data.reduce((prevValue: any, currValue: any) => prevValue + Number(currValue.attributes.price), 0);
+    });
+  };
 
   return (
     <>
@@ -132,9 +125,11 @@ const Cart = () => {
               Keranjang
             </Heading>
 
-            {isLoading ? null :
-              <Checkbox disabled={data.data.length > 0 ? false : true} onChange={handleSelectAllProductCart}>Pilih semua</Checkbox>
-            }
+            {isLoading ? null : (
+              <Checkbox disabled={data.data.length > 0 ? false : true} onChange={handleSelectAllProductCart}>
+                Pilih semua
+              </Checkbox>
+            )}
 
             <Divider width="100%" />
 

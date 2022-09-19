@@ -69,8 +69,6 @@ const Login = () => {
 
     const result: any = await authLogin(host?.url, credentials);
 
-    console.log({ result });
-
     if (result.status === 200) {
       setCookie(null, 'sfJwt', result.data.jwt, {
         maxAge: 30 * 24 * 60 * 60,
@@ -129,16 +127,14 @@ const Login = () => {
       <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="100vh">
         <Link href="/">
           <a>
-            <Heading as="h2">
-              UD. Putra
-            </Heading>
+            <Heading as="h2">UD. Putra</Heading>
           </a>
         </Link>
         <Heading as="h6" size="md" mb={8}>
           Login
         </Heading>
 
-        <Box border="1px solid lightgrey" borderRadius={4} p={8}  width="90%" maxWidth="526px">
+        <Box border="1px solid lightgrey" borderRadius={4} p={8} width="90%" maxWidth="526px">
           <Heading as="h2" mb={4}>
             Masuk
           </Heading>
@@ -192,13 +188,22 @@ const Login = () => {
               </Link>
             </Text>
 
-            <Button mb={2} width="100%" colorScheme="blue" onClick={login} isLoading={isLoading} loadingText="Mohon tunggu...">
+            <Button
+              mb={2}
+              width="100%"
+              colorScheme="blue"
+              onClick={login}
+              isLoading={isLoading}
+              loadingText="Mohon tunggu..."
+            >
               Login
             </Button>
-    
-            <Link href="#">
+
+            <Link href="/reset-password">
               <a>
-                <Text as="p" textDecoration="underline">Lupa password?</Text>
+                <Text as="p" textDecoration="underline">
+                  Lupa password?
+                </Text>
               </a>
             </Link>
           </Box>

@@ -19,8 +19,6 @@ export const Order = ({ data, isLoadingTransactions }: { data: any; isLoadingTra
     style: 'currency',
     currency: 'IDR',
   });
-  
-  console.log({ trx: data })
 
   return (
     <Box>
@@ -47,7 +45,9 @@ export const Order = ({ data, isLoadingTransactions }: { data: any; isLoadingTra
                     {isLoadingTransactions ? (
                       <Skeleton height="32px" width="3rem" />
                     ) : (
-                      <Alert width="min-content" borderRadius={6} status="warning" fontWeight="bold">{data.attributes.payment.data.attributes.xendit_va_object.status}</Alert>
+                      <Alert width="min-content" borderRadius={6} status="warning" fontWeight="bold">
+                        {data.attributes.payment.data.attributes.xendit_va_object.status}
+                      </Alert>
                     )}
                   </Stack>
 
@@ -56,7 +56,9 @@ export const Order = ({ data, isLoadingTransactions }: { data: any; isLoadingTra
                     {isLoadingTransactions ? (
                       <Skeleton height="32px" width="3rem" />
                     ) : (
-                      <Text as="p">{data.attributes.payment.data.attributes.xendit_va_object.bank_code.replace("_", " ")}</Text>
+                      <Text as="p">
+                        {data.attributes.payment.data.attributes.xendit_va_object.bank_code.replace('_', ' ')}
+                      </Text>
                     )}
                   </Stack>
 
@@ -86,7 +88,9 @@ export const Order = ({ data, isLoadingTransactions }: { data: any; isLoadingTra
                       <Skeleton height="32px" width="3rem" />
                     ) : (
                       <Text as="p">
-                        {new Date(data.attributes.payment.data.attributes.xendit_va_object.expiration_date).toLocaleString()}
+                        {new Date(
+                          data.attributes.payment.data.attributes.xendit_va_object.expiration_date
+                        ).toLocaleString()}
                       </Text>
                     )}
                   </Stack>

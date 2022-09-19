@@ -4,9 +4,9 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useState, useEffect, useContext } from 'react';
 import { HostContext } from '../../context/HostContext';
-import { parseCookies } from 'nookies'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
+import { parseCookies } from 'nookies';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 type ProductDetailsProps = {
   isLoading: boolean;
@@ -32,52 +32,56 @@ const ProductDetail: NextPage = () => {
   const host = useContext(HostContext);
   const router = useRouter();
   let stock: number = 0;
-  const toast = useToast()
+  const toast = useToast();
 
   const [cookies, setCookies] = useState<any | null>({
     sfJwt: '',
     sfUserId: '',
-    sfUsername: ''
+    sfUsername: '',
   });
   const [subtotal, setSubtotal] = useState<number>(0);
   const [qty, setQty] = useState<number>(1);
-  const [isLoadingCart, setIsLoadingCart] = useState<boolean>(false)
+  const [isLoadingCart, setIsLoadingCart] = useState<boolean>(false);
 
   useEffect(() => {
-    const cookies = parseCookies()
+    const cookies = parseCookies();
 
-    setCookies({ ...cookies })
-  }, [])
+    setCookies({ ...cookies });
+  }, []);
 
   const { isLoading, isError, data }: ProductDetailsProps = useQuery(
     [`product-detail-${router.query.index}`],
     async () => findProductDetail(host?.url, router.query.index)
   );
 
-  console.log({ cookies })
-
   const handleCreateCart = async () => {
     if (!cookies.sfJwt) {
-      router.replace('/login')
+      router.replace('/login');
       return;
     }
 
-    setIsLoadingCart(true)
+    setIsLoadingCart(true);
 
-    const result: any = await createCart(host?.url, String(qty), String(subtotal), cookies.sfUserId, data.data.data[0].id)
+    const result: any = await createCart(
+      host?.url,
+      String(qty),
+      String(subtotal),
+      cookies.sfUserId,
+      data.data.data[0].id
+    );
 
     if (result.status == 200) {
-      setIsLoadingCart(false)
+      setIsLoadingCart(false);
 
       toast({
         title: 'Produk ditambahkan.',
-        description: "Produk berhasil ditambahkan ke keranjang.",
+        description: 'Produk berhasil ditambahkan ke keranjang.',
         status: 'success',
         duration: 9000,
         isClosable: true,
-      })
+      });
     }
-  }
+  };
 
   const formatter = new Intl.NumberFormat('id-ID', {
     style: 'currency',
@@ -95,7 +99,7 @@ const ProductDetail: NextPage = () => {
 
   if (!isLoading) {
     // stock = data.data.data[0].attributes.stock.slice(0, data.data.data[0].attributes.stock.length - 2);
-    stock = data.data.data[0].attributes.stock
+    stock = data.data.data[0].attributes.stock;
   }
 
   useEffect(() => {
@@ -103,8 +107,6 @@ const ProductDetail: NextPage = () => {
   }, [data]);
 
   const handleAddQty = () => {
-    console.log(qty)
-    console.log(stock)
     if (Number(qty) === Number(stock)) {
       return false;
     } else {
@@ -131,15 +133,15 @@ const ProductDetail: NextPage = () => {
 
   const handleBuyNow = async () => {
     if (!cookies.sfJwt) {
-      router.replace('/login')
+      router.replace('/login');
       return;
-    };
+    }
 
     router.push({
-      pathname: "/buy-now/[index]",
-      query: { index: data.data.data[0].attributes.slug }
-    })
-  }
+      pathname: '/buy-now/[index]',
+      query: { index: data.data.data[0].attributes.slug },
+    });
+  };
 
   return (
     <Box>
@@ -239,14 +241,28 @@ const ProductDetail: NextPage = () => {
               </Box>
 
               <Box>
-                <Button onClick={handleCreateCart} mb={2} w="100%" size="sm" colorScheme="blue" isLoading={isLoadingCart}>
+                <Button
+                  onClick={handleCreateCart}
+                  mb={2}
+                  w="100%"
+                  size="sm"
+                  colorScheme="blue"
+                  isLoading={isLoadingCart}
+                >
                   + Keranjang
                 </Button>
 
                 {isLoading ? (
                   <Skeleton height="24px" width="100%" />
                 ) : (
-                  <Button onClick={handleBuyNow} w="100%" size="sm" colorScheme="blue" variant="outline" isLoading={isLoadingCart}>
+                  <Button
+                    onClick={handleBuyNow}
+                    w="100%"
+                    size="sm"
+                    colorScheme="blue"
+                    variant="outline"
+                    isLoading={isLoadingCart}
+                  >
                     Beli Sekarang
                   </Button>
                 )}
@@ -270,7 +286,14 @@ const ProductDetail: NextPage = () => {
             {isLoading ? (
               <Skeleton height="24px" width="100%" />
             ) : (
-              <Button onClick={handleBuyNow} w="100%" size="sm" colorScheme="blue" variant="outline" isLoading={isLoadingCart}>
+              <Button
+                onClick={handleBuyNow}
+                w="100%"
+                size="sm"
+                colorScheme="blue"
+                variant="outline"
+                isLoading={isLoadingCart}
+              >
                 Beli Sekarang
               </Button>
             )}
