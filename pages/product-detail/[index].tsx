@@ -5,6 +5,8 @@ import { useRouter } from 'next/router';
 import React, { useState, useEffect, useContext } from 'react';
 import { HostContext } from '../../context/HostContext';
 import { parseCookies } from 'nookies'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 type ProductDetailsProps = {
   isLoading: boolean;
@@ -189,9 +191,7 @@ const ProductDetail: NextPage = () => {
             {isLoading ? (
               <Skeleton height="20px" />
             ) : (
-              <Text as="p">
-                {data.data.data[0].attributes.description ? data.data.data[0].attributes.description : '-'}
-              </Text>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{data.data.data[0].attributes.desc}</ReactMarkdown>
             )}
           </Box>
 
