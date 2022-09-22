@@ -70,7 +70,7 @@ const Profile = () => {
 
     const result: any = await updateProfile(host?.url, cookies.sfJwt, cookies.sfUserId, body);
 
-    if (result.statusText === 'OK') {
+    if (result.status == 200) {
       router.reload();
     }
   };
