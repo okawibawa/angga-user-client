@@ -89,6 +89,20 @@ const Login = () => {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const res: any = await getProfile(host?.url, result.data.jwt, result.data.user.username);
 
+      console.log({ res });
+
+      setCookie(null, 'sfAddress', res.data.data[0].attributes.address),
+        {
+          maxAge: 30 * 24 * 60 * 60,
+          path: '/',
+        };
+
+      setCookie(null, 'sfPhone', res.data.data[0].attributes.phone),
+        {
+          maxAge: 30 * 24 * 60 * 60,
+          path: '/',
+        };
+
       setCookie(null, 'sfUserId', res.data.data[0].id),
         {
           maxAge: 30 * 24 * 60 * 60,

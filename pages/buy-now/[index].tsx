@@ -272,8 +272,8 @@ const BuyNow = () => {
                         <Skeleton height="20px" width="100%" />
                       ) : (
                         <Text as="p">
-                          {dataProfile.data.data[0].attributes.full_name} - ({dataProfile.data.data[0].attributes.phone}
-                          )
+                          {dataProfile.data.data[0].attributes.full_name} - (
+                          {dataProfile.data.data[0].attributes.phone ?? '-'})
                         </Text>
                       )}
 
@@ -281,9 +281,10 @@ const BuyNow = () => {
                         <Skeleton height="20px" width="100%" />
                       ) : (
                         <Text as="p">
-                          {dataProfile.data.data[0].attributes.address}, {dataProfile.data.data[0].attributes.district},{' '}
-                          {dataProfile.data.data[0].attributes.regency} (
-                          {dataProfile.data.data[0].attributes.postal_code})
+                          {dataProfile.data.data[0].attributes.address ?? '-'},{' '}
+                          {dataProfile.data.data[0].attributes.district ?? '-'},{' '}
+                          {dataProfile.data.data[0].attributes.regency ?? '-'} (
+                          {dataProfile.data.data[0].attributes.postal_code ?? '-'})
                         </Text>
                       )}
                     </Stack>

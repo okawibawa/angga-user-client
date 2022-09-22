@@ -105,6 +105,8 @@ export const Order = ({ data, isLoadingTransactions }: { data: any; isLoadingTra
 };
 
 export const Address = ({ data, handleDetails, details, handleUpdate, isLoadingUpdate }: ProfileFormsProps) => {
+  console.log({ data });
+
   return (
     <Box>
       <Heading as="h6" size="md">
@@ -113,7 +115,6 @@ export const Address = ({ data, handleDetails, details, handleUpdate, isLoadingU
       <Text as="p" size="md">
         Informasi pesanan Anda
       </Text>
-
       <Divider my={8} />
 
       <VStack align="stretch" spacing={4} mb={6}>
@@ -213,7 +214,6 @@ export const Address = ({ data, handleDetails, details, handleUpdate, isLoadingU
           />
         </Box>
       </VStack>
-
       <Button colorScheme="blue" onClick={handleUpdate} isLoading={isLoadingUpdate} loadingText="Memperbarui Data">
         Simpan
       </Button>

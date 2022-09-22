@@ -38,6 +38,8 @@ const ProductDetail: NextPage = () => {
     sfJwt: '',
     sfUserId: '',
     sfUsername: '',
+    sfAddress: '',
+    sfPhone: '',
   });
   const [subtotal, setSubtotal] = useState<number>(0);
   const [qty, setQty] = useState<number>(1);
@@ -143,6 +145,8 @@ const ProductDetail: NextPage = () => {
     });
   };
 
+  console.log({ cookies });
+
   return (
     <Box>
       <Layout>
@@ -240,6 +244,14 @@ const ProductDetail: NextPage = () => {
                 </Heading>
               </Box>
 
+              <Text as="p" my={2} color="red.400" display={cookies.sfAddress ? 'none' : 'block'}>
+                Lengkapi alamat pengiriman pada halaman{' '}
+                <Link href="/profile">
+                  <a style={{ textDecoration: 'underline' }}>profile</a>
+                </Link>{' '}
+                terlebih dahulu.
+              </Text>
+
               <Box>
                 <Button
                   onClick={handleCreateCart}
@@ -248,6 +260,7 @@ const ProductDetail: NextPage = () => {
                   size="sm"
                   colorScheme="blue"
                   isLoading={isLoadingCart}
+                  disabled={cookies.sfAddress ? false : true}
                 >
                   + Keranjang
                 </Button>
@@ -262,6 +275,7 @@ const ProductDetail: NextPage = () => {
                     colorScheme="blue"
                     variant="outline"
                     isLoading={isLoadingCart}
+                    disabled={cookies.sfAddress ? false : true}
                   >
                     Beli Sekarang
                   </Button>
@@ -282,6 +296,13 @@ const ProductDetail: NextPage = () => {
         backgroundColor="white"
       >
         <Container maxW="container.xl">
+          <Text as="p" my={2} color="red.400" display={cookies.sfAddress ? 'none' : 'block'}>
+            Lengkapi alamat pengiriman pada halaman{' '}
+            <Link href="/profile">
+              <a style={{ textDecoration: 'underline' }}>profile</a>
+            </Link>{' '}
+            terlebih dahulu.
+          </Text>
           <Box display="flex" justifyContent="flex-end">
             {isLoading ? (
               <Skeleton height="24px" width="100%" />
@@ -293,11 +314,19 @@ const ProductDetail: NextPage = () => {
                 colorScheme="blue"
                 variant="outline"
                 isLoading={isLoadingCart}
+                disabled={cookies.sfAddress ? false : true}
               >
                 Beli Sekarang
               </Button>
             )}
-            <Button onClick={handleCreateCart} size="sm" colorScheme="blue" ml={2} isLoading={isLoadingCart}>
+            <Button
+              onClick={handleCreateCart}
+              size="sm"
+              colorScheme="blue"
+              ml={2}
+              isLoading={isLoadingCart}
+              disabled={cookies.sfAddress ? false : true}
+            >
               Keranjang
             </Button>
           </Box>
