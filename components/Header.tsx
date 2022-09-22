@@ -42,7 +42,7 @@ const Header = () => {
     destroyCookie(null, 'sfUserId');
     destroyCookie(null, 'sfUsername');
 
-    router.reload();
+    router.replace('/');
   };
 
   return (
@@ -91,7 +91,6 @@ const Header = () => {
                 <Divider orientation="vertical" height={6} />
               </>
             )}
-
 
             {cookies.sfJwt === '' ? (
               <Spinner />
