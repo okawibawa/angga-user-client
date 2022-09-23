@@ -70,6 +70,12 @@ const Profile = () => {
 
     const result: any = await updateProfile(host?.url, cookies.sfJwt, cookies.sfUserId, body);
 
+    setCookie(null, 'sfAddress', result.data.data.attributes.address),
+      {
+        maxAge: 30 * 24 * 60 * 60,
+        path: '/',
+      };
+
     if (result.status == 200) {
       router.reload();
     }

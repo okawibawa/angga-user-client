@@ -190,28 +190,18 @@ export const Address = ({
           />
         </Box>
 
-        {/* <Box>
-          <Text as="p">Kabupaten</Text>
-          <Input
-            placeholder="Alamat"
-            disabled={isLoadingUpdate ? true : false}
-            defaultValue={
-              details.regency
-                ? details.regency
-                : data.data.data[0].attributes.regency
-                  ? data.data.data[0].attributes.regency
-                  : ''
-            }
-            onChange={handleDetails('regency')}
-          />
-        </Box> */}
-
         <Box>
           <Text as="p">Kabupaten</Text>
           <Select
             placeholder="Pilih Kabupaten"
             onChange={handleDetails('ro_regency')}
-            defaultValue={details.ro_regency ? details.ro_regency : data.data.data[0].attributes.ro_regency.data.id}
+            defaultValue={
+              details.ro_regency
+                ? details.ro_regency
+                : data.data.data[0].attributes.ro_regency.data
+                ? data.data.data[0].attributes.ro_regency.data.id
+                : null
+            }
           >
             {!isLoadingRegency && (
               <>
