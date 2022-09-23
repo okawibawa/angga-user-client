@@ -29,7 +29,7 @@ import {
 
 import Layout from '../components/Layout';
 
-import { createInvoice, deleteCart, getVa, getProfile, getCart, createVa } from '../apis/api';
+import { cost, createInvoice, deleteCart, getVa, getProfile, getCart, createVa } from '../apis/api';
 
 interface VAProps {
   name: string;
@@ -48,6 +48,7 @@ const Cart = () => {
   const [va, setVA] = useState('');
   const [isLoadingPayment, setIsLoadingPayment] = useState(false);
   const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false);
+  const [ongkir, setOngkir] = useState(0)
 
   const { isLoading, data } = useQuery(['cart'], () => getCart(host?.url, cookies.sfUsername));
 
@@ -57,6 +58,14 @@ const Cart = () => {
     getProfile(host?.url, cookies.sfJwt, cookies.sfUsername)
   );
 
+  const { isLoading: isLoadingOngkir, data: dataOngkir } = useQuery(['ongkir'], () => cost(host?.url, dataProfile.data.data[0].attributes.ro_regency.data.attributes.city_id), {
+    enabled: !!dataProfile
+  });
+
+  const handleChangeCourier = (e: any) => {
+    setOngkir(e.target.value)
+  }
+
   const formatter = new Intl.NumberFormat('id-Id', {
     style: 'currency',
     currency: 'IDR',
@@ -65,11 +74,13 @@ const Cart = () => {
   const handleCreateInvoice = async () => {
     setIsLoadingPayment(true);
 
+    const totalPay = Number(total) + Number(ongkir)
+
     const ids = data.data.map((data: any) => data.attributes.product.data.id);
 
     const qty = data.data.map((data: any) => Number(data.attributes.qty));
 
-    const result: any = await createInvoice(host?.url, Number(total), qty, ids);
+    const result: any = await createInvoice(host?.url, Number(totalPay), qty, ids);
 
     if (result.status != 200) {
       setMsg('Proses pembuatan pembayaran gagal. Hubungi admin.');
@@ -210,9 +221,29 @@ const Cart = () => {
                     <Skeleton height="20px" width="100%" />
                   ) : (
                     <Text as="p">
-                      {dataProfile.data.data[0].attributes.address}, {dataProfile.data.data[0].attributes.district},{' '}
-                      {dataProfile.data.data[0].attributes.regency} ({dataProfile.data.data[0].attributes.postal_code})
+                      {dataProfile.data.data[0].attributes.address ?? '-'}, {dataProfile.data.data[0].attributes.district ?? '-'},{' '}
+                      {dataProfile.data.data[0].attributes.ro_regency.data.attributes.city ?? '-'} ({dataProfile.data.data[0].attributes.postal_code ?? '-'})
                     </Text>
+                  )}
+                </Stack>
+              </Stack>
+            </Box>
+
+            <Box border="1px solid #ddd" borderRadius={4} p={6} mb={[4, 0]}>
+              <Stack direction="column" spacing={4}>
+                <Heading as="h6" size="md">
+                  Jasa Pengiriman - {!isLoadingOngkir && dataOngkir.rajaongkir.results[0].code.toUpperCase()}
+                </Heading>
+
+                <Stack spacing={2}>
+                  {isLoadingOngkir ? (
+                    <Skeleton height="20px" width="100%" />
+                  ) : (
+                    <Select placeholder='Pilih jasa' onChange={handleChangeCourier} disabled={data.data.length < 1 || total === 0 ? true : false}>
+                      {dataOngkir.rajaongkir.results[0].costs.map((ongkir: any) => (
+                        <option value={ongkir.cost[0].value} key={ongkir.service}>{ongkir.service} - {formatter.format(ongkir.cost[0].value)}, {ongkir.cost[0].etd} hari.</option>
+                      ))}
+                    </Select>
                   )}
                 </Stack>
               </Stack>
@@ -230,7 +261,7 @@ const Cart = () => {
                   </Heading>
 
                   <Heading as="h6" size={['sm', 'md']} mb={4}>
-                    {!isLoading ? formatter.format(total) : <Skeleton height="20px" width="32px" />}
+                    {!isLoading ? formatter.format(Number(total) + Number(ongkir)) : <Skeleton height="20px" width="32px" />}
                   </Heading>
                 </Box>
 

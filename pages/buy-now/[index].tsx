@@ -46,7 +46,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 // icons
 import { Plus, Minus, NavArrowDown, MapsGoStraight } from 'iconoir-react';
 
-import { createInvoice, createVa, findProductDetail, getProfile, getVa } from '../../apis/api';
+import { cost, createInvoice, createVa, findProductDetail, getProfile, getVa } from '../../apis/api';
 import { parseCookies } from 'nookies';
 
 const BuyNow = () => {
@@ -61,6 +61,7 @@ const BuyNow = () => {
   const [va, setVA] = useState<string>('');
   const [isLoadingPayment, setIsLoadingPayment] = useState<boolean>(false);
   const [msg, setMsg] = useState<string>('');
+  const [ongkir, setOngkir] = useState(0);
 
   const { isLoading, isError, data }: ProductDetailsProps = useQuery(
     [`product-detail-${router.query.index}`],
@@ -72,6 +73,18 @@ const BuyNow = () => {
   const { data: dataProfile, isLoading: isLoadingProfile }: any = useQuery([`profile-${cookies.sfUsername}`], () =>
     getProfile(host?.url, cookies.sfJwt, cookies.sfUsername)
   );
+
+  const { isLoading: isLoadingOngkir, data: dataOngkir } = useQuery(
+    ['ongkir'],
+    () => cost(host?.url, dataProfile.data.data[0].attributes.ro_regency.data.attributes.city_id),
+    {
+      enabled: !!dataProfile,
+    }
+  );
+
+  const handleChangeCourier = (e: any) => {
+    setOngkir(e.target.value);
+  };
 
   const formatter = new Intl.NumberFormat('id-ID', {
     style: 'currency',
@@ -124,7 +137,9 @@ const BuyNow = () => {
   const handleCreateInvoice = async () => {
     setIsLoadingPayment(true);
 
-    const result: any = await createInvoice(host?.url, Number(subtotal), [qty], [data.data.data[0].id]);
+    const total = Number(subtotal) + Number(ongkir);
+
+    const result: any = await createInvoice(host?.url, Number(total), [qty], [data.data.data[0].id]);
 
     if (result.status != 200) {
       setMsg('Proses pembuatan pembayaran gagal. Hubungi admin.');
@@ -213,15 +228,6 @@ const BuyNow = () => {
 
                 <Divider my={[6]} display={['block', 'none']} />
 
-                <Text as="p" fontWeight="bold" mb={2}>
-                  Deskripsi
-                </Text>
-                {isLoading ? (
-                  <Skeleton height="20px" />
-                ) : (
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{data.data.data[0].attributes.desc}</ReactMarkdown>
-                )}
-
                 <Heading as="h6" size={['sm', 'md']} mb={4}>
                   Atur Jumlah (kg)
                 </Heading>
@@ -258,6 +264,15 @@ const BuyNow = () => {
                     {isLoading ? <Skeleton ml={1} height="20px" width="32px" /> : data.data.data[0].attributes.stock}
                   </Text>
                 </Box>
+
+                <Text as="p" fontWeight="bold" mb={2}>
+                  Deskripsi
+                </Text>
+                {isLoading ? (
+                  <Skeleton height="20px" />
+                ) : (
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{data.data.data[0].attributes.desc}</ReactMarkdown>
+                )}
               </Box>
 
               <Stack spacing={4} width={['100%', '32%']}>
@@ -283,9 +298,31 @@ const BuyNow = () => {
                         <Text as="p">
                           {dataProfile.data.data[0].attributes.address ?? '-'},{' '}
                           {dataProfile.data.data[0].attributes.district ?? '-'},{' '}
-                          {dataProfile.data.data[0].attributes.regency ?? '-'} (
+                          {dataProfile.data.data[0].attributes.ro_regency.data.attributes.city ?? '-'} (
                           {dataProfile.data.data[0].attributes.postal_code ?? '-'})
                         </Text>
+                      )}
+                    </Stack>
+                  </Stack>
+                </Box>
+
+                <Box border="1px solid #ddd" borderRadius={4} p={6} mb={[4, 0]}>
+                  <Stack direction="column" spacing={4}>
+                    <Heading as="h6" size="md">
+                      Jasa Pengiriman - {!isLoadingOngkir && dataOngkir.rajaongkir.results[0].code.toUpperCase()}
+                    </Heading>
+
+                    <Stack spacing={2}>
+                      {isLoadingOngkir ? (
+                        <Skeleton height="20px" width="100%" />
+                      ) : (
+                        <Select placeholder="Pilih jasa" onChange={handleChangeCourier}>
+                          {dataOngkir.rajaongkir.results[0].costs.map((ongkir: any) => (
+                            <option value={ongkir.cost[0].value} key={ongkir.service}>
+                              {ongkir.service} - {formatter.format(ongkir.cost[0].value)}, {ongkir.cost[0].etd} hari.
+                            </option>
+                          ))}
+                        </Select>
                       )}
                     </Stack>
                   </Stack>
@@ -309,11 +346,25 @@ const BuyNow = () => {
 
                     <Box display="flex" alignItems="center" justifyContent="space-between">
                       <Heading as="h6" size={['sm', 'sm']} color="gray" mb={4}>
+                        Ongkos Kirim
+                      </Heading>
+
+                      <Heading as="h6" size={['sm', 'md']} mb={4}>
+                        {formatter.format(ongkir)}
+                      </Heading>
+                    </Box>
+
+                    <Box display="flex" alignItems="center" justifyContent="space-between">
+                      <Heading as="h6" size={['sm', 'sm']} color="gray" mb={4}>
                         Total Tagihan
                       </Heading>
 
                       <Heading as="h6" size={['sm', 'md']} mb={4}>
-                        {!isLoading ? formatter.format(subtotal) : <Skeleton height="20px" width="32px" />}
+                        {!isLoading ? (
+                          formatter.format(Number(subtotal) + Number(ongkir))
+                        ) : (
+                          <Skeleton height="20px" width="32px" />
+                        )}
                       </Heading>
                     </Box>
 

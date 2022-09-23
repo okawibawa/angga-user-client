@@ -10,7 +10,7 @@ import { Divider, Text, Box, Heading, Grid, GridItem, Stack } from '@chakra-ui/r
 // components
 import Layout from '../components/Layout';
 import { Order, Address } from '../components/ProfileForms/ProfileForms';
-import { getProfile, updateProfile, getPaymentByProfile } from '../apis/api';
+import { getRegency, getProfile, updateProfile, getPaymentByProfile } from '../apis/api';
 
 interface UserProps {
   address: string;
@@ -18,6 +18,7 @@ interface UserProps {
   postal_code: string;
   district: string;
   regency: string;
+  ro_regency: any;
 }
 
 interface UpdateUserProps {
@@ -42,6 +43,8 @@ const Profile = () => {
     getProfile(host?.url, cookies.sfJwt, cookies.sfUsername)
   );
 
+  const { data: dataRegency, isLoading: isLoadingRegency }: any = useQuery(['regency'], () => getRegency(host?.url));
+
   const { data: dataTransaction, isLoading: isLoadingTransaction }: any = useQuery(
     ['profile-${cookies.sfUsername}'],
     () => getPaymentByProfile(host?.url, cookies.sfUsername)
@@ -59,6 +62,7 @@ const Profile = () => {
         postal_code: details.postal_code ? details.postal_code : data.data.data[0].attributes.postal_code,
         district: details.district ? details.district : data.data.data[0].attributes.district,
         regency: details.regency ? details.regency : data.data.data[0].attributes.regency,
+        ro_regency: details.ro_regency ? details.ro_regency : data.data.data[0].attributes.ro_regency.data.id,
       },
     ];
 
@@ -111,6 +115,8 @@ const Profile = () => {
                     details={details}
                     handleDetails={handleDetails}
                     handleUpdate={handleUpdate}
+                    dataRegency={dataRegency}
+                    isLoadingRegency={isLoadingRegency}
                   />
                 )}
               </>

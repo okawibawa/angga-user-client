@@ -1,5 +1,26 @@
 import axios from 'axios';
-import { EmojiBall } from 'iconoir-react';
+
+// ! regency
+export const getRegency = async (url: string | undefined) => {
+  try {
+    const result = await axios.get(`${url}regencies`)
+
+    return result
+  } catch (error) {
+    return error;
+  }
+}
+
+// ! ongkir
+export const cost = async (url: string | undefined, id: number) => {
+  try {
+    const result = await axios.get(`${url}ongkir/hitung/${id}`);
+
+    return result.data;
+  } catch (error) {
+    return error;
+  }
+};
 
 // ! reset password
 export const forgotPassword = async (url: string | undefined, email: string) => {

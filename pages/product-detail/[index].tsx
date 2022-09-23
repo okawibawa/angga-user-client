@@ -145,8 +145,6 @@ const ProductDetail: NextPage = () => {
     });
   };
 
-  console.log({ cookies });
-
   return (
     <Box>
       <Layout>

@@ -9,10 +9,12 @@ interface ProfileFormsProps {
   details: any;
   handleUpdate: () => void;
   isLoadingUpdate: boolean;
+  dataRegency: any;
+  isLoadingRegency: boolean;
 }
 
 // chakra
-import { Skeleton, Stack, Alert, Button, Box, Text, Heading, Divider, Input, VStack } from '@chakra-ui/react';
+import { Select, Skeleton, Stack, Alert, Button, Box, Text, Heading, Divider, Input, VStack } from '@chakra-ui/react';
 
 export const Order = ({ data, isLoadingTransactions }: { data: any; isLoadingTransactions: boolean }) => {
   const formatter = new Intl.NumberFormat('id-ID', {
@@ -104,9 +106,15 @@ export const Order = ({ data, isLoadingTransactions }: { data: any; isLoadingTra
   );
 };
 
-export const Address = ({ data, handleDetails, details, handleUpdate, isLoadingUpdate }: ProfileFormsProps) => {
-  console.log({ data });
-
+export const Address = ({
+  data,
+  handleDetails,
+  details,
+  handleUpdate,
+  isLoadingUpdate,
+  dataRegency,
+  isLoadingRegency,
+}: ProfileFormsProps) => {
   return (
     <Box>
       <Heading as="h6" size="md">
@@ -182,7 +190,7 @@ export const Address = ({ data, handleDetails, details, handleUpdate, isLoadingU
           />
         </Box>
 
-        <Box>
+        {/* <Box>
           <Text as="p">Kabupaten</Text>
           <Input
             placeholder="Alamat"
@@ -191,11 +199,30 @@ export const Address = ({ data, handleDetails, details, handleUpdate, isLoadingU
               details.regency
                 ? details.regency
                 : data.data.data[0].attributes.regency
-                ? data.data.data[0].attributes.regency
-                : ''
+                  ? data.data.data[0].attributes.regency
+                  : ''
             }
             onChange={handleDetails('regency')}
           />
+        </Box> */}
+
+        <Box>
+          <Text as="p">Kabupaten</Text>
+          <Select
+            placeholder="Pilih Kabupaten"
+            onChange={handleDetails('ro_regency')}
+            defaultValue={details.ro_regency ? details.ro_regency : data.data.data[0].attributes.ro_regency.data.id}
+          >
+            {!isLoadingRegency && (
+              <>
+                {dataRegency.data.data.map((regency: any) => (
+                  <>
+                    <option value={regency.id}>{regency.attributes.city}</option>
+                  </>
+                ))}
+              </>
+            )}
+          </Select>
         </Box>
 
         <Box>
