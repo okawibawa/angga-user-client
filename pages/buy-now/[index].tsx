@@ -83,6 +83,7 @@ const BuyNow = () => {
   );
 
   const handleChangeCourier = (e: any) => {
+    console.log({ e })
     setOngkir(e.target.value);
   };
 
@@ -135,19 +136,28 @@ const BuyNow = () => {
   };
 
   const handleCreateInvoice = async () => {
-    setIsLoadingPayment(true);
-
-    const total = Number(subtotal) + Number(ongkir);
-
-    const result: any = await createInvoice(host?.url, Number(total), [qty], [data.data.data[0].id]);
-
-    if (result.status != 200) {
-      setMsg('Proses pembuatan pembayaran gagal. Hubungi admin.');
-      setIsLoadingPayment(false);
-      return;
+    if (ongkir === 0 || !ongkir) {
+      alert("Pilih jasa ongkir dulu.")
     }
 
-    window.location.replace(result.data.invoice_url);
+    // setIsLoadingPayment(true);
+
+    const total = Number(subtotal) + Number(ongkir);
+    console.log({ ongkir })
+    const courier = {
+      type: '',
+      amount: ongkir
+    }
+
+    // const result: any = await createInvoice(host?.url, Number(total), [qty], [data.data.data[0].id], cookies.sfUserId);
+
+    // if (result.status != 200) {
+    //   setMsg('Proses pembuatan pembayaran gagal. Hubungi admin.');
+    //   setIsLoadingPayment(false);
+    //   return;
+    // }
+
+    // window.location.replace(result.data.invoice_url);
   };
 
   return (
@@ -168,7 +178,7 @@ const BuyNow = () => {
       </Modal>
 
       <Layout>
-        <Stack direction={['column']} spacing={8}>
+        <Stack direction={['column']} spacing={8} mb={8}>
           <Stack direction={['column']}>
             <Heading as="h2" size="md">
               Beli Langsung

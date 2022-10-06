@@ -80,7 +80,7 @@ const Header = () => {
 
             <Divider orientation="vertical" height={6} />
 
-            {cookies.sfJwt && (
+            {cookies.sfJwt && cookies.sfAddress && (
               <>
                 <Link href="/cart">
                   <a>
@@ -200,7 +200,7 @@ const Header = () => {
               </a>
             </Link>
 
-            {cookies.sfJwt && (
+            {cookies.sfJwt && cookies.sfAddress && (
               <Link href="/cart">
                 <a>
                   <SimpleCart style={{ margin: 'auto' }} />

@@ -35,71 +35,33 @@ export const Order = ({ data, isLoadingTransactions }: { data: any; isLoadingTra
 
       <Stack>
         <Stack spacing={4} maxWidth="32rem" py={4}>
-          {data.data.data.map((data: any) => (
-            <Link
-              key={data.id}
-              href={{ pathname: '/invoice/[index]', query: { index: data.attributes.payment.data.id } }}
-            >
-              <a>
-                <Stack spacing={2} py={2} px={2} border="1px" borderRadius={6}>
-                  <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <Text>Status</Text>
-                    {isLoadingTransactions ? (
-                      <Skeleton height="32px" width="3rem" />
-                    ) : (
-                      <Alert width="min-content" borderRadius={6} status="warning" fontWeight="bold">
-                        {data.attributes.payment.data.attributes.xendit_va_object.status}
-                      </Alert>
-                    )}
-                  </Stack>
+          {
+            isLoadingTransactions ? (
+              <Text>Mohon tunggu...</Text>
+            ) : (
+              data.data.data.map((data: any) => (
+                <Link href={{ pathname: "/invoice/[index]", query: { index: data.attributes.payment.data.id } }}>
+                  <a>
+                    <Stack spacing={4} py={2} px={2} border="1px" borderRadius={6}>
+                      <Stack direction="row" alignItems="center" justifyContent="space-between">
+                        <Text>{data.attributes.payment.data.attributes.xendit_va_object.merchant_name}</Text>
+                        <Alert width="max-content" py={2} borderRadius={4} status='warning'>{data.attributes.payment.data.attributes.xendit_va_object.status}</Alert>
+                      </Stack>
 
-                  <Stack direction="row" justifyContent="space-between">
-                    <Text>Bank</Text>
-                    {isLoadingTransactions ? (
-                      <Skeleton height="32px" width="3rem" />
-                    ) : (
-                      <Text as="p">
-                        {data.attributes.payment.data.attributes.xendit_va_object.bank_code.replace('_', ' ')}
-                      </Text>
-                    )}
-                  </Stack>
+                      <Stack direction="row" alignItems="center" justifyContent="space-between">
+                        <Text>Kurir</Text>
+                        <Text as="p">{formatter.format(data.attributes.courier.amount)}, JNE</Text>
+                      </Stack>
 
-                  <Stack direction="row" justifyContent="space-between">
-                    <Text>Nomor VA</Text>
-                    {isLoadingTransactions ? (
-                      <Skeleton height="32px" width="3rem" />
-                    ) : (
-                      <Text as="p">{data.attributes.payment.data.attributes.xendit_va_object.account_number}</Text>
-                    )}
-                  </Stack>
-
-                  <Stack direction="row" justifyContent="space-between">
-                    <Text>Jumlah</Text>
-                    {isLoadingTransactions ? (
-                      <Skeleton height="32px" width="3rem" />
-                    ) : (
-                      <Text as="p">
-                        {formatter.format(data.attributes.payment.data.attributes.xendit_va_object.expected_amount)}
-                      </Text>
-                    )}
-                  </Stack>
-
-                  <Stack direction="row" justifyContent="space-between">
-                    <Text>Bayar sebelum</Text>
-                    {isLoadingTransactions ? (
-                      <Skeleton height="32px" width="3rem" />
-                    ) : (
-                      <Text as="p">
-                        {new Date(
-                          data.attributes.payment.data.attributes.xendit_va_object.expiration_date
-                        ).toLocaleString()}
-                      </Text>
-                    )}
-                  </Stack>
-                </Stack>
-              </a>
-            </Link>
-          ))}
+                      <Stack direction="row" alignItems="center" justifyContent="space-between">
+                        <Text>Total</Text>
+                        <Text as="p">{formatter.format(data.attributes.payment.data.attributes.xendit_va_object.amount)}</Text>
+                      </Stack>
+                    </Stack>
+                  </a>
+                </Link>
+              )))
+          }
         </Stack>
       </Stack>
     </Box>
@@ -135,8 +97,8 @@ export const Address = ({
               details.full_name
                 ? details.full_name
                 : data.data.data[0].attributes.full_name
-                ? data.data.data[0].attributes.full_name
-                : ''
+                  ? data.data.data[0].attributes.full_name
+                  : ''
             }
             onChange={handleDetails('full_name')}
           />
@@ -151,8 +113,8 @@ export const Address = ({
               details.phone
                 ? details.phone
                 : data.data.data[0].attributes.phone
-                ? data.data.data[0].attributes.phone
-                : ''
+                  ? data.data.data[0].attributes.phone
+                  : ''
             }
             onChange={handleDetails('phone')}
           />
@@ -167,8 +129,8 @@ export const Address = ({
               details.address
                 ? details.address
                 : data.data.data[0].attributes.address
-                ? data.data.data[0].attributes.address
-                : ''
+                  ? data.data.data[0].attributes.address
+                  : ''
             }
             onChange={handleDetails('address')}
           />
@@ -183,8 +145,8 @@ export const Address = ({
               details.district
                 ? details.district
                 : data.data.data[0].attributes.district
-                ? data.data.data[0].attributes.district
-                : ''
+                  ? data.data.data[0].attributes.district
+                  : ''
             }
             onChange={handleDetails('district')}
           />
@@ -199,8 +161,8 @@ export const Address = ({
               details.ro_regency
                 ? details.ro_regency
                 : data.data.data[0].attributes.ro_regency.data
-                ? data.data.data[0].attributes.ro_regency.data.id
-                : null
+                  ? data.data.data[0].attributes.ro_regency.data.id
+                  : null
             }
           >
             {!isLoadingRegency && (
@@ -224,8 +186,8 @@ export const Address = ({
               details.postal_code
                 ? details.postal_code
                 : data.data.data[0].attributes.postal_code
-                ? data.data.data[0].attributes.postal_code
-                : ''
+                  ? data.data.data[0].attributes.postal_code
+                  : ''
             }
             onChange={handleDetails('postal_code')}
           />

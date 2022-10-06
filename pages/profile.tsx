@@ -37,7 +37,7 @@ const Profile = () => {
   const [details, setDetails] = useState<any>([]);
   const [isLoadingUpdate, setIsLoadingUpdate] = useState<boolean>(false);
 
-  useEffect(() => {}, [currentMenu]);
+  useEffect(() => { }, [currentMenu]);
 
   const { data, isLoading, isError, error }: any = useQuery([`profile-${cookies.sfUsername}`], () =>
     getProfile(host?.url, cookies.sfJwt, cookies.sfUsername)
@@ -71,10 +71,10 @@ const Profile = () => {
     const result: any = await updateProfile(host?.url, cookies.sfJwt, cookies.sfUserId, body);
 
     setCookie(null, 'sfAddress', result.data.data.attributes.address),
-      {
-        maxAge: 30 * 24 * 60 * 60,
-        path: '/',
-      };
+    {
+      maxAge: 30 * 24 * 60 * 60,
+      path: '/',
+    };
 
     if (result.status == 200) {
       router.reload();
@@ -96,14 +96,14 @@ const Profile = () => {
                 Detail Profil
               </Text>
 
-              {/* <Text
+              <Text
                 as="p"
                 onClick={() => setCurrentMenu('order')}
                 cursor="pointer"
                 color={currentMenu === 'order' ? 'rgb(49, 130, 206)' : 'black'}
               >
                 Pesanan Saya
-              </Text> */}
+              </Text>
             </Stack>
           </GridItem>
 

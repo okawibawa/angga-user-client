@@ -53,7 +53,11 @@ const ProductDetail: NextPage = () => {
 
   const { isLoading, isError, data }: ProductDetailsProps = useQuery(
     [`product-detail-${router.query.index}`],
-    async () => findProductDetail(host?.url, router.query.index)
+    async () => findProductDetail(host?.url, router.query.index), {
+    onSuccess: (data) => {
+      setSubtotal(data.data.data[0].attributes.price)
+    }
+  }
   );
 
   const handleCreateCart = async () => {
@@ -104,32 +108,12 @@ const ProductDetail: NextPage = () => {
     stock = data.data.data[0].attributes.stock;
   }
 
-  useEffect(() => {
-    if (data) setSubtotal(data.data.data[0].attributes.price);
-  }, [data]);
-
   const handleAddQty = () => {
     if (Number(qty) === Number(stock)) {
       return false;
     } else {
       setQty((qty) => Number(qty) + 1);
       setSubtotal(Number(subtotal) + Number(data.data.data[0].attributes.price));
-    }
-  };
-
-  const handleChangeQty = (e: React.FormEvent<HTMLInputElement>) => {
-    setQty(Number(e.currentTarget.value));
-    setSubtotal(Number(data.data.data[0].attributes.price) * Number(e.currentTarget.value));
-    stock = data.data.data[0].attributes.stock.slice(0, data.data.data[0].attributes.stock.length - 2);
-
-    if (Number(e.currentTarget.value) > Number(stock)) {
-      setQty(stock);
-      setSubtotal(Number(data.data.data[0].attributes.price) * Number(stock));
-    }
-
-    if (Number(e.currentTarget.value) <= 0) {
-      setQty(1);
-      setSubtotal(Number(data.data.data[0].attributes.price));
     }
   };
 
@@ -250,6 +234,8 @@ const ProductDetail: NextPage = () => {
                 terlebih dahulu.
               </Text>
 
+              {Number(stock) === 0 && <Text as="p" my={2} color="red.400">Stok Habis!</Text>}
+
               <Box>
                 <Button
                   onClick={handleCreateCart}
@@ -258,9 +244,12 @@ const ProductDetail: NextPage = () => {
                   size="sm"
                   colorScheme="blue"
                   isLoading={isLoadingCart}
-                  disabled={cookies.sfAddress ? false : true}
+                  disabled={Number(stock) === 0 ? true : !cookies.sfAddress ? true : false}
                 >
-                  + Keranjang
+                  <>
+                    {console.log({ stock })}
+                    + Keranjang
+                  </>
                 </Button>
 
                 {isLoading ? (
@@ -273,7 +262,7 @@ const ProductDetail: NextPage = () => {
                     colorScheme="blue"
                     variant="outline"
                     isLoading={isLoadingCart}
-                    disabled={cookies.sfAddress ? false : true}
+                    disabled={Number(stock) === 0 ? true : !cookies.sfAddress ? true : false}
                   >
                     Beli Sekarang
                   </Button>
@@ -301,6 +290,9 @@ const ProductDetail: NextPage = () => {
             </Link>{' '}
             terlebih dahulu.
           </Text>
+
+          {Number(stock) === 0 && <Text as="p" my={2} color="red.400">Stok Habis!</Text>}
+
           <Box display="flex" justifyContent="flex-end">
             {isLoading ? (
               <Skeleton height="24px" width="100%" />
@@ -312,7 +304,7 @@ const ProductDetail: NextPage = () => {
                 colorScheme="blue"
                 variant="outline"
                 isLoading={isLoadingCart}
-                disabled={cookies.sfAddress ? false : true}
+                disabled={Number(stock) === 0 ? true : !cookies.sfAddress ? true : false}
               >
                 Beli Sekarang
               </Button>
@@ -323,7 +315,7 @@ const ProductDetail: NextPage = () => {
               colorScheme="blue"
               ml={2}
               isLoading={isLoadingCart}
-              disabled={cookies.sfAddress ? false : true}
+              disabled={Number(stock) === 0 ? true : !cookies.sfAddress ? true : false}
             >
               Keranjang
             </Button>

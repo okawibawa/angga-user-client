@@ -22,6 +22,8 @@ const AboutUs = () => {
     getPaymentByID(host?.url, router.query.index)
   );
 
+  console.log({ data })
+
   const formatter = new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',
@@ -36,37 +38,38 @@ const AboutUs = () => {
           </Heading>
 
           <Stack textAlign="left" border="1px" width="50%" maxWidth="36rem" py={4} px={6} borderRadius={6}>
-            <Heading as="h2" size="md" mb={2}>
-              Detail
-            </Heading>
+            <Stack direction='row' justifyContent='space-between' alignItems="center">
+              <Heading as="h2" size="md" mb={2}>
+                Detail
+              </Heading>
+
+              {!isLoading &&
+                <a href={data.data.data.attributes.xendit_va_object.invoice_url}>
+                  <Alert status='info' py={2} width="max-content" borderRadius={6} fontWeight='bold'>Bayar Sekarang</Alert>
+                </a>
+              }
+            </Stack>
 
             <Stack direction="row" justifyContent="space-between" alignItems="center">
               <Text>Status</Text>
               {isLoading ? (
                 <Skeleton height="32px" width="3rem" />
               ) : (
-                <Alert width="min-content" borderRadius={6} status="warning" fontWeight="bold">
+                <Alert width="min-content" py={2} borderRadius={6} status="warning" fontWeight="bold">
                   {data.data.data.attributes.xendit_va_object.status}
                 </Alert>
               )}
             </Stack>
 
-            <Stack direction="row" justifyContent="space-between">
-              <Text>Bank</Text>
+            <Stack direction="row" alignItems="center" justifyContent="space-between">
+              <Text>Kurir</Text>
               {isLoading ? (
                 <Skeleton height="32px" width="3rem" />
               ) : (
-                <Text as="p">{data.data.data.attributes.xendit_va_object.bank_code.replace('_', ' ')}</Text>
+                <Text as="p">{formatter.format(data.data.data.attributes.transaction.data.attributes.courier.amount)}, JNE</Text>
               )}
-            </Stack>
+              {/* ({data.data.data.attributes.transaction.data.attributes.courier.type}) */}
 
-            <Stack direction="row" justifyContent="space-between">
-              <Text>Nomor VA</Text>
-              {isLoading ? (
-                <Skeleton height="32px" width="3rem" />
-              ) : (
-                <Text as="p">{data.data.data.attributes.xendit_va_object.account_number}</Text>
-              )}
             </Stack>
 
             <Stack direction="row" justifyContent="space-between">
@@ -74,21 +77,21 @@ const AboutUs = () => {
               {isLoading ? (
                 <Skeleton height="32px" width="3rem" />
               ) : (
-                <Text as="p">{formatter.format(data.data.data.attributes.xendit_va_object.expected_amount)}</Text>
+                <Text as="p">{formatter.format(data.data.data.attributes.xendit_va_object.amount)}</Text>
               )}
             </Stack>
 
-            <Stack direction="row" justifyContent="space-between">
+            {/* <Stack direction="row" justifyContent="space-between">
               <Text>Bayar sebelum</Text>
 
               {isLoading ? (
                 <Skeleton height="32px" width="3rem" />
               ) : (
                 <Text as="p">
-                  {new Date(data.data.data.attributes.xendit_va_object.expiration_date).toLocaleString()}
+                  Change
                 </Text>
               )}
-            </Stack>
+            </Stack> */}
 
             <Divider py={3} />
 
@@ -110,10 +113,7 @@ const AboutUs = () => {
                               <Text as="p">Nama</Text>
 
                               <Link
-                                href={{
-                                  pathname: '/product-detail/[index]',
-                                  query: { index: product.attributes.product.data.attributes.slug },
-                                }}
+                                href="#"
                               >
                                 <a>
                                   <Text as="p" textDecoration="none">
@@ -133,7 +133,7 @@ const AboutUs = () => {
                               <Text as="p">Harga</Text>
 
                               <Text as="p">
-                                {formatter.format(Number(product.attributes.product.data.attributes.price))}
+                                {formatter.format(product.attributes.product.data.attributes.price)}
                               </Text>
                             </Stack>
 
@@ -141,10 +141,7 @@ const AboutUs = () => {
                               <Text as="p">Subtotal</Text>
 
                               <Text as="p">
-                                {formatter.format(
-                                  Number(product.attributes.product.data.attributes.price) *
-                                    Number(product.attributes.qty)
-                                )}
+                                {formatter.format(Number(product.attributes.qty) * Number(product.attributes.product.data.attributes.price))}
                               </Text>
                             </Stack>
                           </Stack>

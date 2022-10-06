@@ -58,13 +58,15 @@ export const createInvoice = async (
   url: string | undefined,
   amount: number,
   qty: number | number[],
-  productId: number | number[]
+  productId: number | number[],
+  user: string,
 ) => {
   try {
     const result = await axios.post(`${url}xendit/create-invoice`, {
       amount: amount,
       qty: qty,
       productId: productId,
+      user: user
     });
 
     return result;
@@ -215,7 +217,7 @@ export const getPaymentByID = async (url: string | undefined, id: string | strin
 export const getPaymentByProfile = async (url: string | undefined, username: string): Promise<any> => {
   try {
     const result = await axios.get(
-      `${url}transactions?filters[profile][full_name][$eq]=${username}&populate=payment,profile`
+      `${url}transactions?filters[profile][full_name][$eq]=${username}&populate=payment,profile, transaction_details, transaction_details.product`
     );
 
     return result;
