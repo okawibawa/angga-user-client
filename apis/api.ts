@@ -60,13 +60,15 @@ export const createInvoice = async (
   qty: number | number[],
   productId: number | number[],
   user: string,
+  courier: any
 ) => {
   try {
     const result = await axios.post(`${url}xendit/create-invoice`, {
       amount: amount,
       qty: qty,
       productId: productId,
-      user: user
+      user: user,
+      courier: courier
     });
 
     return result;

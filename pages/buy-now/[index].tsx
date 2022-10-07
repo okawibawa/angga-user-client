@@ -140,7 +140,7 @@ const BuyNow = () => {
       alert("Pilih jasa ongkir dulu.")
     }
 
-    // setIsLoadingPayment(true);
+    setIsLoadingPayment(true);
 
     const total = Number(subtotal) + Number(ongkir);
     console.log({ ongkir })
@@ -149,15 +149,15 @@ const BuyNow = () => {
       amount: ongkir
     }
 
-    // const result: any = await createInvoice(host?.url, Number(total), [qty], [data.data.data[0].id], cookies.sfUserId);
+    const result: any = await createInvoice(host?.url, Number(total), [qty], [data.data.data[0].id], cookies.sfUserId, courier);
 
-    // if (result.status != 200) {
-    //   setMsg('Proses pembuatan pembayaran gagal. Hubungi admin.');
-    //   setIsLoadingPayment(false);
-    //   return;
-    // }
+    if (result.status != 200) {
+      setMsg('Proses pembuatan pembayaran gagal. Hubungi admin.');
+      setIsLoadingPayment(false);
+      return;
+    }
 
-    // window.location.replace(result.data.invoice_url);
+    window.location.replace(result.data.invoice_url);
   };
 
   return (

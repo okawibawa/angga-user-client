@@ -22,6 +22,8 @@ export const Order = ({ data, isLoadingTransactions }: { data: any; isLoadingTra
     currency: 'IDR',
   });
 
+  console.log({ courier: data.data.data[0].attributes })
+
   return (
     <Box>
       <Heading as="h6" size="md">
