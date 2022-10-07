@@ -33,9 +33,11 @@ const AboutUs = () => {
     <>
       <Layout>
         <Stack direction="column" alignItems="center" textAlign="center" minHeight="50vh">
-          <Heading as="h2" size="md" mb={8}>
-            Selesaikan Proses Pembayaran
-          </Heading>
+          {!isLoading && (
+            <Heading as="h2" size="md" mb={8}>
+              {data.data.data.attributes.xendit_va_object.status == 'PENDING' ? 'Selesaikan Proses Pembayaran' : 'Detail Transaksi'}
+            </Heading>
+          )}
 
           <Stack textAlign="left" border="1px" width="50%" maxWidth="36rem" py={4} px={6} borderRadius={6}>
             <Stack direction='row' justifyContent='space-between' alignItems="center">
@@ -44,9 +46,14 @@ const AboutUs = () => {
               </Heading>
 
               {!isLoading &&
-                <a href={data.data.data.attributes.xendit_va_object.invoice_url}>
-                  <Alert status='info' py={2} width="max-content" borderRadius={6} fontWeight='bold'>Bayar Sekarang</Alert>
-                </a>
+                <>
+                  {
+                    data.data.data.attributes.xendit_va_object.status == 'PENDING' &&
+                    <a href={data.data.data.attributes.xendit_va_object.invoice_url}>
+                      <Alert status='info' py={2} width="max-content" borderRadius={6} fontWeight='bold'>Bayar Sekarang</Alert>
+                    </a>
+                  }
+                </>
               }
             </Stack>
 
@@ -57,6 +64,17 @@ const AboutUs = () => {
               ) : (
                 <Text fontWeight="bold">
                   {data.data.data.attributes.xendit_va_object.status}
+                </Text>
+              )}
+            </Stack>
+
+            <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Text>Status Pengiriman</Text>
+              {isLoading ? (
+                <Skeleton height="32px" width="3rem" />
+              ) : (
+                <Text fontWeight="bold">
+                  {data.data.data.attributes.transaction.data.attributes.status.toUpperCase()}
                 </Text>
               )}
             </Stack>

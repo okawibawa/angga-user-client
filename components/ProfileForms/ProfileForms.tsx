@@ -22,7 +22,7 @@ export const Order = ({ data, isLoadingTransactions }: { data: any; isLoadingTra
     currency: 'IDR',
   });
 
-  console.log({ courier: data.data.data[0].attributes })
+  console.log({ data })
 
   return (
     <Box>
@@ -41,38 +41,41 @@ export const Order = ({ data, isLoadingTransactions }: { data: any; isLoadingTra
             isLoadingTransactions ? (
               <Text>Mohon tunggu...</Text>
             ) : (
-              data.data.data.map((data: any, i: any) => (
-                <Link key={i} href={{ pathname: "/invoice/[index]", query: { index: data.attributes.payment.data.id } }}>
-                  <a>
-                    <Stack spacing={4} py={2} px={2} border="1px" borderRadius={6}>
-                      <Stack direction="row" alignItems="center" justifyContent="space-between">
-                        <Text>{data.attributes.payment.data.attributes.xendit_va_object.merchant_name}</Text>
-                      </Stack>
+              data.data.data.length > 0 ? (
 
-                      <Stack direction="row" alignItems="center" justifyContent="space-between">
-                        <Text>Status Pembayaran</Text>
-                        <Text fontWeight='bold'>{data.attributes.payment.data.attributes.xendit_va_object.status}</Text>
-                      </Stack>
+                data.data.data.map((data: any, i: any) => (
+                  <Link key={i} href={{ pathname: "/invoice/[index]", query: { index: data.attributes.payment.data.id } }}>
+                    <a>
+                      <Stack spacing={4} py={2} px={2} border="1px" borderRadius={6}>
+                        <Stack direction="row" alignItems="center" justifyContent="space-between">
+                          <Text>{data.attributes.payment.data.attributes.xendit_va_object.merchant_name}</Text>
+                        </Stack>
 
-                      <Stack direction="row" alignItems="center" justifyContent="space-between">
-                        <Text>Status Pengiriman</Text>
-                        <Text fontWeight='bold'>{data.attributes.status.toUpperCase()}</Text>
-                      </Stack>
+                        <Stack direction="row" alignItems="center" justifyContent="space-between">
+                          <Text>Status Pembayaran</Text>
+                          <Text fontWeight='bold'>{data.attributes.payment.data.attributes.xendit_va_object.status}</Text>
+                        </Stack>
 
-                      <Stack direction="row" alignItems="center" justifyContent="space-between">
-                        <Text>Kurir</Text>
-                        <Text as="p">{formatter.format(data.attributes.courier.amount)}, JNE</Text>
-                      </Stack>
+                        <Stack direction="row" alignItems="center" justifyContent="space-between">
+                          <Text>Status Pengiriman</Text>
+                          <Text fontWeight='bold'>{data.attributes.status.toUpperCase()}</Text>
+                        </Stack>
 
-                      <Stack direction="row" alignItems="center" justifyContent="space-between">
-                        <Text>Total</Text>
-                        <Text as="p">{formatter.format(data.attributes.payment.data.attributes.xendit_va_object.amount)}</Text>
+                        <Stack direction="row" alignItems="center" justifyContent="space-between">
+                          <Text>Kurir</Text>
+                          <Text as="p">{formatter.format(data.attributes.courier.amount)}, JNE</Text>
+                        </Stack>
+
+                        <Stack direction="row" alignItems="center" justifyContent="space-between">
+                          <Text>Total</Text>
+                          <Text as="p">{formatter.format(data.attributes.payment.data.attributes.xendit_va_object.amount)}</Text>
+                        </Stack>
                       </Stack>
-                    </Stack>
-                  </a>
-                </Link>
-              )))
-          }
+                    </a>
+                  </Link>
+                ))
+              ) : null
+            )}
         </Stack>
       </Stack>
     </Box>
