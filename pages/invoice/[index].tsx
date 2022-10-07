@@ -51,13 +51,13 @@ const AboutUs = () => {
             </Stack>
 
             <Stack direction="row" justifyContent="space-between" alignItems="center">
-              <Text>Status</Text>
+              <Text>Status Pembayaran</Text>
               {isLoading ? (
                 <Skeleton height="32px" width="3rem" />
               ) : (
-                <Alert width="min-content" py={2} borderRadius={6} status="warning" fontWeight="bold">
+                <Text fontWeight="bold">
                   {data.data.data.attributes.xendit_va_object.status}
-                </Alert>
+                </Text>
               )}
             </Stack>
 

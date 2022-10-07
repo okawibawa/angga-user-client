@@ -41,6 +41,8 @@ const Header = () => {
     destroyCookie(null, 'sfUser');
     destroyCookie(null, 'sfUserId');
     destroyCookie(null, 'sfUsername');
+    destroyCookie(null, 'sfAddress')
+    destroyCookie(null, 'sfPhone')
 
     router.replace('/');
   };

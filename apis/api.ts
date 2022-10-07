@@ -219,7 +219,7 @@ export const getPaymentByID = async (url: string | undefined, id: string | strin
 export const getPaymentByProfile = async (url: string | undefined, username: string): Promise<any> => {
   try {
     const result = await axios.get(
-      `${url}transactions?filters[profile][full_name][$eq]=${username}&populate=payment,profile, transaction_details, transaction_details.product`
+      `${url}transactions?filters[profile][full_name][$eq]=${username}&populate=payment,profile,transaction_details,transaction_details.product&pagination[limit]=-1&sort[0]=id:desc`
     );
 
     return result;

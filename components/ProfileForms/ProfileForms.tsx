@@ -47,7 +47,16 @@ export const Order = ({ data, isLoadingTransactions }: { data: any; isLoadingTra
                     <Stack spacing={4} py={2} px={2} border="1px" borderRadius={6}>
                       <Stack direction="row" alignItems="center" justifyContent="space-between">
                         <Text>{data.attributes.payment.data.attributes.xendit_va_object.merchant_name}</Text>
-                        <Alert width="max-content" py={2} borderRadius={4} status='warning'>{data.attributes.payment.data.attributes.xendit_va_object.status}</Alert>
+                      </Stack>
+
+                      <Stack direction="row" alignItems="center" justifyContent="space-between">
+                        <Text>Status Pembayaran</Text>
+                        <Text fontWeight='bold'>{data.attributes.payment.data.attributes.xendit_va_object.status}</Text>
+                      </Stack>
+
+                      <Stack direction="row" alignItems="center" justifyContent="space-between">
+                        <Text>Status Pengiriman</Text>
+                        <Text fontWeight='bold'>{data.attributes.status.toUpperCase()}</Text>
                       </Stack>
 
                       <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -79,6 +88,7 @@ export const Address = ({
   dataRegency,
   isLoadingRegency,
 }: ProfileFormsProps) => {
+
   return (
     <Box>
       <Heading as="h6" size="md">
