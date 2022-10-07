@@ -41,8 +41,8 @@ export const Order = ({ data, isLoadingTransactions }: { data: any; isLoadingTra
             isLoadingTransactions ? (
               <Text>Mohon tunggu...</Text>
             ) : (
-              data.data.data.map((data: any) => (
-                <Link href={{ pathname: "/invoice/[index]", query: { index: data.attributes.payment.data.id } }}>
+              data.data.data.map((data: any, i: any) => (
+                <Link key={i} href={{ pathname: "/invoice/[index]", query: { index: data.attributes.payment.data.id } }}>
                   <a>
                     <Stack spacing={4} py={2} px={2} border="1px" borderRadius={6}>
                       <Stack direction="row" alignItems="center" justifyContent="space-between">
