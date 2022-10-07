@@ -72,6 +72,11 @@ const Cart = () => {
   });
 
   const handleCreateInvoice = async () => {
+    if (ongkir === 0 || !ongkir) {
+      alert("Pilih jasa ongkir dulu.")
+      return
+    }
+
     setIsLoadingPayment(true);
 
     const totalPay = Number(total) + Number(ongkir)
@@ -80,7 +85,12 @@ const Cart = () => {
 
     const qty = data.data.map((data: any) => Number(data.attributes.qty));
 
-    const result: any = await createInvoice(host?.url, Number(totalPay), qty, ids);
+    const courier = {
+      type: '',
+      amount: ongkir
+    }
+
+    const result: any = await createInvoice(host?.url, Number(totalPay), qty, ids, cookies.sfUserId, courier);
 
     if (result.status != 200) {
       setMsg('Proses pembuatan pembayaran gagal. Hubungi admin.');

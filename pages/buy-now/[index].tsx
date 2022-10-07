@@ -138,6 +138,7 @@ const BuyNow = () => {
   const handleCreateInvoice = async () => {
     if (ongkir === 0 || !ongkir) {
       alert("Pilih jasa ongkir dulu.")
+      return
     }
 
     setIsLoadingPayment(true);
