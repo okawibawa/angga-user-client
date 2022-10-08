@@ -1,12 +1,13 @@
 import { useContext } from 'react';
 import { HostContext } from '../context/HostContext';
 import type { NextPage } from 'next';
+import { parseCookies } from 'nookies'
 
 // react query
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 // chakra ui
-import { Divider, Box, Stack, Heading, Text } from '@chakra-ui/react';
+import { Alert, AlertIcon, AlertTitle, AlertDescription, Divider, Box, Stack, Heading, Text } from '@chakra-ui/react';
 
 // components
 import Layout from '../components/Layout';
@@ -20,6 +21,7 @@ import { findProducts, getCategories } from '../apis/api';
 
 const Home: NextPage = () => {
   const host = useContext(HostContext);
+  const cookies = parseCookies()
 
   // access the client
   const queryClient = useQueryClient();
@@ -32,10 +34,21 @@ const Home: NextPage = () => {
     data: dataCategories,
   } = useQuery(['categories'], async () => await getCategories(host?.url));
 
+  console.log({ cookies })
+
   return (
     <>
       <Layout>
         <Banner />
+
+        {cookies.sfJwt && !cookies.sfAddress && (
+          <Alert mt={8} status='error'>
+            <AlertIcon />
+            <AlertTitle>Perhatian!</AlertTitle>
+            <AlertDescription>Lengkapi alamat pada halaman profile untuk melakukan transaksi!</AlertDescription>
+          </Alert>
+        )}
+
         <Categories isLoading={isLoadingCategories} isError={isErrorCategories} data={dataCategories} />
 
         <Divider my={8} />
