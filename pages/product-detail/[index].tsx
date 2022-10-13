@@ -44,6 +44,8 @@ const ProductDetail: NextPage = () => {
   const [subtotal, setSubtotal] = useState<number>(0);
   const [qty, setQty] = useState<number>(1);
   const [isLoadingCart, setIsLoadingCart] = useState<boolean>(false);
+  const [totalRating, setTotalRating] = useState(0);
+  useEffect(() => {}, [totalRating]);
 
   useEffect(() => {
     const cookies = parseCookies();
@@ -51,13 +53,26 @@ const ProductDetail: NextPage = () => {
     setCookies({ ...cookies });
   }, []);
 
+  const ratingnya = () => {};
   const { isLoading, isError, data }: ProductDetailsProps = useQuery(
     [`product-detail-${router.query.index}`],
-    async () => findProductDetail(host?.url, router.query.index), {
-    onSuccess: (data) => {
-      setSubtotal(data.data.data[0].attributes.price)
+    async () => findProductDetail(host?.url, router.query.index),
+    {
+      onSuccess: (data) => {
+        setSubtotal(data.data.data[0].attributes.price);
+        console.log(data);
+        if (data.data.data[0].attributes.ratings > 1) {
+          let total = 0;
+          data.data.data[0].attributes.ratings.data.map((rating: any) => {
+            total = total + rating.attributes.value;
+          });
+          setTotalRating(Math.ceil(total / data.data.data[0].attributes.ratings.data.length));
+          // console.log(data.data.data[0].attributes.ratings)
+        } else {
+          setTotalRating(0);
+        }
+      },
     }
-  }
   );
 
   const handleCreateCart = async () => {
@@ -137,7 +152,7 @@ const ProductDetail: NextPage = () => {
           flexDirection={['column', 'row']}
           alignItems={['flex-start']}
           justifyContent={['flex-start', 'space-between']}
-          mb={['6rem', 0]}
+          mb={['2rem', 0]}
           minHeight="50vh"
         >
           <Box width={['100%', '32%']}>
@@ -158,9 +173,22 @@ const ProductDetail: NextPage = () => {
           </Box>
 
           <Box my={[4, 0]} width={['100%', '32%']}>
-            <Heading as="h2" size={['lg', 'md']} mb={2}>
+            <Heading as="h2" size={['lg', 'md']}>
               {isLoading ? <Skeleton height="20px" /> : <Text as="p">{data.data.data[0].attributes.name}</Text>}
             </Heading>
+            <Text mb={2} color={'gold'}>
+              {isLoading ? (
+                <Skeleton height="10px" />
+              ) : (
+                <Text>
+                  {[...Array(totalRating)].map((value) => (
+                    <>
+                      <Text as={'span'}>&#9733;</Text>
+                    </>
+                  ))}
+                </Text>
+              )}
+            </Text>
             <Heading as="h3" mb={[0, 4]} size={['xl', 'lg']}>
               {isLoading ? (
                 <Skeleton height="20px" />
@@ -234,7 +262,11 @@ const ProductDetail: NextPage = () => {
                 terlebih dahulu.
               </Text>
 
-              {Number(stock) === 0 && <Text as="p" my={2} color="red.400">Stok Habis!</Text>}
+              {Number(stock) === 0 && (
+                <Text as="p" my={2} color="red.400">
+                  Stok Habis!
+                </Text>
+              )}
 
               <Box>
                 <Button
@@ -246,10 +278,7 @@ const ProductDetail: NextPage = () => {
                   isLoading={isLoadingCart}
                   disabled={Number(stock) === 0 ? true : !cookies.sfAddress ? true : false}
                 >
-                  <>
-                    {console.log({ stock })}
-                    + Keranjang
-                  </>
+                  <>{console.log({ stock })}+ Keranjang</>
                 </Button>
 
                 {isLoading ? (
@@ -271,6 +300,82 @@ const ProductDetail: NextPage = () => {
             </Box>
           </Box>
         </Box>
+        {/*  */}
+
+        <Box
+          display="flex"
+          flexDirection={['column', 'row']}
+          alignItems={['flex-start']}
+          justifyContent={['flex-start', 'space-between']}
+          mt={[0, 100]}
+          minHeight="50vh"
+        >
+          <Box width={['100%', '100%']} border="1px solid #ddd" borderRadius={4} p={6}>
+            <Heading as="h6" size={['lg', 'md']} mb={4}>
+              Ulasan
+            </Heading>
+            {isLoading ? (
+              <Skeleton height="20px" />
+            ) : data.data.data[0].attributes.ratings.data.length > 1 ? (
+              <Box>
+                {data.data.data[0].attributes.ratings.data.map((rating: any) => (
+                  <>
+                    <Box
+                      display="flex"
+                      flexDirection={['row', 'row']}
+                      alignItems={['flex-start']}
+                      justifyContent={['flex-start']}
+                      mt={10}
+                      minHeight="10vh"
+                    >
+                      <Box width={['20%', '10%']}>
+                        {isLoading ? (
+                          <Skeleton width={384} height={384} />
+                        ) : (
+                          <Image
+                            // src={
+                            //   data.data.data[0].attributes.image.data
+                            //     ? data.data.data[0].attributes.image.data[0].attributes.url
+                            //     : '/default-placeholder.png'
+                            // }
+                            src={'/default-placeholder.png'}
+                            alt="Products"
+                            width={384}
+                            height={384}
+                          />
+                        )}
+                      </Box>
+                      <Box my={[4, 0]} width={['100%', '32%']}>
+                        <Text as="p" size={['sm', 'md']} ml={[5, 15]}>
+                          {isLoading ? <Skeleton height="10px" /> : <Text as="p">{rating.attributes.desc}</Text>}
+                        </Text>
+                        <Text as="p" mb={[0, 4]} ml={[5, 15]} size={['sm', 'sm']}>
+                          {isLoading ? (
+                            <Skeleton height="20px" />
+                          ) : (
+                            <Text color={'gold'}>
+                              {[...Array(rating.attributes.value)].map((value) => (
+                                <>
+                                  <Text as={'span'}>&#9733;</Text>
+                                </>
+                              ))}
+                            </Text>
+                          )}
+                        </Text>
+                      </Box>
+                    </Box>
+                  </>
+                ))}
+              </Box>
+            ) : (
+              <Heading as="h5" mx={'auto'}>
+                Belum ada Ulasan{' '}
+              </Heading>
+            )}
+          </Box>
+        </Box>
+
+        {/*  */}
       </Layout>
 
       <Box
@@ -284,14 +389,18 @@ const ProductDetail: NextPage = () => {
       >
         <Container maxW="container.xl">
           <Text as="p" my={2} color="red.400" display={cookies.sfAddress ? 'none' : 'block'}>
-            Lengkapi alamat pengiriman pada halaman{' '}
+            Lengkapi alamat pengiriman pada{' '}
             <Link href="/profile">
               <a style={{ textDecoration: 'underline' }}>profile</a>
             </Link>{' '}
             terlebih dahulu.
           </Text>
 
-          {Number(stock) === 0 && <Text as="p" my={2} color="red.400">Stok Habis!</Text>}
+          {Number(stock) === 0 && (
+            <Text as="p" my={2} color="red.400">
+              Stok Habis!
+            </Text>
+          )}
 
           <Box display="flex" justifyContent="flex-end">
             {isLoading ? (

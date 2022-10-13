@@ -15,7 +15,7 @@ const Banner = () => {
         scrollbar={{
           hide: true,
         }}
-      autoplay={{ delay: 5000 }}
+        autoplay={{ delay: 5000 }}
         modules={[Scrollbar, Autoplay]}
         className="mySwiper"
       >

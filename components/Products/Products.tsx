@@ -15,6 +15,7 @@ type ProductsProps = {
 };
 
 // chakra
+import { StarIcon } from '@chakra-ui/icons';
 import { Box, Heading, Text, Skeleton } from '@chakra-ui/react';
 
 const Products = ({ isLoading, isError, data }: ProductsProps) => {
@@ -83,6 +84,11 @@ const Products = ({ isLoading, isError, data }: ProductsProps) => {
                           />
 
                           <Box mt={4}>
+                            <StarIcon h={3} w={3} color="goldenrod" />
+                            <StarIcon h={3} w={3} color="goldenrod" />
+                            <StarIcon h={3} w={3} color="goldenrod" />
+                            <StarIcon h={3} w={3} color="goldenrod" />
+                            <StarIcon h={3} w={3} color="goldenrod" />
                             <Text as="p" fontWeight="bold" size={['sm', 'md']}>
                               {formatter.format(arr.attributes.price)}/{arr.attributes.unit}
                             </Text>

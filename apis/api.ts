@@ -160,6 +160,39 @@ export const updateProfile = async (url: string | undefined, token: string, id: 
     return error;
   }
 };
+export const addRatings = async (url: string | undefined, token: string, body: any, transDetail: number) => {
+  try {
+    const result = await axios.post(
+      `${url}ratings`,
+      { data: body[0] },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const result2 = await axios.put(
+      `${url}transaction-details/${transDetail}`,
+      {
+        data: {
+          is_rate: true
+        }
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
 
 // ! categories
 export const getCategories = async (url: string | undefined) => {
@@ -185,7 +218,7 @@ export const findProducts = async (url: string | undefined) => {
 
 export const findProductDetail = async (url: string | undefined, slug: string | undefined | string[]) => {
   try {
-    const result = await axios.get(`${url}products?filters[slug][$eq]=${slug}&populate=image`);
+    const result = await axios.get(`${url}products?filters[slug][$eq]=${slug}&populate=image,ratings`);
 
     return result;
   } catch (error) {
@@ -207,7 +240,7 @@ export const findProductByCategory = async (url: string | undefined, category: s
 export const getPaymentByID = async (url: string | undefined, id: string | string[] | undefined): Promise<any> => {
   try {
     const result = await axios.get(
-      `${url}payments/${id}?populate=transaction,transaction.transaction_details,transaction.transaction_details.product`
+      `${url}payments/${id}?populate=transaction,transaction.transaction_details,transaction.transaction_details.product.image`
     );
 
     return result;
